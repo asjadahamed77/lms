@@ -33,6 +33,7 @@ import AddAssignments from "./pages/lecturer/assignmentManagement/AddAssignments
 import AssignmentManagement from "./pages/lecturer/assignmentManagement/AssignmentManagement";
 import ResourceManagement from "./pages/lecturer/resourceManagement/ResourceManagement";
 import QuizManagement from "./pages/lecturer/quizManagement/QuizManagement";
+import PaymentManagement from "./pages/admin/paymentManagement/PaymentManagement";
 
 const App = () => {
   return (
@@ -99,6 +100,10 @@ const App = () => {
             <Route
               path="lecturer-management/view-lecturers"
               element={<ViewLecturers />}
+            />
+            <Route
+              path="payment-management"
+              element={<PaymentManagement />}
             />
           </Route>
 
