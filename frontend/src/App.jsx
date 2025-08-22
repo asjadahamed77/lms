@@ -2,70 +2,152 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AdminLayout from "./layout/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AddStudent from "./pages/admin/AddStudent";
-import ViewStudents from "./pages/admin/ViewStudents";
-import AddSubject from "./pages/admin/AddSubject";
-import ViewSubjects from "./pages/admin/ViewSubjects";
-import AddAnnouncement from "./pages/admin/AddAnnouncement";
-import ViewAnnouncements from "./pages/admin/ViewAnnouncements";
-import AddBatch from "./pages/admin/AddBatch";
-import ViewBatch from "./pages/admin/ViewBatch";
-import AddLecturer from "./pages/admin/AddLecturer";
-import ViewLecturers from "./pages/admin/ViewLecturers";
+import AddStudent from "./pages/admin/studentManagement/AddStudent";
+import ViewStudents from "./pages/admin/studentManagement/ViewStudents";
+import AddSubject from "./pages/admin/subjectManagement/AddSubject";
+import ViewSubjects from "./pages/admin/subjectManagement/ViewSubjects";
+import AddAnnouncement from "./pages/admin/announcementManagement/AddAnnouncement";
+import ViewAnnouncements from "./pages/admin/announcementManagement/ViewAnnouncements";
+import AddBatch from "./pages/admin/batchManagement/AddBatch";
+import ViewBatch from "./pages/admin/batchManagement/ViewBatch";
+import AddLecturer from "./pages/admin/lecturerManagement/AddLecturer";
+import ViewLecturers from "./pages/admin/lecturerManagement/ViewLecturers";
 import LecturerLayout from "./layout/LecturerLayout";
 import LecturerDashboard from "./pages/lecturer/LecturerDashboard";
-import ViewAssignments from "./pages/lecturer/ViewAssignments";
-import AddQuiz from "./pages/lecturer/AddQuiz";
-import ViewQuiz from "./pages/lecturer/ViewQuiz";
-import AddResources from "./pages/lecturer/AddResources";
-import ViewResources from "./pages/lecturer/ViewResources";
+import ViewAssignments from "./pages/lecturer/assignmentManagement/ViewAssignments";
+import AddQuiz from "./pages/lecturer/quizManagement/AddQuiz";
+import ViewQuiz from "./pages/lecturer/quizManagement/ViewQuiz";
+import AddResources from "./pages/lecturer/resourceManagement/AddResources";
+import ViewResources from "./pages/lecturer/resourceManagement/ViewResources";
 import StudentLayout from "./layout/StudentLayout";
 import StudentDashboard from "./pages/student/StudentDashboard";
+import Login from "./pages/common/Login";
+import Navbar from "./components/common/Navbar";
+import NotFound from "./pages/common/NotFound";
+import StudentManagement from "./pages/admin/studentManagement/StudentManagement";
+import SubjectManagement from "./pages/admin/subjectManagement/SubjectManagement";
+import AnnouncementManagement from "./pages/admin/announcementManagement/AnnouncementManagement";
+import BatchManagement from "./pages/admin/batchManagement/BatchManagement";
+import LecturerManagement from "./pages/admin/lecturerManagement/LecturerManagement";
+import AddAssignments from "./pages/lecturer/assignmentManagement/AddAssignments";
+import AssignmentManagement from "./pages/lecturer/assignmentManagement/AssignmentManagement";
+import ResourceManagement from "./pages/lecturer/resourceManagement/ResourceManagement";
+import QuizManagement from "./pages/lecturer/quizManagement/QuizManagement";
 
 const App = () => {
   return (
-    <div>
-      <Routes>
-        {/* ---------------------------------------------------------------------------------------- */}
-        {/*  -------------     ADMIN LAYOUT   ------------------------  */}
-        {/* ---------------------------------------------------------------------------------------- */}
+    <div className="">
+      <Navbar />
 
-        <Route path="admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="add-student" element={<AddStudent />} />
-          <Route path="view-students" element={<ViewStudents />} />
-          <Route path="add-subject" element={<AddSubject />} />
-          <Route path="view-subjects" element={<ViewSubjects />} />
-          <Route path="add-announcement" element={<AddAnnouncement />} />
-          <Route path="view-announcements" element={<ViewAnnouncements />} />
-          <Route path="add-batch" element={<AddBatch />} />
-          <Route path="view-batches" element={<ViewBatch />} />
-          <Route path="add-lecturer" element={<AddLecturer />} />
-          <Route path="view-lecturers" element={<ViewLecturers />} />
-        </Route>
+      <div className="px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 mt-[60px]">
+        <Routes>
+          {/* ---------------------------------------------------------------------------------------- */}
+          {/*  -------------     LOGIN    ------------------------  */}
+          {/* ---------------------------------------------------------------------------------------- */}
+          <Route path="/" element={<Login />} />
 
-        {/* ---------------------------------------------------------------------------------------- */}
-        {/*  -------------     LECTURER LAYOUT   ------------------------  */}
-        {/* ---------------------------------------------------------------------------------------- */}
+          {/* ---------------------------------------------------------------------------------------- */}
+          {/*  -------------     ADMIN LAYOUT   ------------------------  */}
+          {/* ---------------------------------------------------------------------------------------- */}
 
-        <Route path="lecturer" element={<LecturerLayout />}>
-          <Route index element={<LecturerDashboard />} />
-          <Route path="add-assignment" element={<AddStudent />} />
-          <Route path="view-assignments" element={<ViewAssignments />} />
-          <Route path="add-quiz" element={<AddQuiz />} />
-          <Route path="view-quiz" element={<ViewQuiz />} />
-          <Route path="add-resourses" element={<AddResources />} />
-          <Route path="view-resourses" element={<ViewResources />} />
-        </Route>
+          <Route path="admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="student-management" element={<StudentManagement />} />
+            <Route
+              path="student-management/add-student"
+              element={<AddStudent />}
+            />
+            <Route
+              path="student-management/view-students"
+              element={<ViewStudents />}
+            />
+            <Route path="subject-management" element={<SubjectManagement />} />
+            <Route
+              path="subject-management/add-subject"
+              element={<AddSubject />}
+            />
+            <Route
+              path="subject-management/view-subjects"
+              element={<ViewSubjects />}
+            />
+            <Route
+              path="announcement-management"
+              element={<AnnouncementManagement />}
+            />
+            <Route
+              path="announcement-management/add-announcement"
+              element={<AddAnnouncement />}
+            />
+            <Route
+              path="announcement-management/view-announcements"
+              element={<ViewAnnouncements />}
+            />
+            <Route path="batch-management" element={<BatchManagement />} />
+            <Route path="batch-management/add-batch" element={<AddBatch />} />
+            <Route
+              path="batch-management/view-batches"
+              element={<ViewBatch />}
+            />
+            <Route
+              path="lecturer-management"
+              element={<LecturerManagement />}
+            />
+            <Route
+              path="lecturer-management/add-lecturer"
+              element={<AddLecturer />}
+            />
+            <Route
+              path="lecturer-management/view-lecturers"
+              element={<ViewLecturers />}
+            />
+          </Route>
 
-        {/* ---------------------------------------------------------------------------------------- */}
-        {/*  -------------     STUDENT LAYOUT   ------------------------  */}
-        {/* ---------------------------------------------------------------------------------------- */}
+          {/* ---------------------------------------------------------------------------------------- */}
+          {/*  -------------     LECTURER LAYOUT   ------------------------  */}
+          {/* ---------------------------------------------------------------------------------------- */}
 
-        <Route path="student" element={<StudentLayout />}>
-          <Route index element={<StudentDashboard />} />
-        </Route>
-      </Routes>
+          <Route path="lecturer" element={<LecturerLayout />}>
+            <Route index element={<LecturerDashboard />} />
+            <Route
+              path="assignment-management"
+              element={<AssignmentManagement />}
+            />
+            <Route
+              path="assignment-management/add-assignment"
+              element={<AddAssignments />}
+            />
+            <Route
+              path="assignment-management/view-assignments"
+              element={<ViewAssignments />}
+            />
+            <Route path="quiz-management" element={<QuizManagement />} />
+            <Route path="quiz-management/add-quiz" element={<AddQuiz />} />
+            <Route path="quiz-management/view-quiz" element={<ViewQuiz />} />
+            <Route
+              path="resource-management"
+              element={<ResourceManagement />}
+            />
+            <Route
+              path="resource-management/add-resource"
+              element={<AddResources />}
+            />
+            <Route
+              path="resource-management/view-resource"
+              element={<ViewResources />}
+            />
+          </Route>
+
+          {/* ---------------------------------------------------------------------------------------- */}
+          {/*  -------------     STUDENT LAYOUT   ------------------------  */}
+          {/* ---------------------------------------------------------------------------------------- */}
+
+          <Route path="student" element={<StudentLayout />}>
+            <Route index element={<StudentDashboard />} />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
     </div>
   );
 };
