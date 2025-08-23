@@ -1,4 +1,5 @@
 import React, {createContext} from 'react';
+import { batches } from '../assets/batches';
 
 export const AppContext = createContext();
 
@@ -6,7 +7,7 @@ const AppContextProvider = ({ children }) => {
 
   const organizationName = "LMS"
   
-  const value = { organizationName, };
+  const value = { organizationName, batches };
 
   return (
     <AppContext.Provider value={value}>
