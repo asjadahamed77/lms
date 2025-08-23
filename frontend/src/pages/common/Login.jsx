@@ -36,7 +36,7 @@ const Login = () => {
             />
           </div>
         </div>
-        <button className="bg-primaryColor py-3 text-white w-full rounded-lg sm:rounded-xl mt-6 cursor-pointer hover:bg-primaryColor/80 duration-300 transition-all ease-in-out">Login</button>
+        <button type="submit" className="bg-primaryColor py-3 text-white w-full rounded-lg sm:rounded-xl mt-6 cursor-pointer hover:bg-primaryColor/80 duration-300 transition-all ease-in-out">Login</button>
         <Link to={'/forgot-password'} className="hover:text-primaryColor/80 duration-300 transition-all ease-in-out text-sm hover:underline">
         <p className="mt-4">forgot password?</p>
         </Link>
