@@ -89,7 +89,7 @@ const ViewBatch = () => {
         <tbody>
           {filteredBatch().map((batch, index) => (
             <tr key={index} className="hover:bg-blue-50">
-              <td className="text-start p-2">#{batch.batchId}</td>
+              <td className="text-start p-2">#{batch.batchId.substring(0, 10)}</td>
               <td className="text-start p-2">{batch.batchName}</td>
               <td className="text-start p-2">{batch.facultyName}</td>
               <td className="text-start p-2">{batch.departmentName}</td>

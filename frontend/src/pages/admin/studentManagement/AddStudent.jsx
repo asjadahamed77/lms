@@ -19,6 +19,9 @@ const AddStudent = () => {
     e.preventDefault();
   };
 
+  
+  
+
   return (
     <div className="py-8 md:py-12">
       <button
