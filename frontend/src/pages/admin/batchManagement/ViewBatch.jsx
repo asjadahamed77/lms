@@ -1,8 +1,11 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../../context/AppContext";
+import { useNavigate } from 'react-router-dom';
+import { IoChevronBackSharp } from "react-icons/io5";
 
 const ViewBatch = () => {
   const { batches } = useContext(AppContext);
+  const navigate = useNavigate()
 
   const [selectedFaculty, setSelectedFaculty] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
@@ -25,14 +28,22 @@ const ViewBatch = () => {
 
   return (
     <div className="py-8 md:py-12">
+<button onClick={()=>navigate('/admin/batch-management')} className='flex items-center gap-1 text-sm  cursor-pointer  text-primaryColor/80 border border-transparent hover:border-primaryColor/80 px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:bg-primaryColor/10'>
+<p>
+        <IoChevronBackSharp className='' />
+</p>
+<p>Back</p>
+      </button>
+
+
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-start md:items-center md:justify-between md:gap-6 gap-4">
         <h1 className="text-2xl font-semibold">View Batches</h1>
 
         {/* Filters */}
-        <div className="flex flex-col md:flex-row justify-start md:items-center md:gap-8">
+        <div className="flex flex-col md:flex-row justify-start md:items-center gap-2 md:gap-8">
           <div className="w-full md:w-auto">
-            <p className="text-primaryColor/80">Filter by Faculty</p>
+            <p className="text-primaryColor/80 mb-1">Filter by Faculty</p>
             <select
               className="w-full border p-2 border-primaryColor/80 rounded"
               value={selectedFaculty}
@@ -47,7 +58,7 @@ const ViewBatch = () => {
             </select>
           </div>
           <div className="w-full md:w-auto">
-            <p className="text-primaryColor/80">Filter by Department</p>
+            <p className="text-primaryColor/80 mb-1">Filter by Department</p>
             <select
               className="w-full border border-primaryColor/80  p-2 rounded"
               value={selectedDepartment}
