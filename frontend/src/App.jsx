@@ -34,6 +34,7 @@ import AssignmentManagement from "./pages/lecturer/assignmentManagement/Assignme
 import ResourceManagement from "./pages/lecturer/resourceManagement/ResourceManagement";
 import QuizManagement from "./pages/lecturer/quizManagement/QuizManagement";
 import PaymentManagement from "./pages/admin/paymentManagement/PaymentManagement";
+import AttendanceManagement from "./pages/lecturer/attendanceManagement/AttendanceManagement";
 
 const App = () => {
   return (
@@ -139,6 +140,10 @@ const App = () => {
             <Route
               path="resource-management/view-resource"
               element={<ViewResources />}
+            />
+            <Route
+              path="attendance-management"
+              element={<AttendanceManagement />}
             />
           </Route>
 

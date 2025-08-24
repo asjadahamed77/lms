@@ -16,7 +16,7 @@ const ViewAnnouncements = () => {
   return (
     <div className="py-8 md:py-12">
       <button
-        onClick={() => navigate("/admin/student-management")}
+        onClick={() => navigate("/admin/announcement-management")}
         className="flex items-center gap-1 text-sm  cursor-pointer  text-primaryColor/80 border border-transparent hover:border-primaryColor/80 px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:bg-primaryColor/10"
       >
         <p>
