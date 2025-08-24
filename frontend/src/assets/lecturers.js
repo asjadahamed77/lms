@@ -125,3 +125,37 @@ export const lecturers = [
     isActive: true,
   },
 ];
+
+export const lecturer = 
+  {
+    id: 1,
+    userId: "hgbdjguek3ih3eidbkd",
+    name: "Mohamed Jiffry Asjad Ahamed",
+    nameWithInitials: "MJA Ahamed",
+    registrationNumber: "20APSE0303",
+    subjects: [
+      {
+        subjectName: "Data Structures and Algorithms",
+        subjectId: "dewgwjhwebuehbkfj",
+        subjectCode: "SE32101",
+        subjectSemester: 1,
+        batchName: "2020/2021",
+      },
+      {
+        subjectName: "Software Architecture",
+        subjectId: "edjdbejdewb",
+        subjectCode: "SE32501",
+        subjectSemester: 2,
+        batchName: "2020/2021",
+      },
+    ],
+    email: "mjaaahamed@com.ac.lk",
+    password: "asjad1234",
+    role: "lecturer",
+    facultyName: "Faculty of Computing",
+    departmentName: "Department of Software Engineering",
+    createdAt: "2025-08-22T10:30:00Z",
+    lastLogin: "2025-09-22T12:30:00Z",
+    isActive: true,
+  }
+

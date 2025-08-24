@@ -1,7 +1,7 @@
 import React, {createContext} from 'react';
 import { batches } from '../assets/batches';
 import { students } from '../assets/students';
-import { lecturers } from '../assets/lecturers';
+import { lecturer, lecturers } from '../assets/lecturers';
 import { subjects } from '../assets/subjects';
 import { announcements } from '../assets/announcements';
 
@@ -11,7 +11,7 @@ const AppContextProvider = ({ children }) => {
 
   const organizationName = "LMS"
   
-  const value = { organizationName, batches, students, lecturers, subjects, announcements };
+  const value = { organizationName, batches, students, lecturers, subjects, announcements, lecturer };
 
   return (
     <AppContext.Provider value={value}>

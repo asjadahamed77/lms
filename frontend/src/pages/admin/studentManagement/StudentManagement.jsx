@@ -24,7 +24,7 @@ const StudentManagement = () => {
           onClick={() =>
             navigate("/admin/student-management/add-student")
           }
-          className="text-white flex items-center gap-6 bg-[#DC2525] p-8 cursor-pointer rounded-2xl hover:-translate-y-2 duration-300 transition-all ease-in-out "
+          className="text-white flex items-center gap-6 bg-[#3D74B6] p-8 cursor-pointer rounded-2xl hover:-translate-y-2 duration-300 transition-all ease-in-out "
         >
           <p className="text-4xl">
             <IoPersonAdd />
