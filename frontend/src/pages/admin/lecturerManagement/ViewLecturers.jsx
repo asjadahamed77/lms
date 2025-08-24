@@ -43,7 +43,9 @@ const ViewLecturers = () => {
                 <td className="text-start p-2">
                   #{lecturer.userId.substring(0, 8)}
                 </td>
-                <td className="text-start p-2">{lecturer.registrationNumber}</td>
+                <td className="text-start p-2">
+                  {lecturer.registrationNumber}
+                </td>
                 <td className="text-start p-2">{lecturer.nameWithInitials}</td>
                 <td className="text-start p-2">{lecturer.facultyName}</td>
                 <td className="text-start p-2">{lecturer.departmentName}</td>
@@ -97,10 +99,12 @@ const ViewLecturers = () => {
                     {selectedLecturer.registrationNumber}
                   </p>
                 </div>
-               <div>
-               <p className="font-medium sm:text-lg ">No of Subjects Assigned</p>
-               <p>{selectedLecturer.subjects.length}</p>
-               </div>
+                <div>
+                  <p className="font-medium sm:text-lg ">
+                    No of Subjects Assigned
+                  </p>
+                  <p>{selectedLecturer.subjects.length}</p>
+                </div>
               </div>
               <div className="grid  sm:grid-cols-2  gap-2 sm:gap-8">
                 <div>
@@ -126,36 +130,44 @@ const ViewLecturers = () => {
                 </div>
               </div>
               <div>
-              <p className="font-medium sm:text-lg ">Assigned Subjects</p>
-              <div className="space-y-4">
-                {
-                  selectedLecturer.subjects.map((subject,index)=>(
+                <p className="font-medium sm:text-lg ">Assigned Subjects</p>
+                <div className=" flex flex-col gap-2  ">
+                  {selectedLecturer.subjects.map((subject, index) => (
                     <div key={index} className="grid  sm:grid-cols-2  ">
                       <div>
-                      <p className="text-sm font-medium">Subject Code</p>
-                      <p className="text-sm">{subject.subjectCode}</p>
+                        <p className="text-sm font-medium">Subject Code</p>
+                        <p className="text-sm">{subject.subjectCode}</p>
                       </div>
                       <div>
-                      <p className="text-sm font-medium">Subject Name</p>
-                      <p className="text-sm">{subject.subjectName}</p>
+                        <p className="text-sm font-medium">Subject Name</p>
+                        <p className="text-sm">{subject.subjectName}</p>
                       </div>
                       <div>
-                      <p className="text-sm font-medium">Subject Semester</p>
-                      <p className="text-sm">{subject.subjectSemester}</p>
+                        <p className="text-sm font-medium">Subject Semester</p>
+                        <p className="text-sm">{subject.subjectSemester}</p>
                       </div>
                       <div>
-                      <p className="text-sm font-medium">Batch</p>
-                      <p className="text-sm">{subject.batchName}</p>
+                        <p className="text-sm font-medium">Batch</p>
+                        <p className="text-sm">{subject.batchName}</p>
                       </div>
                     </div>
-                  ))
-                }
-              </div>
+                  ))}
+                </div>
               </div>
               {/* Buttons */}
               <div className="grid grid-cols-2 gap-4 mt-4">
-                <button onClick={lecturerHandler} className="bg-primaryColor text-white text-sm rounded-lg py-2.5 cursor-pointer hover:bg-primaryColor/80 duration-300 transition-all ease-in-out">Close</button>
-                <button onClick={lecturerHandler} className="bg-red-500 text-white text-sm rounded-lg py-2.5   cursor-pointer hover:bg-red-400 duration-300 transition-all ease-in-out">Delete Lecturer</button>
+                <button
+                  onClick={lecturerHandler}
+                  className="bg-primaryColor text-white text-sm rounded-lg py-2.5 cursor-pointer hover:bg-primaryColor/80 duration-300 transition-all ease-in-out"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={lecturerHandler}
+                  className="bg-red-500 text-white text-sm rounded-lg py-2.5   cursor-pointer hover:bg-red-400 duration-300 transition-all ease-in-out"
+                >
+                  Delete Lecturer
+                </button>
               </div>
             </div>
           </div>

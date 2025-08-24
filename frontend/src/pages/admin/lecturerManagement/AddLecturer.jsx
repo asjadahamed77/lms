@@ -93,6 +93,7 @@ const AddLecturer = () => {
                 value={selectedFaculty}
                 onChange={(e) => setSelectedFaculty(e.target.value)}
                 className="p-2 w-full rounded border border-primaryColor/30"
+                required
               >
                 <option value="">-- SELECT --</option>
                 {faculties.map((faculty, index) => (
@@ -105,7 +106,7 @@ const AddLecturer = () => {
             {selectedFaculty && (
               <div className="flex flex-col  gap-2 flex-1 ">
                 <label className="font-semibold">Select Department</label>
-                <select className="p-2 w-full rounded border border-primaryColor/30">
+                <select className="p-2 w-full rounded border border-primaryColor/30" required>
                   <option value="">-- SELECT --</option>
                   {departmentsOfFaculty.map((dept, index) => (
                     <option key={index} value={dept}>
