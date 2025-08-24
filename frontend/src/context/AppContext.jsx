@@ -4,6 +4,7 @@ import { students } from '../assets/students';
 import { lecturer, lecturers } from '../assets/lecturers';
 import { subjects } from '../assets/subjects';
 import { announcements } from '../assets/announcements';
+import { assignments } from '../assets/assignments';
 
 export const AppContext = createContext();
 
@@ -11,7 +12,7 @@ const AppContextProvider = ({ children }) => {
 
   const organizationName = "LMS"
   
-  const value = { organizationName, batches, students, lecturers, subjects, announcements, lecturer };
+  const value = { organizationName, batches, students, lecturers, subjects, announcements, lecturer, assignments };
 
   return (
     <AppContext.Provider value={value}>
