@@ -62,7 +62,7 @@ const ViewLecturers = () => {
           </tbody>
         </table>
       </div>
-      {/* Popup View Student */}
+      {/* Popup View Lecturer */}
       {showPopup && selectedLecturer && (
         <div
           className={` w-screen h-screen fixed inset-0 bg-black/50 flex items-center justify-center`}
