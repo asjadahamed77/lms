@@ -8,12 +8,14 @@ export const lecturers = [
     subjects: [
       {
         subjectName: "Data Structures and Algorithms",
+        subjectId: "dewgwjhwebuehbkfj",
         subjectCode: "SE32101",
         subjectSemester: 1,
         batchName: "2020/2021",
       },
       {
         subjectName: "Software Architecture",
+        subjectId: "edjdbejdewb",
         subjectCode: "SE32501",
         subjectSemester: 2,
         batchName: "2020/2021",
@@ -40,12 +42,14 @@ export const lecturers = [
       {
         subjectName: "Data Structures and Algorithms",
         subjectCode: "SE32101",
+        subjectId: "deindi3uhdncbmdfdjfnk",
         subjectSemester: 1,
         batchName: "2020/2021",
       },
       {
         subjectName: "Software Architecture",
         subjectCode: "SE32501",
+        subjectId: "djvjvjedgbekdjdedddedwd",
         subjectSemester: 2,
         batchName: "2020/2021",
       },
@@ -71,12 +75,14 @@ export const lecturers = [
       {
         subjectName: "Data Structures and Algorithms",
         subjectCode: "SE32101",
+        subjectId: "dwehuidxbiwuhcuhrbinnhf",
         subjectSemester: 1,
         batchName: "2020/2021",
       },
       {
         subjectName: "Software Architecture",
         subjectCode: "SE32501",
+        subjectId: "wubhuh47yh47y4h73y373",
         subjectSemester: 2,
         batchName: "2020/2021",
       },
@@ -100,12 +106,14 @@ export const lecturers = [
       {
         subjectName: "Data Structures and Algorithms",
         subjectCode: "SE32101",
+        subjectId: "dwehubefgfuekhkwehld",
         subjectSemester: 1,
         batchName: "2020/2021",
       },
       {
         subjectName: "Software Architecture",
         subjectCode: "SE32501",
+        subjectId: "dgejdbdwebjliiwkuegbgf",
         subjectSemester: 2,
         batchName: "2020/2021",
       },

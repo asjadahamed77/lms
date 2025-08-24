@@ -76,7 +76,8 @@ const ViewBatch = () => {
       </div>
 
       {/* Display Batches */}
-      <table className="w-full mt-8  overflow-x-scroll border border-primaryColor/30">
+     <div className="overflow-x-auto mt-8   border border-primaryColor/30">
+     <table className="w-full ">
         <thead className="bg-blue-100">
           <tr>
             <th className="text-start p-2">Batch ID</th>
@@ -102,6 +103,7 @@ const ViewBatch = () => {
           ))}
         </tbody>
       </table>
+     </div>
     </div>
   );
 };
