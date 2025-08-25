@@ -34,6 +34,7 @@ import AssignmentManagement from "./pages/lecturer/assignmentManagement/Assignme
 import ResourceManagement from "./pages/lecturer/resourceManagement/ResourceManagement";
 import QuizManagement from "./pages/lecturer/quizManagement/QuizManagement";
 import PaymentManagement from "./pages/admin/paymentManagement/PaymentManagement";
+import AttendanceManagement from "./pages/lecturer/attendanceManagement/AttendanceManagement";
 
 const App = () => {
   return (
@@ -127,7 +128,7 @@ const App = () => {
             />
             <Route path="quiz-management" element={<QuizManagement />} />
             <Route path="quiz-management/add-quiz" element={<AddQuiz />} />
-            <Route path="quiz-management/view-quiz" element={<ViewQuiz />} />
+            <Route path="quiz-management/view-quizzes" element={<ViewQuiz />} />
             <Route
               path="resource-management"
               element={<ResourceManagement />}
@@ -137,8 +138,12 @@ const App = () => {
               element={<AddResources />}
             />
             <Route
-              path="resource-management/view-resource"
+              path="resource-management/view-resources"
               element={<ViewResources />}
+            />
+            <Route
+              path="attendance-management"
+              element={<AttendanceManagement />}
             />
           </Route>
 
