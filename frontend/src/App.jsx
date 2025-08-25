@@ -138,7 +138,7 @@ const App = () => {
               element={<AddResources />}
             />
             <Route
-              path="resource-management/view-resource"
+              path="resource-management/view-resources"
               element={<ViewResources />}
             />
             <Route
