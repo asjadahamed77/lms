@@ -35,6 +35,7 @@ import ResourceManagement from "./pages/lecturer/resourceManagement/ResourceMana
 import QuizManagement from "./pages/lecturer/quizManagement/QuizManagement";
 import PaymentManagement from "./pages/admin/paymentManagement/PaymentManagement";
 import AttendanceManagement from "./pages/lecturer/attendanceManagement/AttendanceManagement";
+import StudentSubject from "./pages/student/StudentSubject";
 
 const App = () => {
   return (
@@ -153,6 +154,7 @@ const App = () => {
 
           <Route path="student" element={<StudentLayout />}>
             <Route index element={<StudentDashboard />} />
+            <Route path="enrolled-subjects/:subjectId" element={<StudentSubject />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

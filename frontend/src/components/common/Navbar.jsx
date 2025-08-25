@@ -8,7 +8,7 @@ import { AppContext } from "../../context/AppContext";
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const {organizationName} = useContext(AppContext)
+  const { organizationName } = useContext(AppContext);
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-primaryColor text-white flex items-center justify-between px-4 sm:px-6 md:px-20">
@@ -21,7 +21,7 @@ const Navbar = () => {
           <SiStudyverse />
         </p>
         <h1 className="text-3xl tracking-wider font-bold">
-            {organizationName}
+          {organizationName}
         </h1>
       </div>
       {/* User Profile */}
