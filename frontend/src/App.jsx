@@ -128,7 +128,7 @@ const App = () => {
             />
             <Route path="quiz-management" element={<QuizManagement />} />
             <Route path="quiz-management/add-quiz" element={<AddQuiz />} />
-            <Route path="quiz-management/view-quiz" element={<ViewQuiz />} />
+            <Route path="quiz-management/view-quizzes" element={<ViewQuiz />} />
             <Route
               path="resource-management"
               element={<ResourceManagement />}
