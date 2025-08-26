@@ -4,6 +4,8 @@ import file2 from "../assets/files/Form B.pdf";
 export const resources = [
   {
     resourceTitle: "Main Concepts of Design Principles",
+    batchName: "2020/2021",
+    subjectCode: "SE5676",
     resourceFiles: [
       {
         fileName: "Software Design Concepts.pdf",
@@ -18,6 +20,8 @@ export const resources = [
   },
   {
     resourceTitle: "Main Concepts of Design Principles",
+    batchName: "2020/2021",
+    subjectCode: "SE5676",
     resourceFiles: [
       {
         fileName: "Software Design Concepts.pdf",
@@ -32,6 +36,8 @@ export const resources = [
   },
   {
     resourceTitle: "Main Concepts of Design Principles",
+    batchName: "2020/2021",
+    subjectCode: "SE5676",
     resourceFiles: [
       {
         fileName: "Software Design Concepts.pdf",

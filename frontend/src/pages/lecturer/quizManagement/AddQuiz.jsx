@@ -40,17 +40,25 @@ const AddQuiz = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3  gap-8 md:gap-12">
         {lecturer.subjects?.map((subject, index) => (
           <div
-            key={index}
-            onClick={() => handleSubjectSelect(subject)}
-            className="text-white flex items-center gap-6 bg-[#0D1164] p-8 cursor-pointer rounded-2xl hover:-translate-y-2 duration-300 transition-all ease-in-out"
-          >
-            <p className="text-4xl">
-              <MdLibraryBooks />
-            </p>
-            <p className="font-medium text-2xl">
-              {subject.subjectName} - {subject.subjectCode}
-            </p>
+          key={index}
+          onClick={() => handleSubjectSelect(subject)}
+          className="text-white  bg-[#0D1164] p-8 cursor-pointer rounded-2xl hover:-translate-y-2 duration-300 transition-all ease-in-out"
+        >
+          <div className="flex items-center gap-6">
+          <p className="text-4xl">
+            <MdLibraryBooks />
+          </p>
+         <div>
+         <p className="font-medium text-2xl">
+            {subject.subjectName} - {subject.subjectCode}
+          </p>
+          <p className="text-lg mt-1">Batch - {subject.batchName}</p>
+         </div>
           </div>
+         
+
+         
+        </div>
         )) || (
           <p className="text-center text-xl font-medium">No subjects found</p>
         )}

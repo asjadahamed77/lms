@@ -42,14 +42,22 @@ const AddAssignments = () => {
           <div
             key={index}
             onClick={() => handleSubjectSelect(subject)}
-            className="text-white flex items-center gap-6 bg-[#0D1164] p-8 cursor-pointer rounded-2xl hover:-translate-y-2 duration-300 transition-all ease-in-out"
+            className="text-white  bg-[#0D1164] p-8 cursor-pointer rounded-2xl hover:-translate-y-2 duration-300 transition-all ease-in-out"
           >
+            <div className="flex items-center gap-6">
             <p className="text-4xl">
               <MdLibraryBooks />
             </p>
-            <p className="font-medium text-2xl">
+           <div>
+           <p className="font-medium text-2xl">
               {subject.subjectName} - {subject.subjectCode}
             </p>
+            <p className="text-lg mt-1">Batch - {subject.batchName}</p>
+           </div>
+            </div>
+           
+
+           
           </div>
         )) || (
           <p className="text-center text-xl font-medium">No subjects found</p>
