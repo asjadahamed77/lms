@@ -3,6 +3,8 @@ import { AppContext } from "../../context/AppContext";
 import Sidebar from "../../components/student/Sidebar";
 import { MdOutlineMenu } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { GoFileSubmodule } from "react-icons/go";
+
 
 const StudentDashboard = () => {
   const { student } = useContext(AppContext);
@@ -45,14 +47,16 @@ const StudentDashboard = () => {
                   <div 
                   key={idx} 
                   onClick={() => navigate(`/student/enrolled-subjects/${subj.subjectId}`)} 
-                  className="border border-primaryColor/30 p-4 rounded-lg cursor-pointer transform hover:-translate-y-2 duration-300 ease-linear"
+                  className="border border-primaryColor/30 p-4 rounded-lg cursor-pointer transform hover:-translate-y-2 duration-300 ease-linear flex items-center gap-4"
                 >
-                  <p>
+                   <p className="text-4xl">
+                    <GoFileSubmodule />
+                  </p>
+                  <p className="font-medium">
                     {subj.subjectName} - {subj.subjectCode}
                   </p>
-                  <p>
-                    {subj.batchName}
-                  </p>
+                 
+
                 </div>
                 
                 ))}
