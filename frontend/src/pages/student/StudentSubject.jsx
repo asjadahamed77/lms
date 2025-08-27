@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { FaFileAlt, FaFileImage, FaFilePdf, FaFileWord } from "react-icons/fa";
+import { IoCloseSharp } from "react-icons/io5";
 
 const StudentSubject = () => {
   const navigate = useNavigate();
@@ -11,6 +12,11 @@ const StudentSubject = () => {
   const currentSubject = student.subjects.find(
     (sub) => sub.subjectId === subjectId
   );
+
+  const [showSubmitAssignmentPopup, setShowSubmitAssignmentPopup] =
+    useState(false);
+    const [showSubmitQuizPopup, setShowSubmitQuizPopup] =
+    useState(false);
 
   const getFileIcon = (fileName) => {
     const ext = fileName.split(".").pop().toLowerCase();
@@ -43,6 +49,13 @@ const StudentSubject = () => {
     const seconds = Math.floor((diff / 1000) % 60);
 
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  };
+
+  const assignmentSubmitHandler = async (e) => {
+    e.preventDefault();
+  };
+  const quizSubmitHandler = async (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -109,7 +122,10 @@ const StudentSubject = () => {
                   <p className="font-medium mt-2">Time Remaining</p>
                   <p className="text-primaryColor/80">{remaining}</p>
                 </div>
-                <button className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out">
+                <button
+                  onClick={() => setShowSubmitAssignmentPopup(true)}
+                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
+                >
                   Submit your assignment
                 </button>
               </div>
@@ -118,6 +134,45 @@ const StudentSubject = () => {
         ) : (
           <div className="text-center">
             <p className="text-primaryColor/80">No assignments yet.</p>
+          </div>
+        )}
+        {/* Assignment Submit Popup */}
+        {showSubmitAssignmentPopup && (
+          <div className="w-screen h-screen fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center">
+            <div className="bg-white rounded-xl p-4 sm:p-6 lg:p-8 w-full mx-4 sm:m-0 sm:w-[450px]">
+              <div className="flex items-center justify-between">
+                <h1 className="text-lg font-medium">Submit now</h1>
+                <p
+                  onClick={() => setShowSubmitAssignmentPopup(false)}
+                  className="text-2xl cursor-pointer"
+                >
+                  <IoCloseSharp />
+                </p>
+              </div>
+              <form
+                onSubmit={assignmentSubmitHandler}
+                className="mt-6 flex flex-col gap-4"
+              >
+                <div className="flex flex-col gap-2">
+                  <label className="font-semibold">Heading</label>
+                  <input
+                    type="text"
+                    placeholder="Heading ..."
+                    className="p-2 w-full rounded border border-primaryColor/30"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="font-semibold">Add Files</label>
+                  <input
+                    type="file"
+                    accept="application/pdf, image/*, .doc, .docx"
+                    multiple
+                    className="p-2 w-full rounded border border-primaryColor/30"
+                  />
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </div>
@@ -178,7 +233,7 @@ const StudentSubject = () => {
                   <p className="font-medium mt-2">Time Remaining</p>
                   <p className="text-primaryColor/80">{remaining}</p>
                 </div>
-                <button className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out">
+                <button onClick={()=> setShowSubmitQuizPopup(true)} className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer">
                   Submit your quiz
                 </button>
               </div>
@@ -187,6 +242,45 @@ const StudentSubject = () => {
         ) : (
           <div className="text-center">
             <p className="text-primaryColor/80">No quizzes yet.</p>
+          </div>
+        )}
+         {/* Quiz Submit Popup */}
+         {showSubmitQuizPopup && (
+          <div className="w-screen h-screen fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center">
+            <div className="bg-white rounded-xl p-4 sm:p-6 lg:p-8 w-full mx-4 sm:m-0 sm:w-[450px]">
+              <div className="flex items-center justify-between">
+                <h1 className="text-lg font-medium">Submit now</h1>
+                <p
+                  onClick={() => setShowSubmitQuizPopup(false)}
+                  className="text-2xl cursor-pointer"
+                >
+                  <IoCloseSharp />
+                </p>
+              </div>
+              <form
+                onSubmit={quizSubmitHandler}
+                className="mt-6 flex flex-col gap-4"
+              >
+                <div className="flex flex-col gap-2">
+                  <label className="font-semibold">Heading</label>
+                  <input
+                    type="text"
+                    placeholder="Heading ..."
+                    className="p-2 w-full rounded border border-primaryColor/30"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="font-semibold">Add Files</label>
+                  <input
+                    type="file"
+                    accept="application/pdf, image/*, .doc, .docx"
+                    multiple
+                    className="p-2 w-full rounded border border-primaryColor/30"
+                  />
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </div>
