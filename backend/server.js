@@ -7,7 +7,6 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import adminStudentRouter from "./routes/adminStudent.js";
 import authRouter from "./routes/auth.js";
 
-// Initialize app
 const app = express();
 const port = process.env.PORT || 4000;
 
@@ -24,19 +23,24 @@ app.get("/", (req, res) => {
   res.send("API WORKING...");
 });
 
-// Error handler (after routes)
+// Error handler
 app.use(errorHandler);
 
 // DB + Server
 (async () => {
   try {
     await sequelize.authenticate();
-    console.log("Connected to Neon PostgreSQL");
+    console.log("Connected to Database");
 
-    await sequelize.sync(); // ⚠️ use migrations in production
-    console.log("Tables synced");
+    // Only sync tables in dev (fast startup in prod)
+    if (process.env.NODE_ENV !== "production") {
+      await sequelize.sync();
+      console.log("Tables synced (dev mode)");
+    }
 
-    app.listen(port, () => console.log(`Server running on port ${port}`));
+    app.listen(port, () =>
+      console.log(`🚀 Server running on http://localhost:${port}`)
+    );
   } catch (error) {
     console.error("DB connection failed:", error.message);
     process.exit(1);

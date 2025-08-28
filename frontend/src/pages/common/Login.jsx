@@ -6,7 +6,7 @@ import Loading from "../../components/common/Loading";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { organizationName, loading, setLoading } = useContext(AppContext);
+  const { organizationName, loading, setLoading, setUser } = useContext(AppContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +24,9 @@ const Login = () => {
       setLoading(true);
       const data = await login(email, password);
 
-      if (data.success === true) {
+      if (data.success) {
+        setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
         if (data.user.role === "admin") {
           navigate("/admin");
         } else if (data.user.role === "student") {

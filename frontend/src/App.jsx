@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import AdminLayout from "./layout/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -38,8 +38,15 @@ import AttendanceManagement from "./pages/lecturer/attendanceManagement/Attendan
 import StudentSubject from "./pages/student/StudentSubject";
 import ForgotPassword from "./pages/common/ForgotPassword";
 import  { Toaster } from 'react-hot-toast';
+import { AppContext } from "./context/AppContext";
+import Loading from "./components/common/Loading";
 
 const App = () => {
+  const {loading} = useContext(AppContext)
+  if(loading){
+    return  <Loading />
+  }
+  
   return (
     <div className="">
       <Toaster />

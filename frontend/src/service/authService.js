@@ -15,3 +15,16 @@ export const login = async (email, password) => {
         
     }
 }
+
+export const logout = async () => {
+    try {
+        const {data} = await axios.post('/auth/logout', {}, {withCredentials: true});
+        // Clear token and user data
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}

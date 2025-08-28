@@ -39,13 +39,15 @@ export const securityConfig = (app) => {
   // 2. Secure headers
   app.use(helmet());
 
-  // 3. Rate limiting
-  const limiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 200,
-    message: "Too many requests from this IP, please try again later.",
-  });
-  app.use("/api", limiter);
+  // 3. Rate limiting (only enable in production for /auth)
+  if (process.env.NODE_ENV === "production") {
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100, // limit each IP
+      message: "Too many requests, try again later.",
+    });
+    app.use("/api/auth", limiter);
+  }
 
   // 4. Parse JSON
   app.use(express.json());

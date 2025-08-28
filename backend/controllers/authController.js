@@ -45,10 +45,32 @@ export const login = async (req, res) => {
         success: true,
         message: "Login successful",
         token, 
-        user
+        user:  {
+            userId: user.userId,
+            nameWithInitials: user.nameWithInitials,
+            fullName: user.fullName,
+            registrationNumber: user.registrationNumber,
+            email: user.email,
+            role: user.role,
+            batchName: user.batchName,
+            facultyName: user.facultyName,
+            departmentName: user.departmentName
+        }
       });
     } catch (error) {
         console.error("Login error:", error.message);
         res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
+
+export const logout = (req, res) => {
+    try {
+      res.clearCookie("token");
+    res.json({ success: true, message: "Logged out successfully" });
+    } catch (error) {
+        console.error("Logout error:", error.message);
+        res.status(500).json({ success: false, message: "Internal server error" });
+      
     }
 }

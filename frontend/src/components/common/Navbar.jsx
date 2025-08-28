@@ -4,11 +4,14 @@ import { SiStudyverse } from "react-icons/si";
 import { FaUserCircle } from "react-icons/fa";
 import { MdArrowDropDown } from "react-icons/md";
 import { AppContext } from "../../context/AppContext";
+import { logout } from "../../service/authService";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { organizationName, user } = useContext(AppContext);
+
 
   const handleNavigation = () => {
     if (user) {
@@ -22,7 +25,21 @@ const Navbar = () => {
     } else {
       navigate("/");
     }
-  }
+  };
+
+  const logoutHandler = async () => {
+    try {
+      const response = await logout();
+      if (response.success) {
+        navigate("/");
+        toast.success(response.message);
+
+      }
+    } catch (error) {
+      toast.error("Logout failed. Please try again.");
+      console.error("Logout error:", error);
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-primaryColor text-white flex items-center justify-between px-4 sm:px-6 md:px-20">
@@ -40,7 +57,7 @@ const Navbar = () => {
       </div>
       {/* User Profile */}
       {location.pathname !== "/" && (
-        <div className="flex items-center py-3 gap-3 cursor-pointer">
+        <div onClick={logoutHandler} className="flex items-center py-3 gap-3 cursor-pointer">
           <p className="text-sm sm:text-base">{user.nameWithInitials}</p>
           <div className="flex items-center gap-1">
             <p>
