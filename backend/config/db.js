@@ -1,15 +1,14 @@
-// db.js
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   dialectOptions: {
     ssl: {
-      require: true,       // Neon requires SSL
-      rejectUnauthorized: false
-    }
+      require: true,
+      rejectUnauthorized: false, // for Neon
+    },
   },
-  logging: false, // turn off SQL logs (optional)
+  logging: false,
 });
 
 export default sequelize;
