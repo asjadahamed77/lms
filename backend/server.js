@@ -1,22 +1,48 @@
 import express from "express";
-import cors from "cors";
-import "dotenv/config";
 import cookieParser from "cookie-parser";
+import "dotenv/config";
+import sequelize from "./config/db.js";
+import { securityConfig } from "./config/securityConfig.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import adminStudentRouter from "./routes/adminStudent.js";
+import authRouter from "./routes/auth.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
-const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
 
-// Middlewares
-app.use(express.json());
+// Security & middleware
+securityConfig(app);
 app.use(cookieParser());
-app.use(cors({ origin: allowedOrigins, credentials: true }));
-app.use(errorHandler);
 
+// Routes
+app.use("/api/admin-students", adminStudentRouter);
+app.use("/api/auth", authRouter);
 
+// Default route
 app.get("/", (req, res) => {
   res.send("API WORKING...");
 });
 
-app.listen(port, () => console.log(`Server Started on Port ${port}`));
+// Error handler
+app.use(errorHandler);
+
+// DB + Server
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connected to Database");
+
+    // Only sync tables in dev (fast startup in prod)
+    if (process.env.NODE_ENV !== "production") {
+      await sequelize.sync();
+      console.log("Tables synced (dev mode)");
+    }
+
+    app.listen(port, () =>
+      console.log(`🚀 Server running on http://localhost:${port}`)
+    );
+  } catch (error) {
+    console.error("DB connection failed:", error.message);
+    process.exit(1);
+  }
+})();
