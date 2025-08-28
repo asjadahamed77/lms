@@ -1,5 +1,15 @@
-import { neon } from "@neondatabase/serverless";
+// db.js
+import { Sequelize } from "sequelize";
 
-const sql = neon(`${process.env.DATABASE_URL}`);
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: {
+      require: true,       // Neon requires SSL
+      rejectUnauthorized: false
+    }
+  },
+  logging: false, // turn off SQL logs (optional)
+});
 
-export default sql;
+export default sequelize;
