@@ -5,6 +5,7 @@ import sequelize from "./config/db.js";
 import { securityConfig } from "./config/securityConfig.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import adminStudentRouter from "./routes/adminStudent.js";
+import authRouter from "./routes/auth.js";
 
 // Initialize app
 const app = express();
@@ -16,6 +17,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/admin-students", adminStudentRouter);
+app.use("/api/auth", authRouter);
 
 // Default route
 app.get("/", (req, res) => {

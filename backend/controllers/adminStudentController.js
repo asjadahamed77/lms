@@ -115,7 +115,7 @@ export const createStudent = async (req, res) => {
   }
 };
 
-// Additional helper functions
+// Function to get all students
 export const getAllStudents = async (req, res) => {
   try {
     const students = await User.findAll({
