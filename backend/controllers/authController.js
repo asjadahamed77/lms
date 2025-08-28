@@ -16,15 +16,15 @@ export const login = async (req, res) => {
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res
-        .status(401)
-        .json({ success: false, message: "Invalid credentials" });
+       
+        .json({ success: false, message: "User not found" });
     }
 
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
-        .status(401)
+       
         .json({ success: false, message: "Invalid credentials" });
     }
 

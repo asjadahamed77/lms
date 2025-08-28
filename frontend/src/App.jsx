@@ -37,10 +37,12 @@ import PaymentManagement from "./pages/admin/paymentManagement/PaymentManagement
 import AttendanceManagement from "./pages/lecturer/attendanceManagement/AttendanceManagement";
 import StudentSubject from "./pages/student/StudentSubject";
 import ForgotPassword from "./pages/common/ForgotPassword";
+import  { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
     <div className="">
+      <Toaster />
       <Navbar />
 
       <div className="px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 mt-[60px]">
