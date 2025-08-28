@@ -36,6 +36,7 @@ import QuizManagement from "./pages/lecturer/quizManagement/QuizManagement";
 import PaymentManagement from "./pages/admin/paymentManagement/PaymentManagement";
 import AttendanceManagement from "./pages/lecturer/attendanceManagement/AttendanceManagement";
 import StudentSubject from "./pages/student/StudentSubject";
+import ForgotPassword from "./pages/common/ForgotPassword";
 
 const App = () => {
   return (
@@ -48,6 +49,7 @@ const App = () => {
           {/*  -------------     LOGIN    ------------------------  */}
           {/* ---------------------------------------------------------------------------------------- */}
           <Route path="/" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* ---------------------------------------------------------------------------------------- */}
           {/*  -------------     ADMIN LAYOUT   ------------------------  */}
