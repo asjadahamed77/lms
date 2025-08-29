@@ -13,7 +13,7 @@ const User = sequelize.define("User", {
     type: DataTypes.UUID,
     defaultValue: () => uuidv4(),
     allowNull: false,
-    unique: true,
+  
     primaryKey: true,
   },
   name: {

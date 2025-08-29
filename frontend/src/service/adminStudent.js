@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
@@ -6,10 +7,10 @@ const token = localStorage.getItem('token')
 
 
 
-// create batch
-export const createBatch = async (formData) => {
+// create student 
+export const createStudent = async (formData) => {
     try {
-        const {data} = await axios.post('/admin-batch/create-batch', formData, {
+        const {data} = await axios.post('/admin-students/create-student', formData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -22,10 +23,10 @@ export const createBatch = async (formData) => {
     }
 }
 
-// get all batches
-export const getAllBatches = async () => {
+// get all students
+export const getAllStudents = async () => {
     try {
-        const {data} = await axios.get('/admin-batch/get-batches', {
+        const {data} = await axios.get('/admin-students/get-students', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`

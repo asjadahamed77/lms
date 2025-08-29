@@ -8,11 +8,11 @@ const Batch = sequelize.define("Batch", {
     autoIncrement: true,
    
   },
-  batchID: {
+  batchId: {
     type: DataTypes.UUID,
     defaultValue: () => uuidv4(),
     allowNull: false,
-    unique: true,
+ 
     primaryKey: true,
   },
   batchName: {
@@ -21,11 +21,9 @@ const Batch = sequelize.define("Batch", {
   },
   facultyName: {
     type: DataTypes.STRING,
-    unique: true,
   },
   departmentName: {
     type: DataTypes.STRING,
-    unique: true,
   },
 },{
     timestamps: true,

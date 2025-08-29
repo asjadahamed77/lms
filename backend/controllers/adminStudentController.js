@@ -125,7 +125,7 @@ export const getAllStudents = async (req, res) => {
 
     res.json({
       success: true,
-      data: students
+      students
     });
   } catch (error) {
     console.error("Error fetching students:", error);
