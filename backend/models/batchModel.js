@@ -6,22 +6,26 @@ const Batch = sequelize.define("Batch", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true,
+   
   },
   batchID: {
     type: DataTypes.UUID,
     defaultValue: () => uuidv4(),
     allowNull: false,
     unique: true,
+    primaryKey: true,
   },
   batchName: {
     type: DataTypes.STRING,
+   
   },
   facultyName: {
     type: DataTypes.STRING,
+    unique: true,
   },
   departmentName: {
     type: DataTypes.STRING,
+    unique: true,
   },
 },{
     timestamps: true,

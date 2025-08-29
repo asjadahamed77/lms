@@ -1,13 +1,48 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBackSharp } from "react-icons/io5";
+import toast from 'react-hot-toast';
+import { createBatch } from '../../../service/adminBatch';
+import { AppContext } from '../../../context/AppContext';
+import Loading from '../../../components/common/Loading';
 
 const AddBatch = () => {
   const navigate = useNavigate()
+  const {loading} = useContext(AppContext)
+  const [formData, setFormData] = useState({
+    batchName: '',
+    facultyName: '',
+    departmentName: '',
+  })
 
-  const submitHandler = (e) => {
+  const onChangeHandler = (e) => {
+    const {name, value} = e.target;
+    setFormData({...formData, [name]: value})
+  }
+
+  const submitHandler = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await createBatch(formData)
+      if(response.success){
+        toast.success(response.message)
+        setFormData({
+          batchName: '',
+          facultyName: '',
+          departmentName: '',
+        })
+      }
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message)
+      
+    }
     
+  }
+
+  if(loading){
+    return <Loading />
   }
 
   return (
@@ -27,6 +62,9 @@ const AddBatch = () => {
               type="text"
               placeholder="If batch is 2020/2021 then type 2020/2021"
               className="p-2 w-full rounded border border-primaryColor/30"
+              name='batchName'
+              onChange={onChangeHandler}
+              value={formData.batchName}
               required
             />
           </div>
@@ -36,6 +74,9 @@ const AddBatch = () => {
               type="text"
               placeholder="Faculty of Computing"
               className="p-2 w-full rounded border border-primaryColor/30"
+              name='facultyName'
+              onChange={onChangeHandler}
+              value={formData.facultyName}
               required
             />
           </div>
@@ -45,6 +86,9 @@ const AddBatch = () => {
               type="text"
               placeholder="Department of Computer Science"
               className="p-2 w-full rounded border border-primaryColor/30"
+              name='departmentName'
+              onChange={onChangeHandler}
+              value={formData.departmentName}
               required
             />
           </div>
