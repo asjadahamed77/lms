@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SiStudyverse } from "react-icons/si";
 import { FaUserCircle } from "react-icons/fa";
 import { MdArrowDropDown } from "react-icons/md";
@@ -11,7 +11,13 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { organizationName, user } = useContext(AppContext);
+  const [mobileProfile, setMobileProfile] = useState(false);
 
+  const handleMobileProfile = () => {
+    if (window.screen.width < 640) {
+      setMobileProfile(!mobileProfile);
+    }
+  };
 
   const handleNavigation = () => {
     if (user) {
@@ -33,7 +39,6 @@ const Navbar = () => {
       if (response.success) {
         navigate("/");
         toast.success(response.message);
-
       }
     } catch (error) {
       toast.error("Logout failed. Please try again.");
@@ -57,15 +62,38 @@ const Navbar = () => {
       </div>
       {/* User Profile */}
       {location.pathname !== "/" && (
-        <div onClick={logoutHandler} className="flex items-center py-3 gap-3 cursor-pointer">
-          <p className="text-sm sm:text-base">{user.nameWithInitials}</p>
-          <div className="flex items-center gap-1">
-            <p>
-              <FaUserCircle />
-            </p>
-            <p>
-              <MdArrowDropDown />
-            </p>
+        <div
+          onClick={handleMobileProfile}
+          className=" py-3  cursor-pointer relative group"
+        >
+          <div className="flex items-center gap-3">
+            <p className="text-sm sm:text-base">{user.nameWithInitials}</p>
+            <div className="flex items-center gap-1">
+              <p>
+                <FaUserCircle />
+              </p>
+              <p>
+                <MdArrowDropDown />
+              </p>
+            </div>
+          </div>
+          {/* Group hover contents */}
+          <div
+            className={`absolute right-0 top-full p-1.5 w-40 ${
+              mobileProfile ? "opacity-100" : ""
+            }  opacity-0 sm:group-hover:opacity-100 transition-opacity z-25`}
+          >
+            <ul className="flex flex-col bg-white  border border-primaryColor/30 py-2 px-2 rounded-lg ">
+              <li className="p-1 border-b border-primaryColor/20 text-primaryColor/70 hover:text-primaryColor/90 duration-300 transition-all ease-linear cursor-pointer">
+                <Link to={"/manage-profile"}>Manage Profile</Link>
+              </li>
+              <li
+                onClick={logoutHandler}
+                className="p-1 text-primaryColor/70 hover:text-primaryColor/90 duration-300 transition-all ease-linear cursor-pointer"
+              >
+                Logout Profile
+              </li>
+            </ul>
           </div>
         </div>
       )}

@@ -7,13 +7,14 @@ const User = sequelize.define("User", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true,
+   
   },
   userId: {
     type: DataTypes.UUID,
     defaultValue: () => uuidv4(),
     allowNull: false,
     unique: true,
+    primaryKey: true,
   },
   name: {
     type: DataTypes.STRING,
@@ -57,7 +58,7 @@ const User = sequelize.define("User", {
     }
   },
   role: {
-    type: DataTypes.ENUM("student", "lecturer", "admin"),
+    type: DataTypes.ENUM("admin", "lecturer", "student"),
     defaultValue: "student",
   },
   batchName: { 

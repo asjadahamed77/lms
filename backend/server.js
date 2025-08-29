@@ -6,6 +6,7 @@ import { securityConfig } from "./config/securityConfig.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import adminStudentRouter from "./routes/adminStudent.js";
 import authRouter from "./routes/auth.js";
+import adminBatchRouter from "./routes/adminBatch.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -16,6 +17,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/admin-students", adminStudentRouter);
+app.use("/api/admin-batch", adminBatchRouter);
 app.use("/api/auth", authRouter);
 
 // Default route
@@ -39,7 +41,7 @@ app.use(errorHandler);
     }
 
     app.listen(port, () =>
-      console.log(`🚀 Server running on http://localhost:${port}`)
+      console.log(`Server running on http://localhost:${port}`)
     );
   } catch (error) {
     console.error("DB connection failed:", error.message);
