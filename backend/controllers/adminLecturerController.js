@@ -2,7 +2,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 
-export const createStudent = async (req, res) => {
+export const createLecturer = async (req, res) => {
   try {
     const { 
       name, 
@@ -10,7 +10,6 @@ export const createStudent = async (req, res) => {
       registrationNumber, 
       email, 
       password, 
-      batchName, 
       facultyName, 
       departmentName 
     } = req.body;
@@ -47,43 +46,42 @@ export const createStudent = async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Create student
-    const student = await User.create({
+    // Create lecturer
+    const lecturer = await User.create({
       name,
       nameWithInitials,
       registrationNumber,
       email,
       password: hashedPassword,
-      batchName,
       facultyName,
       departmentName,
-      role: "student"
+      role: "lecturer"
     });
 
     // Remove password from response
-    const studentResponse = {
-      userId: student.userId,
-      name: student.name,
-      nameWithInitials: student.nameWithInitials,
-      registrationNumber: student.registrationNumber,
-      email: student.email,
-      role: student.role,
-      batchName: student.batchName,
-      facultyName: student.facultyName,
-      departmentName: student.departmentName,
-      isActive: student.isActive,
-      createdAt: student.createdAt,
-      updatedAt: student.updatedAt
+    const lectuererResponse = {
+      userId: lecturer.userId,
+      name: lecturer.name,
+      nameWithInitials: lecturer.nameWithInitials,
+      registrationNumber: stulecturerdent.registrationNumber,
+      email: stlecturerudent.email,
+      role: lecturer.role,
+     
+      facultyName: lecturer.facultyName,
+      departmentName: lecturer.departmentName,
+      isActive: lecturer.isActive,
+      createdAt: lecturer.createdAt,
+      updatedAt: lecturer.updatedAt
     };
 
     res.status(201).json({
       success: true,
-      message: "Student created successfully",
-      data: studentResponse
+      message: "Lecturer created successfully",
+        lecturer: lectuererResponse
     });
 
   } catch (error) {
-    console.error("Error creating student:", error);
+    console.error("Error creating lecturer:", error);
 
     // Handle Sequelize validation errors
     if (error.name === 'SequelizeValidationError') {
@@ -115,51 +113,51 @@ export const createStudent = async (req, res) => {
   }
 };
 
-// Function to get all students
-export const getAllStudents = async (req, res) => {
+// Function to get all lecturers
+export const getAllLecturers = async (req, res) => {
   try {
-    const students = await User.findAll({
-      where: { role: "student" },
+    const lecturers = await User.findAll({
+      where: { role: "lecturer" },
       attributes: { exclude: ['password'] }
     });
 
     res.json({
       success: true,
-      students
+      lecturers
     });
   } catch (error) {
-    console.error("Error fetching students:", error);
+    console.error("Error fetching lecturers:", error);
     res.status(500).json({
       success: false,
-      message: "Error fetching students"
+      message: "Error fetching lecturers"
     });
   }
 };
 
-export const getStudentById = async (req, res) => {
+export const getLecturerById = async (req, res) => {
   try {
     const { id } = req.params;
-    const student = await User.findOne({
-      where: { userId: id, role: "student" },
+    const lecturer = await User.findOne({
+      where: { userId: id, role: "lecturer" },
       attributes: { exclude: ['password'] }
     });
 
-    if (!student) {
+    if (!lecturer) {
       return res.status(404).json({
         success: false,
-        message: "Student not found"
+        message: "lecturer not found"
       });
     }
 
     res.json({
       success: true,
-      student
+      lecturer
     });
   } catch (error) {
-    console.error("Error fetching student:", error);
+    console.error("Error fetching lecturer:", error);
     res.status(500).json({
       success: false,
-      message: "Error fetching student"
+      message: "Error fetching lecturer"
     });
   }
 };

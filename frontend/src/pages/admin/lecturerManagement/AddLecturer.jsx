@@ -2,22 +2,71 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { AppContext } from "../../../context/AppContext";
+import Loading from "../../../components/common/Loading";
+import { createLecturer } from "../../../service/adminLecturer";
+import toast from "react-hot-toast";
 const AddLecturer = () => {
   const navigate = useNavigate();
-  const { batches } = useContext(AppContext);
-  const [selectedFaculty, setSelectedFaculty] = useState("");
+  const { batches, loading } = useContext(AppContext);
+  const [formData, setFormData] = useState({
+    name: "",
+    nameWithInitials: "",
+    registrationNumber: "",
+    email: "",
+    password: "",
+    facultyName: "",
+    departmentName: "",
+    
+  });
 
-  // Get unique faculties
-  const faculties = [...new Set(batches.map((batch) => batch.facultyName))];
+  const onChangeHandler = (e) => {
+    const {name, value} = e.target;
+    setFormData({...formData, [name]: value})
+  }
 
-  // Get Department of seleceted faculty
-  const departmentsOfFaculty = batches
-    .filter((batch) => batch.facultyName === selectedFaculty)
-    .map((batch) => batch.departmentName);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-  };
+// Get unique faculties
+const faculties = [...new Set(batches.map((batch) => batch.facultyName))];
+
+// Get unique departments for selected faculty
+const departmentsOfFaculty = [
+  ...new Set(
+    batches
+      .filter((batch) => batch.facultyName === formData.facultyName)
+      .map((batch) => batch.departmentName)
+  ),
+];
+
+
+
+
+
+    const submitHandler = async (e) => {
+      e.preventDefault();
+      try {
+        const response = await createLecturer(formData);
+        if (response.success) {
+          toast.success(response.message);
+          setFormData({
+            name: "",
+            nameWithInitials: "",
+            registrationNumber: "",
+            email: "",
+            password: "",
+            facultyName: "",
+            departmentName: "",
+           
+          });
+        }
+      } catch (error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
+    };
+
+  if(loading){
+    return <Loading />
+  }
 
   
   
@@ -40,6 +89,9 @@ const AddLecturer = () => {
             <label className="font-semibold">Full Name</label>
             <input
               type="text"
+              name="name"
+              onChange={onChangeHandler}
+              value={formData.name}
               placeholder="Mohamed Jiffry Asjad Ahamed"
               className="p-2 w-full rounded border border-primaryColor/30"
               required
@@ -51,6 +103,9 @@ const AddLecturer = () => {
               <input
                 type="text"
                 placeholder="MJA Ahamed"
+                name="nameWithInitials"
+                onChange={onChangeHandler}
+                value={formData.nameWithInitials}
                 className="p-2 w-full rounded border border-primaryColor/30"
                 required
               />
@@ -60,6 +115,9 @@ const AddLecturer = () => {
               <input
                 type="text"
                 placeholder="20APSE4839"
+                name="registrationNumber"
+                onChange={onChangeHandler}
+                value={formData.registrationNumber}
                 className="p-2 w-full rounded border border-primaryColor/30"
                 required
               />
@@ -70,6 +128,9 @@ const AddLecturer = () => {
               <label className="font-semibold">Email</label>
               <input
                 type="email"
+                name="email"
+                onChange={onChangeHandler}
+                value={formData.email}
                 placeholder="mjaahamed@com.ac.lk"
                 className="p-2 w-full rounded border border-primaryColor/30"
                 required
@@ -79,6 +140,9 @@ const AddLecturer = () => {
               <label className="font-semibold">Password</label>
               <input
                 type="text"
+                name="password"
+                onChange={onChangeHandler}
+                value={formData.password}
                 placeholder="********"
                 className="p-2 w-full rounded border border-primaryColor/30"
                 required
@@ -86,12 +150,14 @@ const AddLecturer = () => {
             </div>
           </div>
 
-          <div className="flex md:flex-row flex-col gap-4">
-            <div className="flex flex-col  gap-2 flex-1 ">
+   <div className="flex flex-col gap-4">
+            {/* Faculty */}
+            <div className="flex flex-col gap-2">
               <label className="font-semibold">Select Faculty</label>
               <select
-                value={selectedFaculty}
-                onChange={(e) => setSelectedFaculty(e.target.value)}
+                name="facultyName"
+                value={formData.facultyName}
+                onChange={onChangeHandler}
                 className="p-2 w-full rounded border border-primaryColor/30"
                 required
               >
@@ -103,10 +169,18 @@ const AddLecturer = () => {
                 ))}
               </select>
             </div>
-            {selectedFaculty && (
-              <div className="flex flex-col  gap-2 flex-1 ">
+
+            {/* Department */}
+            {formData.facultyName && (
+              <div className="flex flex-col gap-2">
                 <label className="font-semibold">Select Department</label>
-                <select className="p-2 w-full rounded border border-primaryColor/30" required>
+                <select
+                  name="departmentName"
+                  value={formData.departmentName}
+                  onChange={onChangeHandler}
+                  className="p-2 w-full rounded border border-primaryColor/30"
+                  required
+                >
                   <option value="">-- SELECT --</option>
                   {departmentsOfFaculty.map((dept, index) => (
                     <option key={index} value={dept}>
@@ -116,6 +190,9 @@ const AddLecturer = () => {
                 </select>
               </div>
             )}
+
+           
+          
           </div>
 
           <button

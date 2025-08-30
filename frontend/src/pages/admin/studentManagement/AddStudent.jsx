@@ -4,10 +4,11 @@ import { IoChevronBackSharp } from "react-icons/io5";
 import { AppContext } from "../../../context/AppContext";
 import toast from "react-hot-toast";
 import { createStudent } from "../../../service/adminStudent";
+import Loading from "../../../components/common/Loading";
 
 const AddStudent = () => {
   const navigate = useNavigate();
-  const { batches } = useContext(AppContext);
+  const { batches, loading } = useContext(AppContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -25,22 +26,31 @@ const AddStudent = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  // Get unique faculties
-  const faculties = [...new Set(batches.map((batch) => batch.facultyName))];
+// Get unique faculties
+const faculties = [...new Set(batches.map((batch) => batch.facultyName))];
 
-  // Get departments for selected faculty
-  const departmentsOfFaculty = batches
-    .filter((batch) => batch.facultyName === formData.facultyName)
-    .map((batch) => batch.departmentName);
+// Get unique departments for selected faculty
+const departmentsOfFaculty = [
+  ...new Set(
+    batches
+      .filter((batch) => batch.facultyName === formData.facultyName)
+      .map((batch) => batch.departmentName)
+  ),
+];
 
-  // Get batch names for selected department
-  const batchesOfDepartment = batches
-    .filter(
-      (batch) =>
-        batch.facultyName === formData.facultyName &&
-        batch.departmentName === formData.departmentName
-    )
-    .map((batch) => batch.batchName);
+// Get unique batch names for selected department
+const batchesOfDepartment = [
+  ...new Set(
+    batches
+      .filter(
+        (batch) =>
+          batch.facultyName === formData.facultyName &&
+          batch.departmentName === formData.departmentName
+      )
+      .map((batch) => batch.batchName)
+  ),
+];
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -64,6 +74,10 @@ const AddStudent = () => {
       console.log(error.message);
     }
   };
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <div className="py-8 md:py-12">
