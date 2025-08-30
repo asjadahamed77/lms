@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { lecturer, lecturers } from "../assets/lecturers";
+import { lecturer } from "../assets/lecturers";
 import { subjects } from "../assets/subjects";
 import { announcements } from "../assets/announcements";
 import { assignments } from "../assets/assignments";
@@ -8,6 +8,7 @@ import { resources } from "../assets/resources";
 import { student } from "../assets/student";
 import { getAllBatches } from "../service/adminBatch";
 import { getAllStudents } from "../service/adminStudent";
+import { getAllLecturers } from "../service/adminLecturer";
 
 export const AppContext = createContext();
 
@@ -22,8 +23,12 @@ const AppContextProvider = ({ children }) => {
 
   const [batches, setBatches] = useState([])
   const [students, setStudents] = useState([])
+  const [lecturers, setLecturers] = useState([])
 
+  console.log(lecturers);
   
+
+
   
 
   const getAdminBatches = async ()=> {
@@ -44,9 +49,19 @@ const AppContextProvider = ({ children }) => {
     }
   }
 
+  const getAdminLecturers = async ()=> {
+    if(user && user.role === "admin") {
+      const response = await getAllLecturers();
+      if(response.success) {
+        setLecturers(response.lecturers)
+      }
+    }
+  }
+
   useEffect(()=>{
     getAdminBatches()
     getAdminStudents()
+    getAdminLecturers()
   },[])
 
   
@@ -70,6 +85,7 @@ const AppContextProvider = ({ children }) => {
     students,
     setStudents,
     lecturers,
+    setLecturers,
     subjects,
     announcements,
     lecturer,
