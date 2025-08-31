@@ -8,10 +8,7 @@ import Batch from "./batchModel.js";
 const Subject = sequelize.define(
   "Subject",
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-    },
+    
     subjectId: {
       type: DataTypes.UUID,
       defaultValue: () => uuidv4(),

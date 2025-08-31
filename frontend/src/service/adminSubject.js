@@ -22,18 +22,20 @@ export const createSubject = async (formData) => {
     }
 }
 
-// // get all subjects
-// export const getAllSubjects = async () => {
-//     try {
-//         const {data} = await axios.get('/admin-subjects/get-subjects', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Authorization': `Bearer ${token}`
-//             },
-//         })
-//         return data;
-//     } catch (error) {
-//         console.log(error);
-//         throw error;
-//     }
-// }
+// get all subjects
+export const getAllSubjects = async () => {
+    try {
+        const {data} = await axios.get('/admin-subjects/get-subjects', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+      
+        
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
