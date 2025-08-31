@@ -63,8 +63,8 @@ export const createLecturer = async (req, res) => {
       userId: lecturer.userId,
       name: lecturer.name,
       nameWithInitials: lecturer.nameWithInitials,
-      registrationNumber: stulecturerdent.registrationNumber,
-      email: stlecturerudent.email,
+      registrationNumber: lecturer.registrationNumber,
+      email: lecturer.email,
       role: lecturer.role,
      
       facultyName: lecturer.facultyName,
