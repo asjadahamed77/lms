@@ -3,9 +3,11 @@ import { AppContext } from "../../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { IoCloseSharp } from "react-icons/io5";
+import Loading from "../../../components/common/Loading";
 
 const ViewSubjects = () => {
-  const { subjects } = useContext(AppContext);
+  const { subjects, loading } = useContext(AppContext);
+  
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -13,6 +15,11 @@ const ViewSubjects = () => {
     setShowPopup(!showPopup);
     setSelectedSubject(subject);
   };
+
+  if(loading){
+    return <Loading />
+  }
+
   return (
     <div className="py-8 md:py-12">
       <button
