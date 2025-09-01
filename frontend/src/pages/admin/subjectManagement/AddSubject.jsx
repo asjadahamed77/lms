@@ -8,7 +8,7 @@ import Loading from "../../../components/common/Loading";
 
 const AddSubject = () => {
   const navigate = useNavigate();
-  const { batches, loading } = useContext(AppContext);
+  const { batches, loading, getAdminSubjects } = useContext(AppContext);
 
   const [formData, setFormData] = useState({
     batchName: "",
@@ -64,6 +64,7 @@ const AddSubject = () => {
           subjectCode: "",
           subjectSemester: "",
         });
+        await getAdminSubjects();
       }
     } catch (error) {
       console.log(error.message);

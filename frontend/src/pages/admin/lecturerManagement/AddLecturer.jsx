@@ -7,7 +7,7 @@ import { createLecturer } from "../../../service/adminLecturer";
 import toast from "react-hot-toast";
 const AddLecturer = () => {
   const navigate = useNavigate();
-  const { batches, loading } = useContext(AppContext);
+  const { batches, loading, getAdminLecturers } = useContext(AppContext);
   const [formData, setFormData] = useState({
     name: "",
     nameWithInitials: "",
@@ -57,6 +57,7 @@ const departmentsOfFaculty = [
             departmentName: "",
            
           });
+          await getAdminLecturers();
         }
       } catch (error) {
         toast.error(error.message);
