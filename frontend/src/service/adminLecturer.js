@@ -38,3 +38,19 @@ export const getAllLecturers = async () => {
         throw error;
     }
 }
+
+// Delete lecturer
+export const deleteLecturer = async (id) => {
+    try {
+        const {data} = await axios.delete(`/admin-lecturers/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
