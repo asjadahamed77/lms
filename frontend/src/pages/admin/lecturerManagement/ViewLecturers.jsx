@@ -3,16 +3,37 @@ import { AppContext } from "../../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { IoCloseSharp } from "react-icons/io5";
+import { deleteLecturer } from "../../../service/adminLecturer";
+import toast from "react-hot-toast";
+import Loading from "../../../components/common/Loading";
 
 const ViewLecturers = () => {
-  const { lecturers } = useContext(AppContext);
+  const { lecturers, loading, getAdminLecturers } = useContext(AppContext);
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [selectedLecturer, setSelectedLecturer] = useState(null);
   const lecturerHandler = (lecturer) => {
     setShowPopup(!showPopup);
     setSelectedLecturer(lecturer);
   };
+  const handleDeleteLecturer = async (userId) => {
+    try {
+      const response = await deleteLecturer(userId);
+      if (response.success) {
+        setShowPopup(false);
+        toast.success(response.message);
+        await getAdminLecturers();
+      }
+    } catch (error) {
+      toast.error(error.message || "Something went wrong");
+      console.log(error.message);
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <div className="py-8 md:py-12">
       <button
@@ -163,12 +184,44 @@ const ViewLecturers = () => {
                   Close
                 </button>
                 <button
-                  onClick={lecturerHandler}
+                      onClick={() => setShowConfirm(true)}
                   className="bg-red-500 text-white text-sm rounded-lg py-2.5   cursor-pointer hover:bg-red-400 duration-300 transition-all ease-in-out"
                 >
                   Delete Lecturer
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+       {/* Confirmation Modal */}
+       {showConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 w-[350px] shadow-md">
+            <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+            <p className="text-sm mb-6">
+              Are you sure you want to delete{" "}
+              <span className="font-medium">
+                {selectedLecturer?.nameWithInitials}
+              </span>
+              ?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="px-4 py-2 bg-gray-300 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  handleDeleteLecturer(selectedLecturer.userId);
+                  setShowConfirm(false);
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

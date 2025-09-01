@@ -161,3 +161,19 @@ export const getLecturerById = async (req, res) => {
     });
   }
 };
+
+export const deleteLecturer = async (req,res) => {
+  const {userId} = req.params;
+  try {
+    const lecturer = await User.findOne({where: {userId, role: "lecturer"}});
+    if(!lecturer){
+      return res.status(404).json({success: false, message: "Lecturer not found"})
+    }
+    await lecturer.destroy();
+    res.status(200).json({success: true, message: "Lecturer deleted successfully"})
+  } catch (error) {
+    console.log("Error in deleting lecturer:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+    
+  }
+}
