@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { IoCloseSharp } from "react-icons/io5";
 import Loading from "../../../components/common/Loading";
+import { deleteSubject } from "../../../service/adminSubject";
+import toast from "react-hot-toast";
 
 const ViewSubjects = () => {
-  const { subjects, loading } = useContext(AppContext);
+  const { subjects, loading, getAdminSubjects } = useContext(AppContext);
   
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
@@ -15,6 +17,27 @@ const ViewSubjects = () => {
     setShowPopup(!showPopup);
     setSelectedSubject(subject);
   };
+
+  const handleDeleteSubject = async (subjectId) => {
+
+    try {
+      const response = await deleteSubject(subjectId);
+    if(response.success){
+    
+      setShowPopup(false);
+      toast.success(response.message)
+      await getAdminSubjects();
+    }
+    } catch (error) {
+      toast.error(error.message || "Something went wrong")
+      console.log(error.message);
+      
+      
+    }
+
+  }
+
+
 
   if(loading){
     return <Loading />
@@ -137,7 +160,7 @@ const ViewSubjects = () => {
               {/* Buttons */}
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <button onClick={subjectHandler} className="bg-primaryColor text-white text-sm rounded-lg py-2.5 cursor-pointer hover:bg-primaryColor/80 duration-300 transition-all ease-in-out">Close</button>
-                <button onClick={subjectHandler} className="bg-red-500 text-white text-sm rounded-lg py-2.5   cursor-pointer hover:bg-red-400 duration-300 transition-all ease-in-out">Delete Subject</button>
+                <button onClick={()=> handleDeleteSubject(selectedSubject.subjectId)} className="bg-red-500 text-white text-sm rounded-lg py-2.5   cursor-pointer hover:bg-red-400 duration-300 transition-all ease-in-out">Delete Subject</button>
               </div>
             </div>
           </div>

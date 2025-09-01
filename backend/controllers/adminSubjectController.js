@@ -64,3 +64,23 @@ export const getAllSubjects = async (req, res) => {
 //         res.status(500).json({ success: false, message: error.message || "Internal server error" });
 //     }
 // }
+
+export const deleteSubject = async (req, res) => {
+    const {subjectId} = req.params;
+    
+    
+    
+    try {
+        const subject = await Subject.findOne({where: {subjectId}});
+       
+        
+        if(!subject){
+            return res.status(404).json({success: false, message: "Subject not found"})
+        }
+        await subject.destroy();
+        res.status(200).json({success: true, message: "Subject deleted successfully"})
+    } catch (error) {
+        console.error("Delete Subject error:", error);
+        res.status(500).json({ success: false, message: error.message || "Internal server error" });
+    }
+}

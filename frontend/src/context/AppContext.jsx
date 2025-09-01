@@ -114,6 +114,11 @@ const AppContextProvider = ({ children }) => {
     setLoading,
     user,
     setUser,
+    getAdminSubjects,
+    getAdminBatches,
+    getAdminStudents,
+    getAdminLecturers,
+    
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -39,3 +39,20 @@ export const getAllSubjects = async () => {
         throw error;
     }
 }
+
+
+// Delete Subject
+export const deleteSubject = async (id) => {
+    try {
+        const {data} = await axios.delete(`/admin-subjects/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
