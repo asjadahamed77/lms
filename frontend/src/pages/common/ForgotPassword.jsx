@@ -30,7 +30,7 @@ const ForgotPassword = () => {
 
   // OTP input handlers
   const handleChange = (e, index) => {
-    const value = e.target.value.replace(/\D/, ""); // only numbers
+    const value = e.target.value.replace(/\D/, ""); 
 
     if (!value) return;
 

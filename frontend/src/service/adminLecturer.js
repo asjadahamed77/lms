@@ -32,7 +32,6 @@ export const getAllLecturers = async () => {
                 'Authorization': `Bearer ${token}`
             },
         })
-console.log(data);
         
         return data;
     } catch (error) {
