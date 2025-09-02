@@ -4,11 +4,11 @@ import { announcements } from "../assets/announcements";
 import { assignments } from "../assets/assignments";
 import { quizzes } from "../assets/quizzes";
 import { resources } from "../assets/resources";
-import { student } from "../assets/student";
 import { getAllBatches } from "../service/adminBatch";
 import { getAllStudents } from "../service/adminStudent";
 import { getAllLecturers } from "../service/adminLecturer";
 import { getAllSubjects } from "../service/adminSubject";
+// import { getStudent } from "../service/studentService";
 
 export const AppContext = createContext();
 
@@ -25,6 +25,7 @@ const AppContextProvider = ({ children }) => {
   const [students, setStudents] = useState([])
   const [lecturers, setLecturers] = useState([])
   const [subjects, setSubjects] = useState([])
+  // const [student, setStudent] = useState(null)
 
   
 
@@ -70,6 +71,20 @@ const AppContextProvider = ({ children }) => {
     }
   }
 
+  
+
+  // const getStudentData = async () => {
+  //   if(user && user.role === "student") {
+  //     const response = await getStudent(user.userId);
+  //     if(response.success) {
+  //       setStudent(response.student)
+  //     }
+  //   }
+  // }
+
+  console.log(user);
+  
+
   useEffect(()=>{
     getAdminBatches()
     getAdminStudents()
@@ -109,7 +124,7 @@ const AppContextProvider = ({ children }) => {
     assignments,
     quizzes,
     resources,
-    student,
+   
     loading,
     setLoading,
     user,

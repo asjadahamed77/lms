@@ -9,6 +9,7 @@ import authRouter from "./routes/auth.js";
 import adminBatchRouter from "./routes/adminBatch.js";
 import adminLecturerRouter from "./routes/adminLecturer.js";
 import adminSubjectRouter from "./routes/adminSubject.js";
+import studentRouter from "./routes/student.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -22,6 +23,7 @@ app.use("/api/admin-students", adminStudentRouter);
 app.use("/api/admin-lecturers", adminLecturerRouter);
 app.use("/api/admin-subjects", adminSubjectRouter);
 app.use("/api/admin-batch", adminBatchRouter);
+app.use("/api/student", studentRouter);
 app.use("/api/auth", authRouter);
 
 // Default route

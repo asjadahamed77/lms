@@ -67,4 +67,16 @@ Batch.hasMany(Subject, { foreignKey: "batchId" });
 Subject.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
 User.hasMany(Subject, { as: "lecturerSubjects", foreignKey: "lecturerId" });
 
+User.belongsToMany(Subject, {
+  through: "StudentSubjects",
+  as: "subjects",
+  foreignKey: "studentId"
+});
+Subject.belongsToMany(User, {
+  through: "StudentSubjects",
+  as: "students",
+  foreignKey: "subjectId"
+});
+
+
 export default Subject;
