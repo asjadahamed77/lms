@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Subject from "../models/subjectModel.js";
 
 
 export const login = async (req, res) => {
@@ -13,7 +14,13 @@ export const login = async (req, res) => {
     }
     try {
          // Find user
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email },  include: [
+      {
+        model: Subject,
+        as: "lecturerSubjects", 
+        attributes: ["subjectId", "subjectName", "subjectCode", "subjectSemester", "batchName"],
+      },
+    ], });
     if (!user) {
       return res
        
@@ -41,21 +48,12 @@ export const login = async (req, res) => {
         sameSite: "strict",
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       });
+      
       res.json({
         success: true,
         message: "Login successful",
         token, 
-        user:  {
-            userId: user.userId,
-            nameWithInitials: user.nameWithInitials,
-            fullName: user.fullName,
-            registrationNumber: user.registrationNumber,
-            email: user.email,
-            role: user.role,
-            batchName: user.batchName,
-            facultyName: user.facultyName,
-            departmentName: user.departmentName
-        }
+        user
       });
     } catch (error) {
         console.error("Login error:", error.message);

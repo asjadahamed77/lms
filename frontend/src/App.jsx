@@ -40,6 +40,7 @@ import ForgotPassword from "./pages/common/ForgotPassword";
 import  { Toaster } from 'react-hot-toast';
 import { AppContext } from "./context/AppContext";
 import Loading from "./components/common/Loading";
+import ManageProfile from "./pages/common/ManageProfile";
 
 const App = () => {
   const {loading} = useContext(AppContext)
@@ -59,6 +60,7 @@ const App = () => {
           {/* ---------------------------------------------------------------------------------------- */}
           <Route path="/" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/manage-profile" element={<ManageProfile />} />
 
           {/* ---------------------------------------------------------------------------------------- */}
           {/*  -------------     ADMIN LAYOUT   ------------------------  */}
