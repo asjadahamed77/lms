@@ -1,4 +1,5 @@
 // controllers/userController.js
+import Subject from "../models/subjectModel.js";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 
@@ -118,21 +119,22 @@ export const getAllLecturers = async (req, res) => {
   try {
     const lecturers = await User.findAll({
       where: { role: "lecturer" },
-      attributes: { exclude: ['password'] }
+      include: [
+        {
+          model: Subject,
+          as: "lecturerSubjects", 
+          attributes: ["subjectId", "subjectName", "subjectCode", "subjectSemester", "batchName"],
+        },
+      ],
     });
 
-    res.json({
-      success: true,
-      lecturers
-    });
+    res.status(200).json({ success: true,  lecturers });
   } catch (error) {
-    console.error("Error fetching lecturers:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error fetching lecturers"
-    });
+    console.error("Get Lecturers error:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 export const getLecturerById = async (req, res) => {
   try {
