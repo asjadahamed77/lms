@@ -124,7 +124,7 @@ const ViewLecturers = () => {
                   <p className="font-medium sm:text-lg ">
                     No of Subjects Assigned
                   </p>
-                  <p>{selectedLecturer.subjects?.length}</p>
+                  <p>{selectedLecturer.lecturerSubjects?.length}</p>
                 </div>
               </div>
               <div className="grid  sm:grid-cols-2  gap-2 sm:gap-8">
@@ -153,8 +153,8 @@ const ViewLecturers = () => {
               <div>
                 <p className="font-medium sm:text-lg ">Assigned Subjects</p>
                 <div className=" flex flex-col gap-2  ">
-                  {selectedLecturer.subjects?.map((subject, index) => (
-                    <div key={index} className="grid  sm:grid-cols-2  ">
+                  {selectedLecturer.lecturerSubjects?.map((subject, index) => (
+                    <div key={index} className="grid  sm:grid-cols-2 bg-blue-50 p-2  ">
                       <div>
                         <p className="text-sm font-medium">Subject Code</p>
                         <p className="text-sm">{subject.subjectCode}</p>

@@ -30,7 +30,15 @@ export const createSubject = async (req, res)=> {
 
 export const getAllSubjects = async (req, res) => {
     try {
-        const subjects = await Subject.findAll();
+        const subjects = await Subject.findAll({
+            include: [
+                {
+                  model: User,
+                  as: "lecturer",
+                  attributes: ["userId", "name", "email"], 
+                },
+              ],
+        });
 
         const subjectResponses = subjects.map(subject => ({
             id: subject.id,
@@ -38,12 +46,13 @@ export const getAllSubjects = async (req, res) => {
             subjectName: subject.subjectName,
             subjectCode: subject.subjectCode,
             subjectSemester: subject.subjectSemester,
+            lecturerId: subject.lecturerId,
+            name: subject.lecturer ? subject.lecturer.name : null, 
             facultyName: subject.facultyName,
             departmentName: subject.departmentName,
             batchName: subject.batchName,
-            createdAt: subject.createdAt
-
-        }))
+            createdAt: subject.createdAt,
+          }));
 
         res.status(200).json({success: true, subjects: subjectResponses})
     } catch (error) {
@@ -107,7 +116,7 @@ export const assignLecturerToSubject = async (req, res) => {
       }
   
       // Assign lecturer to subject
-      subject.lecturerId = userId;   // <-- fixed here
+      subject.lecturerId = userId;   
       await subject.save();
   
       res.status(200).json({
