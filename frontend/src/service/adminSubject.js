@@ -56,3 +56,24 @@ export const deleteSubject = async (id) => {
         throw error;
     }
 }
+
+
+// assign lecturer to subject
+export const assignLecturerToSubject = async (subjectId, userId) => {
+    try {
+      const { data } = await axios.post(
+        `/admin-subjects/assign-lecturer`,
+        { subjectId, userId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw error.response?.data || error;
+    }
+  };

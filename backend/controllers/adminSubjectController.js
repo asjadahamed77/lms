@@ -1,4 +1,5 @@
 import Subject from "../models/subjectModel.js";
+import User from "../models/userModel.js";
 
 
 export const createSubject = async (req, res)=> {
@@ -84,3 +85,39 @@ export const deleteSubject = async (req, res) => {
         res.status(500).json({ success: false, message: error.message || "Internal server error" });
     }
 }
+
+export const assignLecturerToSubject = async (req, res) => {
+    const { subjectId, userId } = req.body;
+  
+    if (!userId || !subjectId) {
+      return res.status(400).json({ success: false, message: "Subject ID and Lecturer ID are required" });
+    }
+  
+    try {
+      // Find the subject
+      const subject = await Subject.findByPk(subjectId);
+      if (!subject) {
+        return res.status(404).json({ success: false, message: "Subject not found" });
+      }
+  
+      // Find the lecturer
+      const lecturer = await User.findByPk(userId);
+      if (!lecturer || lecturer.role !== "lecturer") {
+        return res.status(404).json({ success: false, message: "Lecturer not found or not valid" });
+      }
+  
+      // Assign lecturer to subject
+      subject.lecturerId = userId;   // <-- fixed here
+      await subject.save();
+  
+      res.status(200).json({
+        success: true,
+        message: "Lecturer assigned to subject successfully",
+        subject,
+      });
+    } catch (error) {
+      console.error("Assign Lecturer to Subject error:", error);
+      res.status(500).json({ success: false, message: error.message || "Internal server error" });
+    }
+  };
+  
