@@ -74,6 +74,7 @@ const AddAssignments = () => {
       form.append("description", formData.description);
       form.append("deadline", formData.deadline);
       form.append("subjectId", subjectSelected.subjectId);
+      form.append("lecturerId", user.userId);
 
       if (formData.files && formData.files.length > 0) {
         for (let i = 0; i < formData.files.length; i++) {

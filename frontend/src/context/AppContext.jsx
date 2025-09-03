@@ -1,13 +1,13 @@
 import React, { createContext, useEffect, useState } from "react";
 import { lecturer } from "../assets/lecturers";
 import { announcements } from "../assets/announcements";
-import { assignments } from "../assets/assignments";
 import { quizzes } from "../assets/quizzes";
 import { resources } from "../assets/resources";
 import { getAllBatches } from "../service/adminBatch";
 import { getAllStudents } from "../service/adminStudent";
 import { getAllLecturers } from "../service/adminLecturer";
 import { getAllSubjects } from "../service/adminSubject";
+import { getLecturerAssignments } from "../service/assignmentService";
 // import { getStudent } from "../service/studentService";
 
 export const AppContext = createContext();
@@ -25,6 +25,7 @@ const AppContextProvider = ({ children }) => {
   const [students, setStudents] = useState([])
   const [lecturers, setLecturers] = useState([])
   const [subjects, setSubjects] = useState([])
+  const [assignments, setAssignments] = useState([])
   // const [student, setStudent] = useState(null)
 
   
@@ -71,6 +72,15 @@ const AppContextProvider = ({ children }) => {
     }
   }
 
+  const getLecturerAssignmentsDetails = async ()=> {
+    if(user && user.role === "lecturer") {
+      const response = await getLecturerAssignments(user.userId);
+      if(response.success) {
+        setAssignments(response.assignments)
+      }
+    }     
+  }
+
   
 
   // const getStudentData = async () => {
@@ -89,6 +99,7 @@ const AppContextProvider = ({ children }) => {
     getAdminStudents()
     getAdminLecturers()
     getAdminSubjects()
+    getLecturerAssignmentsDetails()
   },[])
 
  

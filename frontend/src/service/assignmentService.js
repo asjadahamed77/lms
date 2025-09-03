@@ -8,7 +8,7 @@ const token = localStorage.getItem('token');
 export const createAssignment = async (formData) => {
     try {
         const { data } = await axios.post(
-            '/assignment/create-assignment',
+            '/assignment/add-assignment',
             formData,
             {
                 headers: {
@@ -25,10 +25,10 @@ export const createAssignment = async (formData) => {
 };
 
 //  Get Lecturer Assignments
-export const getLecturerAssignments = async () => {
+export const getLecturerAssignments = async (lecturerId) => {
     try {
         const { data } = await axios.get(
-            '/lecturer/assignment/lecturer-assignments',
+          `/assignment/lecturer-assignments/${lecturerId}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,6 +36,8 @@ export const getLecturerAssignments = async () => {
                 },
             }
         );
+        console.log(data);
+        
         return data;
     } catch (error) {
         console.error("Get Lecturer Assignments Error:", error);
