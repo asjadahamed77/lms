@@ -43,3 +43,23 @@ export const getLecturerResources = async (lecturerId) => {
         throw error;
     }
 };
+
+// delete resource
+export const deleteResource = async (resourceId) => {
+    try {
+        const { data } = await axios.delete(
+          `/resource/lecturer-resources/${resourceId}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        
+        return data;
+    } catch (error) {
+        console.error("Delete Assignment Error:", error);
+        throw error;
+    }
+}

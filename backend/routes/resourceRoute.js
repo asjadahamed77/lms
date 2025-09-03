@@ -3,7 +3,7 @@ import { authorizeRoles, verifyToken } from "../middlewares/userAuthMiddleware.j
 
 import upload from '../middlewares/multerConfig.js'
 import  { uploadFilesToCloudinary } from "../middlewares/cloudinaryUpload.js";
-import { createResource, getResourcesForLecturer } from "../controllers/resourceController.js";
+import { createResource, deleteResource, getResourcesForLecturer } from "../controllers/resourceController.js";
 
 
 
@@ -18,5 +18,6 @@ resourceRouter.post(
   createResource
 );
 resourceRouter.get('/lecturer-resources/:lecturerId', verifyToken, authorizeRoles('lecturer'), getResourcesForLecturer);
+resourceRouter.delete('/lecturer-resources/:resourceId', verifyToken, authorizeRoles('lecturer'), deleteResource);
 
 export default resourceRouter;

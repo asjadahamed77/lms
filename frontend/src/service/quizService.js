@@ -46,3 +46,23 @@ export const getLecturerQuizzes = async (lecturerId) => {
         throw error;
     }
 };
+
+// delete quiz
+export const deleteQuiz = async (quizId) => {
+    try {
+        const { data } = await axios.delete(
+          `/quiz/lecturer-quizzes/${quizId}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        
+        return data;
+    } catch (error) {
+        console.error("Delete Assignment Error:", error);
+        throw error;
+    }
+}

@@ -1,12 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { AppContext } from "../../../context/AppContext";
 import { FaFilePdf, FaFileWord, FaFileImage, FaFileAlt } from "react-icons/fa";
+import { deleteResource } from "../../../service/resourceService";
+import toast from "react-hot-toast";
+import Loading from "../../../components/common/Loading";
 
 const ViewResources = () => {
   const navigate = useNavigate();
-  const { resources, loading } = useContext(AppContext);
+  const { resources, loading, setLoading, getLecturerResourcesDetails } = useContext(AppContext);
+
+  const [showConfirm, setShowConfirm] = useState(false);
+
 
   const getFileNameFromUrl = (url) => {
     try {
@@ -32,6 +38,18 @@ const ViewResources = () => {
         return <FaFileImage className="text-green-600 text-2xl" />;
       default:
         return <FaFileAlt className="text-gray-600 text-2xl" />; // generic file icon
+    }
+  };
+
+  const deleteResourceHandler = async (assignmentId) => {
+    setLoading(true);
+    const response = await deleteResource(assignmentId);
+    if (response.success) {
+      toast.success(response.message);
+      getLecturerResourcesDetails();
+      setLoading(false);
+    } else {
+      toast.error(response.message || "Failed to delete assignment");
     }
   };
 
@@ -95,8 +113,38 @@ const ViewResources = () => {
               {/* Button */}
             
             
-                    <button className="bg-red-500 text-white text-sm rounded  hover:bg-red-400 duration-300 transition-all ease-linear py-2.5 cursor-pointer mt-6 px-12">Delete Resources</button>
-                   
+                    <button onClick={()=> setShowConfirm(true)} className="bg-red-500 text-white text-sm rounded  hover:bg-red-400 duration-300 transition-all ease-linear py-2.5 cursor-pointer mt-6 px-12">Delete Resources</button>
+                    {/* Confirmation Modal */}
+              {showConfirm && (
+                <div className="fixed inset-0 bg-black/20 flex items-center justify-center">
+                  <div className="bg-white rounded-lg p-6 w-[350px] ">
+                    <h2 className="text-lg font-semibold mb-4">
+                      Confirm Delete
+                    </h2>
+                    <p className="text-sm mb-6">
+                      Are you sure you want to delete{" "}
+                      <span className="font-medium">{ass?.title}</span>?
+                    </p>
+                    <div className="flex justify-end gap-3">
+                      <button
+                        onClick={() => setShowConfirm(false)}
+                        className="px-4 py-2 bg-gray-300 rounded-md"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          deleteResourceHandler(ass.resourceId);
+                          setShowConfirm(false);
+                        }}
+                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             
             </div>
           ))}

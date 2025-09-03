@@ -179,6 +179,9 @@ const AppContextProvider = ({ children }) => {
     getAdminBatches,
     getAdminStudents,
     getAdminLecturers,
+    getLecturerAssignmentsDetails,
+    getLecturerQuizzesDetails,
+    getLecturerResourcesDetails
     
   };
 

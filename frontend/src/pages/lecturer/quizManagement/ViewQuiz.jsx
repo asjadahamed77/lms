@@ -1,13 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { AppContext } from "../../../context/AppContext";
 import { FaFilePdf, FaFileWord, FaFileImage, FaFileAlt } from "react-icons/fa";
 import Loading from "../../../components/common/Loading";
+import { deleteQuiz } from "../../../service/quizService";
+import toast from "react-hot-toast";
 
 const ViewQuiz = () => {
   const navigate = useNavigate();
-  const { quizzes, loading } = useContext(AppContext);
+  const { quizzes, loading, setLoading, getLecturerQuizzesDetails } = useContext(AppContext);
+
+  const [showConfirm, setShowConfirm] = useState(false);
+
 
   // extract filename from Cloudinary URL
   const getFileNameFromUrl = (url) => {
@@ -34,6 +39,18 @@ const ViewQuiz = () => {
         return <FaFileImage className="text-green-600 text-2xl" />;
       default:
         return <FaFileAlt className="text-gray-600 text-2xl" />; // generic file icon
+    }
+  };
+
+  const deleteQuizHandler = async (quizId) => {
+    setLoading(true);
+    const response = await deleteQuiz(quizId);
+    if (response.success) {
+      toast.success(response.message);
+      getLecturerQuizzesDetails();
+      setLoading(false);
+    } else {
+      toast.error(response.message || "Failed to delete assignment");
     }
   };
 
@@ -104,9 +121,42 @@ const ViewQuiz = () => {
               {/* Button */}
               <div className="grid grid-cols-2 gap-4 sm:gap-8 mt-6">
               <button className="bg-primaryColor text-white text-sm rounded  hover:bg-primaryColor/80 duration-300 transition-all ease-linear py-2.5 cursor-pointer">View More</button>
-                    <button className="bg-red-500 text-white text-sm rounded  hover:bg-red-400 duration-300 transition-all ease-linear py-2.5 cursor-pointer">Delete Quiz</button>
+                    <button onClick={()=> setShowConfirm(true)} className="bg-red-500 text-white text-sm rounded  hover:bg-red-400 duration-300 transition-all ease-linear py-2.5 cursor-pointer">Delete Quiz</button>
                    
               </div>
+
+ {/* Confirmation Modal */}
+ {showConfirm && (
+                <div className="fixed inset-0 bg-black/20 flex items-center justify-center">
+                  <div className="bg-white rounded-lg p-6 w-[350px] ">
+                    <h2 className="text-lg font-semibold mb-4">
+                      Confirm Delete
+                    </h2>
+                    <p className="text-sm mb-6">
+                      Are you sure you want to delete{" "}
+                      <span className="font-medium">{ass?.title}</span>?
+                    </p>
+                    <div className="flex justify-end gap-3">
+                      <button
+                        onClick={() => setShowConfirm(false)}
+                        className="px-4 py-2 bg-gray-300 rounded-md"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          deleteQuizHandler(ass.quizId);
+                          setShowConfirm(false);
+                        }}
+                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </div>
           ))}
         </div>

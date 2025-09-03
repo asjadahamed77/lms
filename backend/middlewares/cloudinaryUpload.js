@@ -15,8 +15,10 @@ export const uploadFilesToCloudinary = async (req, res, next) => {
         
         const uploadStream = cloudinary.uploader.upload_stream(
           {
-            resource_type: 'auto',
+            resource_type: 'raw',
             public_id: publicId,
+             access_mode: "public",
+             type: "upload",
             folder: 'assignments'
           },
           (error, result) => {

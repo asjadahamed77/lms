@@ -1,4 +1,5 @@
 
+import cloudinary from "../config/cloudinaryConfig.js";
 import Resource from "../models/resourceModel.js";
 import Subject from "../models/subjectModel.js";
 import User from "../models/userModel.js";
@@ -67,5 +68,59 @@ export const getResourcesForStudents = async (req, res) => {
   } catch (error) {
     console.error("Fetch Resource Error:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+// Delete Resource
+export const deleteResource = async (req, res) => {
+  try {
+    const { resourceId } = req.params;
+
+    // Find assignment by ID
+    const resource = await Resource.findByPk(resourceId);
+    if (!resource) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Resource not found" });
+    }
+
+    // Ensure fileUrl is parsed correctly
+    let fileUrls = [];
+    try {
+      if (Array.isArray(resource.fileUrl)) {
+        fileUrls = resource.fileUrl;
+      } else if (typeof resource.fileUrl === "string") {
+        fileUrls = JSON.parse(resource.fileUrl);
+      }
+    } catch (err) {
+      console.error("Error parsing fileUrl:", err);
+    }
+
+    // Delete files from Cloudinary
+    for (const file of fileUrls) {
+      if (file.public_id) {
+        try {
+          await cloudinary.uploader.destroy(file.public_id, {
+            resource_type: "raw", // for pdf, docx, etc
+          });
+          console.log(`Deleted from Cloudinary: ${file.public_id}`);
+        } catch (err) {
+          console.error("Cloudinary delete error:", err);
+        }
+      }
+    }
+
+    // Delete the resource record
+    await resource.destroy();
+
+    res.json({
+      success: true,
+      message: "Resource and its files deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Delete Resource Error:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
 };

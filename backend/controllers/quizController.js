@@ -1,5 +1,6 @@
 
 
+import cloudinary from "../config/cloudinaryConfig.js";
 import Quiz from "../models/quizModel.js";
 import Subject from "../models/subjectModel.js";
 import User from "../models/userModel.js";
@@ -69,5 +70,60 @@ export const getQuizzesForStudents = async (req, res) => {
   } catch (error) {
     console.error("Fetch Quizzes Error:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+
+// Delete Quiz
+export const deleteQuiz = async (req, res) => {
+  try {
+    const { quizId } = req.params;
+
+    // Find assignment by ID
+    const quiz = await Quiz.findByPk(quizId);
+    if (!quiz) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Quiz not found" });
+    }
+
+    // Ensure fileUrl is parsed correctly
+    let fileUrls = [];
+    try {
+      if (Array.isArray(quiz.fileUrl)) {
+        fileUrls = quiz.fileUrl;
+      } else if (typeof quiz.fileUrl === "string") {
+        fileUrls = JSON.parse(quiz.fileUrl);
+      }
+    } catch (err) {
+      console.error("Error parsing fileUrl:", err);
+    }
+
+    // Delete files from Cloudinary
+    for (const file of fileUrls) {
+      if (file.public_id) {
+        try {
+          await cloudinary.uploader.destroy(file.public_id, {
+            resource_type: "raw", // for pdf, docx, etc
+          });
+          console.log(`Deleted from Cloudinary: ${file.public_id}`);
+        } catch (err) {
+          console.error("Cloudinary delete error:", err);
+        }
+      }
+    }
+
+    // Delete the quiz record
+    await quiz.destroy();
+
+    res.json({
+      success: true,
+      message: "Quiz and its files deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Delete Quiz Error:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
 };

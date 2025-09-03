@@ -43,3 +43,23 @@ export const getLecturerAssignments = async (lecturerId) => {
         throw error;
     }
 };
+
+// delete assignment
+export const deleteAssignment = async (assignmentId) => {
+    try {
+        const { data } = await axios.delete(
+          `/assignment/lecturer-assignments/${assignmentId}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        
+        return data;
+    } catch (error) {
+        console.error("Delete Assignment Error:", error);
+        throw error;
+    }
+}

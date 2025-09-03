@@ -3,7 +3,7 @@ import { authorizeRoles, verifyToken } from "../middlewares/userAuthMiddleware.j
 
 import upload from '../middlewares/multerConfig.js'
 import  { uploadFilesToCloudinary } from "../middlewares/cloudinaryUpload.js";
-import { createQuiz, getQuizzesForLecturer } from "../controllers/quizController.js";
+import { createQuiz, deleteQuiz, getQuizzesForLecturer } from "../controllers/quizController.js";
 
 
 const quizRouter = express.Router();
@@ -17,5 +17,6 @@ quizRouter.post(
   createQuiz
 );
 quizRouter.get('/lecturer-quizzes/:lecturerId', verifyToken, authorizeRoles('lecturer'), getQuizzesForLecturer);
+quizRouter.delete('/lecturer-quizzes/:quizId', verifyToken, authorizeRoles('lecturer'), deleteQuiz);
 
 export default quizRouter;
