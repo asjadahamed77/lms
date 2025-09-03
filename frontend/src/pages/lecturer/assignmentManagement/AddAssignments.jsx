@@ -6,10 +6,11 @@ import { MdLibraryBooks } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { createAssignment } from "../../../service/assignmentService";
+import Loading from "../../../components/common/Loading";
 
 const AddAssignments = () => {
   const navigate = useNavigate();
-  const { user } = useContext(AppContext);
+  const { user, loading, setLoading } = useContext(AppContext);
 
   
   
@@ -67,6 +68,7 @@ const AddAssignments = () => {
       toast.error("Please select a subject first!");
       return;
     }
+    setLoading(true)
 
     try {
       const form = new FormData();
@@ -91,6 +93,7 @@ const AddAssignments = () => {
         deadline: "",
         files: [],
       })
+      setLoading(false)
      }
       
       handleClose();
@@ -100,6 +103,10 @@ const AddAssignments = () => {
       console.error(error);
     }
   };
+
+  if(loading){
+    return <Loading  />;
+  }
 
   return (
     <div className="py-8 md:py-12">

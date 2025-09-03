@@ -8,7 +8,7 @@ import Loading from "../../../components/common/Loading";
 
 const AddSubject = () => {
   const navigate = useNavigate();
-  const { batches, loading, getAdminSubjects } = useContext(AppContext);
+  const { batches, loading, getAdminSubjects, setLoading } = useContext(AppContext);
 
   const [formData, setFormData] = useState({
     batchName: "",
@@ -52,6 +52,8 @@ const AddSubject = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     try {
       const response = await createSubject(formData);
       if (response.success) {
@@ -65,6 +67,7 @@ const AddSubject = () => {
           subjectSemester: "",
         });
         await getAdminSubjects();
+        setLoading(false)
       }
     } catch (error) {
       console.log(error.message);

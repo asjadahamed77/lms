@@ -6,7 +6,7 @@ import { FaFilePdf, FaFileWord, FaFileImage, FaFileAlt } from "react-icons/fa";
 
 const ViewResources = () => {
   const navigate = useNavigate();
-  const { resources } = useContext(AppContext);
+  const { resources, loading } = useContext(AppContext);
 
   const getFileNameFromUrl = (url) => {
     try {
@@ -34,6 +34,10 @@ const ViewResources = () => {
         return <FaFileAlt className="text-gray-600 text-2xl" />; // generic file icon
     }
   };
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <div className="py-8 md:py-12">

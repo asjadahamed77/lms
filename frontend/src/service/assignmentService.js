@@ -36,7 +36,6 @@ export const getLecturerAssignments = async (lecturerId) => {
                 },
             }
         );
-        console.log(data);
         
         return data;
     } catch (error) {

@@ -8,7 +8,7 @@ import Loading from '../../../components/common/Loading';
 
 const AddBatch = () => {
   const navigate = useNavigate()
-  const {loading, getAdminBatches} = useContext(AppContext)
+  const {loading, getAdminBatches, setLoading} = useContext(AppContext)
   const [formData, setFormData] = useState({
     batchName: '',
     facultyName: '',
@@ -23,6 +23,8 @@ const AddBatch = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    setLoading(true)
+    
     try {
       const response = await createBatch(formData)
       if(response.success){
@@ -32,7 +34,9 @@ const AddBatch = () => {
           facultyName: '',
           departmentName: '',
         })
+        
         await getAdminBatches()
+        setLoading(false)
       }
     } catch (error) {
       console.log(error.message);

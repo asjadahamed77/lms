@@ -36,7 +36,6 @@ export const getLecturerResources = async (lecturerId) => {
                 },
             }
         );
-        console.log(data);
         
         return data;
     } catch (error) {

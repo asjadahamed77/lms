@@ -6,10 +6,11 @@ import { MdLibraryBooks } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { createQuiz } from "../../../service/quizService";
+import Loading from "../../../components/common/Loading";
 
 const AddQuiz = () => {
   const navigate = useNavigate();
-  const { user } = useContext(AppContext);
+  const { user,loading, setLoading } = useContext(AppContext);
   const [subjectSelected, setSubjectSelected] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -62,6 +63,8 @@ const AddQuiz = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
       const form = new FormData();
       form.append("title", formData.title);
@@ -85,6 +88,7 @@ const AddQuiz = () => {
         deadline: "",
         files: [],
       })
+      setLoading(false);
      }
       
       handleClose();
@@ -94,6 +98,10 @@ const AddQuiz = () => {
       console.error(error);
     }
   };
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <div className="py-8 md:py-12">

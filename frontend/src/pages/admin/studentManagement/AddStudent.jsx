@@ -8,7 +8,7 @@ import Loading from "../../../components/common/Loading";
 
 const AddStudent = () => {
   const navigate = useNavigate();
-  const { batches, loading, getAdminStudents } = useContext(AppContext);
+  const { batches, loading, getAdminStudents, setLoading } = useContext(AppContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -54,6 +54,7 @@ const batchesOfDepartment = [
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await createStudent(formData);
       if (response.success) {
@@ -69,6 +70,7 @@ const batchesOfDepartment = [
           batchName: "",
         });
         await getAdminStudents();
+        setLoading(false);
       }
     } catch (error) {
       toast.error(error.message);

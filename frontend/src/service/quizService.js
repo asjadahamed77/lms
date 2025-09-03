@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const token = localStorage.getItem('token');
+
+
 
 //  Create Quiz
 export const createQuiz = async (formData) => {
@@ -36,7 +39,6 @@ export const getLecturerQuizzes = async (lecturerId) => {
                 },
             }
         );
-        console.log(data);
         
         return data;
     } catch (error) {

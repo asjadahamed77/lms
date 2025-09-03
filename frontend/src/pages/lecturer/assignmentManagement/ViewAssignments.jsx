@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { AppContext } from "../../../context/AppContext";
 import { FaFilePdf, FaFileWord, FaFileImage, FaFileAlt } from "react-icons/fa";
+import Loading from "../../../components/common/Loading";
 
 const ViewAssignments = () => {
   const navigate = useNavigate();
-  const { assignments } = useContext(AppContext);
+  const { assignments, loading } = useContext(AppContext);
 
   // extract filename from Cloudinary URL
   const getFileNameFromUrl = (url) => {
@@ -35,6 +36,10 @@ const ViewAssignments = () => {
         return <FaFileAlt className="text-gray-600 text-2xl" />;
     }
   };
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <div className="py-8 md:py-12">

@@ -6,10 +6,11 @@ import { MdLibraryBooks } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import { createResource } from "../../../service/resourceService";
 import toast from "react-hot-toast";
+import Loading from "../../../components/common/Loading";
 
 const AddResources = () => {
   const navigate = useNavigate();
-  const { user } = useContext(AppContext);
+  const { user, loading, setLoading } = useContext(AppContext);
   const [subjectSelected, setSubjectSelected] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -59,6 +60,8 @@ const AddResources = () => {
       return;
     }
 
+    setLoading(true)
+
     try {
       const form = new FormData();
       form.append("title", formData.title);
@@ -81,6 +84,8 @@ const AddResources = () => {
        
         files: [],
       })
+
+      setLoading(false)
      }
       
       handleClose();
@@ -90,6 +95,10 @@ const AddResources = () => {
       console.error(error);
     }
   };
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <div className="py-8 md:py-12">
