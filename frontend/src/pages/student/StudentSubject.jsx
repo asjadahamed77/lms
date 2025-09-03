@@ -8,8 +8,8 @@ import { IoCloseSharp } from "react-icons/io5";
 const StudentSubject = () => {
   const navigate = useNavigate();
   const { subjectId } = useParams();
-  const { student } = useContext(AppContext);
-  const currentSubject = student.subjects.find(
+  const { user } = useContext(AppContext);
+  const currentSubject = user.subjects.find(
     (sub) => sub.subjectId === subjectId
   );
 

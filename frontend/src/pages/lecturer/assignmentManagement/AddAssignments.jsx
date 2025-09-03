@@ -4,16 +4,35 @@ import { IoChevronBackSharp } from "react-icons/io5";
 import { AppContext } from "../../../context/AppContext";
 import { MdLibraryBooks } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
+import toast from "react-hot-toast";
+import { createAssignment } from "../../../service/assignmentService";
 
 const AddAssignments = () => {
   const navigate = useNavigate();
-  const { lecturer } = useContext(AppContext);
+  const { user } = useContext(AppContext);
+
+  console.log(user);
+  
+
   const [subjectSelected, setSubjectSelected] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    deadline: "",
+    files: [],
+  });
 
   const handleClose = () => {
     setShowPopup(false);
     setSubjectSelected(null);
+    setFormData({
+      title: "",
+      description: "",
+      deadline: "",
+      files: [],
+    });
   };
 
   const handleSubjectSelect = (subject) => {
@@ -21,104 +40,172 @@ const AddAssignments = () => {
     setShowPopup(true);
   };
 
-  const submitHandler = (e) => {
+  
+
+  // handle text input
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // handle file input
+  const handleFileChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      files: e.target.files,
+    }));
+  };
+
+  // submit assignment
+  const submitHandler = async (e) => {
     e.preventDefault();
+
+    if (!subjectSelected) {
+      toast.error("Please select a subject first!");
+      return;
+    }
+
+    try {
+      const form = new FormData();
+      form.append("title", formData.title);
+      form.append("description", formData.description);
+      form.append("deadline", formData.deadline);
+      form.append("subjectId", subjectSelected.subjectId);
+
+      if (formData.files && formData.files.length > 0) {
+        for (let i = 0; i < formData.files.length; i++) {
+          form.append("files", formData.files[i]);
+        }
+      }
+
+     const response = await createAssignment(form);
+     if(response.success){
+      toast.success("Assignment created successfully!");
+      setFormData({
+        title: "",
+        description: "",
+        deadline: "",
+        files: [],
+      })
+     }
+      
+      handleClose();
+    
+    } catch (error) {
+      toast.error("Failed to create assignment");
+      console.error(error);
+    }
   };
 
   return (
     <div className="py-8 md:py-12">
       <button
         onClick={() => navigate("/lecturer/assignment-management")}
-        className="flex items-center gap-1 text-sm mb-6 cursor-pointer  text-primaryColor/80 border border-transparent hover:border-primaryColor/80 px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:bg-primaryColor/10"
+        className="flex items-center gap-1 text-sm mb-6 cursor-pointer text-primaryColor/80 border border-transparent hover:border-primaryColor/80 px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:bg-primaryColor/10"
       >
-        <p>
-          <IoChevronBackSharp className="" />
-        </p>
+        <IoChevronBackSharp />
         <p>Back</p>
       </button>
-      {/* Display the subjects of particular lecturer */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3  gap-8 md:gap-12">
-        {lecturer.subjects?.map((subject, index) => (
-          <div
-            key={index}
-            onClick={() => handleSubjectSelect(subject)}
-            className="text-white  bg-[#0D1164] p-8 cursor-pointer rounded-2xl hover:-translate-y-2 duration-300 transition-all ease-in-out"
-          >
-            <div className="flex items-center gap-6">
-            <p className="text-4xl">
-              <MdLibraryBooks />
-            </p>
-           <div>
-           <p className="font-medium text-2xl">
-              {subject.subjectName} - {subject.subjectCode}
-            </p>
-            <p className="text-lg mt-1">Batch - {subject.batchName}</p>
-           </div>
-            </div>
-           
 
-           
-          </div>
-        )) || (
+      {/* Display the subjects of particular lecturer */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-12">
+        {user.lecturerSubjects?.length > 0 ? (
+          user.lecturerSubjects.map((subject, index) => (
+            <div
+              key={index}
+              onClick={() => handleSubjectSelect(subject)}
+              className="text-white bg-[#0D1164] p-8 cursor-pointer rounded-2xl hover:-translate-y-2 duration-300 transition-all ease-in-out"
+            >
+              <div className="flex items-center gap-6">
+                <p className="text-4xl">
+                  <MdLibraryBooks />
+                </p>
+                <div>
+                  <p className="font-medium text-2xl">
+                    {subject.subjectName} - {subject.subjectCode}
+                  </p>
+                  <p className="text-lg mt-1">Batch - {subject.batchName}</p>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
           <p className="text-center text-xl font-medium">No subjects found</p>
         )}
       </div>
+
       {/* Display Add Assignment popup */}
       {showPopup && subjectSelected && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center ">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div className="p-4 sm:p-8 bg-white rounded-lg w-full mx-4 sm:mx-0 sm:w-[500px] overflow-y-scroll max-h-[calc(100vh-80px)]">
-            <div className="flex items-center justify-between ">
+            <div className="flex items-center justify-between">
               <h1 className="sm:text-xl font-medium">
                 {subjectSelected.subjectName}
               </h1>
-
               <p
                 onClick={handleClose}
-                className="text-2xl font-bold cursor-pointer "
+                className="text-2xl font-bold cursor-pointer"
               >
                 <IoCloseSharp />
               </p>
             </div>
             <form onSubmit={submitHandler} className="mt-6 flex flex-col gap-4">
-              <div className="flex flex-col  gap-2  flex-1">
+              <div className="flex flex-col gap-2 flex-1">
                 <label className="font-semibold">Title</label>
                 <input
                   type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
                   placeholder="Enter here ..."
                   className="p-2 w-full rounded border border-primaryColor/30"
                   required
                 />
               </div>
 
-              <div className="flex flex-col  gap-2  flex-1">
+              <div className="flex flex-col gap-2 flex-1">
                 <label className="font-semibold">Description</label>
                 <textarea
                   rows={4}
-                  type="text"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
                   placeholder="Enter here ..."
                   className="p-2 w-full rounded border border-primaryColor/30 resize-none overflow-y-scroll"
                 />
               </div>
-              <div className="flex flex-col  gap-2  flex-1">
-                <label className="font-semibold">Add File</label>
 
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="font-semibold">Add File</label>
                 <input
                   type="file"
                   accept="application/pdf, image/*, .doc, .docx"
                   multiple
+                  onChange={handleFileChange}
                   className="p-2 rounded border border-primaryColor/30"
                 />
               </div>
-              <div className="flex flex-col  gap-2  flex-1">
+
+              <div className="flex flex-col gap-2 flex-1">
                 <label className="font-semibold">Deadline</label>
-                <input type="datetime-local" className="p-2 w-full rounded border border-primaryColor/30" />
+                <input
+                  type="datetime-local"
+                  name="deadline"
+                  value={formData.deadline}
+                  onChange={handleChange}
+                  className="p-2 w-full rounded border border-primaryColor/30"
+                />
               </div>
+
               <button
-            type="submit"
-            className="bg-primaryColor py-3 text-white w-full rounded-lg  mt-4 cursor-pointer hover:bg-primaryColor/80 duration-300 transition-all ease-in-out"
-          >
-            Add Assignment
-          </button>
+                type="submit"
+                className="bg-primaryColor py-3 text-white w-full rounded-lg mt-4 cursor-pointer hover:bg-primaryColor/80 duration-300 transition-all ease-in-out"
+              >
+                Add Assignment
+              </button>
             </form>
           </div>
         </div>

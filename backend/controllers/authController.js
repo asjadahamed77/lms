@@ -21,7 +21,7 @@ export const login = async (req, res) => {
       include: [
         {
           model: Subject,
-          as: "lecturerSubjects", // subjects taught if lecturer
+          as: "lecturerSubjects", 
           attributes: [
             "subjectId",
             "subjectName",
@@ -84,7 +84,7 @@ export const login = async (req, res) => {
       token,
       user: {
         ...user.toJSON(),
-        subjects, // attach subjects directly for student
+        subjects, 
       },
     });
   } catch (error) {

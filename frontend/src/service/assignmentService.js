@@ -1,0 +1,44 @@
+import axios from 'axios';
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+
+const token = localStorage.getItem('token');
+
+//  Create Assignment
+export const createAssignment = async (formData) => {
+    try {
+        const { data } = await axios.post(
+            '/assignment/create-assignment',
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        return data;
+    } catch (error) {
+        console.error("Create Assignment Error:", error);
+        throw error;
+    }
+};
+
+//  Get Lecturer Assignments
+export const getLecturerAssignments = async () => {
+    try {
+        const { data } = await axios.get(
+            '/lecturer/assignment/lecturer-assignments',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        return data;
+    } catch (error) {
+        console.error("Get Lecturer Assignments Error:", error);
+        throw error;
+    }
+};

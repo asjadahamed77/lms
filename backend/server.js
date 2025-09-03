@@ -10,6 +10,7 @@ import adminBatchRouter from "./routes/adminBatch.js";
 import adminLecturerRouter from "./routes/adminLecturer.js";
 import adminSubjectRouter from "./routes/adminSubject.js";
 import studentRouter from "./routes/student.js";
+import assignmentRouter from "./routes/assignmentRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -18,12 +19,16 @@ const port = process.env.PORT || 4000;
 securityConfig(app);
 app.use(cookieParser());
 
+
+
+
 // Routes
 app.use("/api/admin-students", adminStudentRouter);
 app.use("/api/admin-lecturers", adminLecturerRouter);
 app.use("/api/admin-subjects", adminSubjectRouter);
 app.use("/api/admin-batch", adminBatchRouter);
 app.use("/api/student", studentRouter);
+app.use("/api/assignment", assignmentRouter);
 app.use("/api/auth", authRouter);
 
 // Default route
