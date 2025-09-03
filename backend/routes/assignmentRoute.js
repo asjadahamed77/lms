@@ -1,19 +1,20 @@
-import express from 'express';
-import { authorizeRoles, verifyToken } from '../middlewares/userAuthMiddleware.js';
-import { createAssignment } from '../controllers/assignmentController.js';
-import uploadToCloudinary from '../middlewares/cloudinaryUpload.js';
-import upload from "../middlewares/multerConfig.js";
+import express from "express";
+import { authorizeRoles, verifyToken } from "../middlewares/userAuthMiddleware.js";
+import { createAssignment, getAssignmentsForLecturer } from "../controllers/assignmentController.js";
+import upload from '../middlewares/multerConfig.js'
+import  { uploadFilesToCloudinary } from "../middlewares/cloudinaryUpload.js";
+
 
 const assignmentRouter = express.Router();
 
-
 assignmentRouter.post(
-    "/create-assignment",
-    verifyToken,
-    authorizeRoles("lecturer"),
-    upload.array("files", 5),  
-    uploadToCloudinary,
-    createAssignment
-  );
+  "/add-assignment",
+  verifyToken,
+  authorizeRoles("lecturer"),
+  upload.array("files", 5),     
+  uploadFilesToCloudinary,            
+  createAssignment
+);
+assignmentRouter.get('/lecturer-assignments/:lecturerId', verifyToken, authorizeRoles('lecturer'), getAssignmentsForLecturer);
 
 export default assignmentRouter;

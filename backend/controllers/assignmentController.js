@@ -1,33 +1,38 @@
 // controllers/assignmentController.js
 import Assignment from "../models/assignmentModel.js";
 import Subject from "../models/subjectModel.js";
+import User from "../models/userModel.js";
 
 export const createAssignment = async (req, res) => {
-  try {
-    const { title, description, deadline, subjectId, lecturerId } = req.body;
-
-    const subject = await Subject.findByPk(subjectId);
-   
-    
-    if (!subject) return res.status(404).json({ success: false, message: "Subject not found" });
-
-    const assignment = await Assignment.create({
-      title,
-      description,
-      deadline,
-      subjectId,
-      lecturerId,
-      batchName: subject.batchName,
-      departmentName: subject.departmentName,
-      fileUrl: req.file?.path || null,
-    });
-
-    res.status(201).json({ success: true, message:'Assignment created successfully.', assignment });
-  } catch (error) {
-    console.error("Create Assignment Error:", error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
-};
+    try {
+      const { title, description, deadline, subjectId, lecturerId } = req.body;
+  
+      const subject = await Subject.findByPk(subjectId);
+      if (!subject) {
+        return res.status(404).json({ success: false, message: "Subject not found" });
+      }
+  
+      const assignment = await Assignment.create({
+        title,
+        description,
+        deadline,
+        subjectId,
+        lecturerId,
+        batchName: subject.batchName,
+        departmentName: subject.departmentName,
+        fileUrl: req.fileUrls || [],       });
+  
+      res.status(201).json({
+        success: true,
+        message: "Assignment created successfully.",
+        assignment,
+      });
+    } catch (error) {
+      console.error("Create Assignment Error:", error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+  };
+  
 
 export const getAssignmentsForLecturer = async (req, res) => {
     try {

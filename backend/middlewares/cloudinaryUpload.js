@@ -1,23 +1,47 @@
+// middleware/cloudinaryUpload.js
+import cloudinary from '../config/cloudinaryConfig.js';
 
-import fs from "fs";
-import cloudinary from "../config/cloudinaryConfig.js";
-
-const uploadToCloudinary = async (req, res, next) => {
+export const uploadFilesToCloudinary = async (req, res, next) => {
   try {
-    if (!req.file) return next(); 
+    if (!req.files || req.files.length === 0) {
+      req.fileUrls = [];
+      return next();
+    }
 
-    const result = await cloudinary.uploader.upload(req.file.path);
+    const uploadPromises = req.files.map((file) => {
+      return new Promise((resolve, reject) => {
+        // Create a unique public_id for the file
+        const publicId = `assignments/${Date.now()}_${Math.round(Math.random() * 1E9)}`;
+        
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: 'auto',
+            public_id: publicId,
+            folder: 'assignments'
+          },
+          (error, result) => {
+            if (error) {
+              console.error('Cloudinary upload error:', error);
+              reject(error);
+            } else {
+              resolve(result.secure_url);
+            }
+          }
+        );
+        
+        uploadStream.end(file.buffer);
+      });
+    });
 
-    req.fileUrl = result.secure_url;
-
-    
-    fs.unlinkSync(req.file.path);
-
+    const urls = await Promise.all(uploadPromises);
+    req.fileUrls = urls;
     next();
   } catch (err) {
-    console.error("Cloudinary upload error:", err);
-    return res.status(500).json({ error: "File upload failed" });
+    console.error('Cloudinary upload error:', err);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'File upload failed',
+      error: err.message 
+    });
   }
 };
-
-export default uploadToCloudinary;

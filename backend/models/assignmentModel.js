@@ -19,7 +19,15 @@ const Assignment = sequelize.define("Assignment", {
     type: DataTypes.TEXT,
   },
   fileUrl: {
-    type: DataTypes.STRING, 
+    type: DataTypes.TEXT, // Store as JSON string
+    defaultValue: "[]",
+    get() {
+      const rawValue = this.getDataValue('fileUrl');
+      return rawValue ? JSON.parse(rawValue) : [];
+    },
+    set(value) {
+      this.setDataValue('fileUrl', JSON.stringify(value));
+    }
   },
   deadline: {
     type: DataTypes.DATE,
