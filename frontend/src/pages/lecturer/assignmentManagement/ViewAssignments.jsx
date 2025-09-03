@@ -110,7 +110,7 @@ const ViewAssignments = () => {
                 </button>
               </div>
             </div>
-          ))}
+          ))} 
         </div>
       </div>
     </div>
