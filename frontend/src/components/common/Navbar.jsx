@@ -61,13 +61,13 @@ const Navbar = () => {
         </h1>
       </div>
       {/* User Profile */}
-      {location.pathname !== "/" && (
+      {location.pathname !== "/" && location.pathname !== "/forgot-password" && (
         <div
           onClick={handleMobileProfile}
           className=" py-3  cursor-pointer relative group"
         >
           <div className="flex items-center gap-3">
-            <p className="text-sm sm:text-base">{user.nameWithInitials}</p>
+            <p className="text-sm sm:text-base">{user?.nameWithInitials}</p>
             <div className="flex items-center gap-1">
               <p>
                 <FaUserCircle />

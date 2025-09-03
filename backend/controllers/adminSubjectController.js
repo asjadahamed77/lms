@@ -40,6 +40,9 @@ export const getAllSubjects = async (req, res) => {
               ],
         });
 
+  
+        
+
         const subjectResponses = subjects.map(subject => ({
             id: subject.id,
             subjectId: subject.subjectId,

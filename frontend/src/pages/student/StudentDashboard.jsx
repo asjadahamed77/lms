@@ -5,15 +5,15 @@ import { MdOutlineMenu } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { GoFileSubmodule } from "react-icons/go";
 
-
 const StudentDashboard = () => {
-  const { student } = useContext(AppContext);
+  const { user } = useContext(AppContext);
+
   const [sidebar, setSidebar] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Get all unique semesters (sorted)
   const semesters = [
-    ...new Set(student.subjects.map((s) => s.subjectSemester)),
+    ...new Set(user.subjects.map((s) => s.subjectSemester)),
   ].sort((a, b) => a - b);
 
   return (
@@ -35,30 +35,26 @@ const StudentDashboard = () => {
         <h1 className="text-2xl font-semibold mb-4">Enrolled Subjects</h1>
 
         {semesters.map((sem) => (
-          <div
-            key={sem}
-            className="mb-6 "
-          >
+          <div key={sem} className="mb-6 ">
             <h2 className="text-xl font-medium mb-4">Semester 0{sem}</h2>
             <div className="grid sm:grid-cols-2 gap-8">
-              {student.subjects
+              {user.subjects
                 .filter((subj) => subj.subjectSemester === sem)
                 .map((subj, idx) => (
-                  <div 
-                  key={idx} 
-                  onClick={() => navigate(`/student/enrolled-subjects/${subj.subjectId}`)} 
-                  className="border border-primaryColor/30 p-4 rounded-lg cursor-pointer transform hover:-translate-y-2 duration-300 ease-linear flex items-center gap-4"
-                >
-                   <p className="text-4xl">
-                    <GoFileSubmodule />
-                  </p>
-                  <p className="font-medium">
-                    {subj.subjectName} - {subj.subjectCode}
-                  </p>
-                 
-
-                </div>
-                
+                  <div
+                    key={idx}
+                    onClick={() =>
+                      navigate(`/student/enrolled-subjects/${subj.subjectId}`)
+                    }
+                    className="border border-primaryColor/30 p-4 rounded-lg cursor-pointer transform hover:-translate-y-2 duration-300 ease-linear flex items-center gap-4"
+                  >
+                    <p className="text-4xl">
+                      <GoFileSubmodule />
+                    </p>
+                    <p className="font-medium">
+                      {subj.subjectName} - {subj.subjectCode}
+                    </p>
+                  </div>
                 ))}
             </div>
           </div>
