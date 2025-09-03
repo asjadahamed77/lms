@@ -11,6 +11,8 @@ import adminLecturerRouter from "./routes/adminLecturer.js";
 import adminSubjectRouter from "./routes/adminSubject.js";
 import studentRouter from "./routes/student.js";
 import assignmentRouter from "./routes/assignmentRoute.js";
+import quizRouter from "./routes/quizRoute.js";
+import resourceRouter from "./routes/resourceRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -29,6 +31,8 @@ app.use("/api/admin-subjects", adminSubjectRouter);
 app.use("/api/admin-batch", adminBatchRouter);
 app.use("/api/student", studentRouter);
 app.use("/api/assignment", assignmentRouter);
+app.use("/api/quiz", quizRouter);
+app.use("/api/resource", resourceRouter);
 app.use("/api/auth", authRouter);
 
 // Default route

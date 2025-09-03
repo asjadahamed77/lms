@@ -11,7 +11,7 @@ const AddAssignments = () => {
   const navigate = useNavigate();
   const { user } = useContext(AppContext);
 
-  console.log(user);
+  
   
 
   const [subjectSelected, setSubjectSelected] = useState(null);

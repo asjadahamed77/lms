@@ -1,13 +1,13 @@
 import React, { createContext, useEffect, useState } from "react";
 import { lecturer } from "../assets/lecturers";
 import { announcements } from "../assets/announcements";
-import { quizzes } from "../assets/quizzes";
-import { resources } from "../assets/resources";
 import { getAllBatches } from "../service/adminBatch";
 import { getAllStudents } from "../service/adminStudent";
 import { getAllLecturers } from "../service/adminLecturer";
 import { getAllSubjects } from "../service/adminSubject";
 import { getLecturerAssignments } from "../service/assignmentService";
+import { getLecturerQuizzes } from "../service/quizService";
+import { getLecturerResources } from "../service/resourceService";
 // import { getStudent } from "../service/studentService";
 
 export const AppContext = createContext();
@@ -26,6 +26,8 @@ const AppContextProvider = ({ children }) => {
   const [lecturers, setLecturers] = useState([])
   const [subjects, setSubjects] = useState([])
   const [assignments, setAssignments] = useState([])
+  const [quizzes, setQuizzes] = useState([])
+  const [resources, setResources] = useState([])
   // const [student, setStudent] = useState(null)
 
   
@@ -81,6 +83,24 @@ const AppContextProvider = ({ children }) => {
     }     
   }
 
+  const getLecturerQuizzesDetails = async ()=> {
+    if(user && user.role === "lecturer") {
+      const response = await getLecturerQuizzes(user.userId);
+      if(response.success) {
+        setQuizzes(response.quizzes)
+      }
+    }     
+  }
+
+  const getLecturerResourcesDetails = async ()=> {
+    if(user && user.role === "lecturer") {
+      const response = await getLecturerResources(user.userId);
+      if(response.success) {
+        setResources(response.resources)
+      }
+    }     
+  }
+
   
 
   // const getStudentData = async () => {
@@ -100,6 +120,8 @@ const AppContextProvider = ({ children }) => {
     getAdminLecturers()
     getAdminSubjects()
     getLecturerAssignmentsDetails()
+    getLecturerQuizzesDetails()
+    getLecturerResourcesDetails()
   },[])
 
  

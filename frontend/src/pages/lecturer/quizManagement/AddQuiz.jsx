@@ -4,16 +4,31 @@ import { IoChevronBackSharp } from "react-icons/io5";
 import { AppContext } from "../../../context/AppContext";
 import { MdLibraryBooks } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
+import toast from "react-hot-toast";
+import { createQuiz } from "../../../service/quizService";
 
 const AddQuiz = () => {
   const navigate = useNavigate();
-  const { lecturer } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   const [subjectSelected, setSubjectSelected] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    deadline: "",
+    files: [],
+  });
 
   const handleClose = () => {
     setShowPopup(false);
     setSubjectSelected(null);
+    setFormData({
+      title: "",
+      description: "",
+      deadline: "",
+      files: [],
+    });
   };
 
   const handleSubjectSelect = (subject) => {
@@ -21,8 +36,63 @@ const AddQuiz = () => {
     setShowPopup(true);
   };
 
-  const submitHandler = (e) => {
+    // handle text input
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
+
+     // handle file input
+  const handleFileChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      files: e.target.files,
+    }));
+  };
+
+   // submit quiz
+   const submitHandler = async (e) => {
     e.preventDefault();
+
+    if (!subjectSelected) {
+      toast.error("Please select a subject first!");
+      return;
+    }
+
+    try {
+      const form = new FormData();
+      form.append("title", formData.title);
+      form.append("description", formData.description);
+      form.append("deadline", formData.deadline);
+      form.append("subjectId", subjectSelected.subjectId);
+      form.append("lecturerId", user.userId);
+
+      if (formData.files && formData.files.length > 0) {
+        for (let i = 0; i < formData.files.length; i++) {
+          form.append("files", formData.files[i]);
+        }
+      }
+
+     const response = await createQuiz(form);
+     if(response.success){
+      toast.success("Quiz created successfully!");
+      setFormData({
+        title: "",
+        description: "",
+        deadline: "",
+        files: [],
+      })
+     }
+      
+      handleClose();
+    
+    } catch (error) {
+      toast.error("Failed to create quiz. Please try again.");
+      console.error(error);
+    }
   };
 
   return (
@@ -38,7 +108,7 @@ const AddQuiz = () => {
       </button>
       {/* Display the subjects of particular lecturer */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3  gap-8 md:gap-12">
-        {lecturer.subjects?.map((subject, index) => (
+        {user.lecturerSubjects?.map((subject, index) => (
           <div
           key={index}
           onClick={() => handleSubjectSelect(subject)}
@@ -84,6 +154,9 @@ const AddQuiz = () => {
                 <label className="font-semibold">Title</label>
                 <input
                   type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
                   placeholder="Enter here ..."
                   className="p-2 w-full rounded border border-primaryColor/30"
                   required
@@ -95,6 +168,9 @@ const AddQuiz = () => {
                 <textarea
                   rows={4}
                   type="text"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
                   placeholder="Enter here ..."
                   className="p-2 w-full rounded border border-primaryColor/30 resize-none overflow-y-scroll"
                 />
@@ -106,12 +182,15 @@ const AddQuiz = () => {
                   type="file"
                   accept="application/pdf, image/*, .doc, .docx"
                   multiple
+                  onChange={handleFileChange}
                   className="p-2 rounded border border-primaryColor/30"
                 />
               </div>
               <div className="flex flex-col  gap-2  flex-1">
                 <label className="font-semibold">Deadline</label>
-                <input type="datetime-local" className="p-2 w-full rounded border border-primaryColor/30" />
+                <input type="datetime-local" name="deadline"
+                  value={formData.deadline}
+                  onChange={handleChange} className="p-2 w-full rounded border border-primaryColor/30" />
               </div>
               <button
             type="submit"

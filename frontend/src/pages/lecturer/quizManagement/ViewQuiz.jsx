@@ -8,6 +8,15 @@ const ViewQuiz = () => {
   const navigate = useNavigate();
   const { quizzes } = useContext(AppContext);
 
+  // extract filename from Cloudinary URL
+  const getFileNameFromUrl = (url) => {
+    try {
+      return decodeURIComponent(url.split("/").pop().split("?")[0]);
+    } catch {
+      return "file";
+    }
+  };
+
   const getFileIcon = (fileName) => {
     const ext = fileName.split(".").pop().toLowerCase();
 
@@ -48,28 +57,31 @@ const ViewQuiz = () => {
               className="border border-primaryColor/30 rounded-lg sm:rounded-2xl p-4 sm:p-6 lg:p-8"
             >
               <h1 className="font-medium text-xl">
-                {ass.quizTitle} - {ass.subjectCode}
+                {ass.title} - {ass.Subject?.subjectCode}
               </h1>
               <p className="text-sm mt-2">Batch - {ass.batchName}</p>
               <p className="text-sm sm:text-base text-primaryColor/65 mt-4">
-                {ass.quizDescription}
+                {ass.description}
               </p>
               <div className="mt-4">
                 <p className="text-primaryColor/85">Attached Files</p>
                 <div className="flex flex-wrap gap-6">
-                  {ass.quizFiles.length > 0 &&
-                    ass.quizFiles.map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.file}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 hover:underline mt-1"
-                      >
-                        {getFileIcon(item.fileName)}
-                        <span>{item.fileName}</span>
-                      </a>
-                    ))}
+                  {ass.fileUrl.length > 0 &&
+                    ass.fileUrl.map((url, idx) => {
+                      const fileName = getFileNameFromUrl(url);
+                      return (
+                        <a
+                          key={idx}
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:underline mt-1"
+                        >
+                          {getFileIcon(fileName)}
+                          <span>{fileName}</span>
+                        </a>
+                      );
+                    })}
                 </div>
               </div>
               <div className="grid sm:grid-cols-2 sm:gap-4">
