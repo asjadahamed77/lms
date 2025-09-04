@@ -41,6 +41,7 @@ const Quiz = sequelize.define("Quiz", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+ 
 }, {
   timestamps: true,
 });

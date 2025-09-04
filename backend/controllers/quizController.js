@@ -127,3 +127,4 @@ export const deleteQuiz = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+

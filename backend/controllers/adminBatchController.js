@@ -13,7 +13,7 @@ export const createBatch = async (req, res) => {
 
         const batchResponse = {
             id: newBatch.id,
-            batchID: newBatch.batchID,
+            batchId: newBatch.batchId,
             batchName: newBatch.batchName,
             facultyName: newBatch.facultyName,
             departmentName: newBatch.departmentName,

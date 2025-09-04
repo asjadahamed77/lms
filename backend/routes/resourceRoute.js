@@ -14,7 +14,7 @@ resourceRouter.post(
   verifyToken,
   authorizeRoles("lecturer"),
   upload.array("files", 5),     
-  uploadFilesToCloudinary,            
+  uploadFilesToCloudinary("fileUrls"),            
   createResource
 );
 resourceRouter.get('/lecturer-resources/:lecturerId', verifyToken, authorizeRoles('lecturer'), getResourcesForLecturer);

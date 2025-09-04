@@ -13,10 +13,11 @@ quizRouter.post(
   verifyToken,
   authorizeRoles("lecturer"),
   upload.array("files", 5),     
-  uploadFilesToCloudinary,            
+  uploadFilesToCloudinary("fileUrls"),            
   createQuiz
 );
 quizRouter.get('/lecturer-quizzes/:lecturerId', verifyToken, authorizeRoles('lecturer'), getQuizzesForLecturer);
 quizRouter.delete('/lecturer-quizzes/:quizId', verifyToken, authorizeRoles('lecturer'), deleteQuiz);
+
 
 export default quizRouter;

@@ -41,6 +41,7 @@ const Assignment = sequelize.define("Assignment", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  
 }, {
   timestamps: true,
 });

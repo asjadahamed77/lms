@@ -12,10 +12,12 @@ assignmentRouter.post(
   verifyToken,
   authorizeRoles("lecturer"),
   upload.array("files", 5),     
-  uploadFilesToCloudinary,            
+  uploadFilesToCloudinary("fileUrls"),            
   createAssignment
 );
 assignmentRouter.get('/lecturer-assignments/:lecturerId', verifyToken, authorizeRoles('lecturer'), getAssignmentsForLecturer);
 assignmentRouter.delete('/lecturer-assignments/:assignmentId', verifyToken, authorizeRoles('lecturer'), deleteAssignment);
+
+
 
 export default assignmentRouter;

@@ -66,6 +66,7 @@ const AddAssignments = () => {
 
     if (!subjectSelected) {
       toast.error("Please select a subject first!");
+      setLoading(false)
       return;
     }
     setLoading(true)

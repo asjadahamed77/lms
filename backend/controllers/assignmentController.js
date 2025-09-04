@@ -59,6 +59,10 @@ export const getAssignmentsForStudents = async (req, res) => {
   try {
     const { batchName, departmentName } = req.query;
 
+ 
+   
+    
+
     const assignments = await Assignment.findAll({
       where: { batchName, departmentName },
       include: [{ model: Subject }, { association: "lecturer", attributes: ["name", "email"] }],
@@ -124,3 +128,4 @@ export const deleteAssignment = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+
