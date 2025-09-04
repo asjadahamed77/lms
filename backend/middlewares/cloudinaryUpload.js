@@ -1,5 +1,5 @@
-// middleware/cloudinaryUpload.js
-import cloudinary from '../config/cloudinaryConfig.js';
+import { v2 as cloudinary } from 'cloudinary';
+import path from 'path';
 
 export const uploadFilesToCloudinary = async (req, res, next) => {
   try {
@@ -10,15 +10,17 @@ export const uploadFilesToCloudinary = async (req, res, next) => {
 
     const uploadPromises = req.files.map((file) => {
       return new Promise((resolve, reject) => {
-        // Create a unique public_id for the file
-        const publicId = `assignments/${Date.now()}_${Math.round(Math.random() * 1E9)}`;
+        // Preserve original filename but make it unique
+        const originalName = path.parse(file.originalname).name;
+        const extension = path.parse(file.originalname).ext;
+        const publicId = `assignments/${originalName}_${Date.now()}_${Math.round(Math.random() * 1E9)}${extension}`;
         
         const uploadStream = cloudinary.uploader.upload_stream(
           {
             resource_type: 'raw',
             public_id: publicId,
-             access_mode: "public",
-             type: "upload",
+            access_mode: "public",
+            type: "upload",
             folder: 'assignments'
           },
           (error, result) => {
@@ -26,7 +28,11 @@ export const uploadFilesToCloudinary = async (req, res, next) => {
               console.error('Cloudinary upload error:', error);
               reject(error);
             } else {
-              resolve(result.secure_url);
+              resolve({
+                url: result.secure_url,
+                public_id: result.public_id,
+                original_name: file.originalname
+              });
             }
           }
         );
@@ -35,8 +41,8 @@ export const uploadFilesToCloudinary = async (req, res, next) => {
       });
     });
 
-    const urls = await Promise.all(uploadPromises);
-    req.fileUrls = urls;
+    const fileData = await Promise.all(uploadPromises);
+    req.fileUrls = fileData;
     next();
   } catch (err) {
     console.error('Cloudinary upload error:', err);

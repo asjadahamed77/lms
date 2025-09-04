@@ -54,7 +54,7 @@ export const getAssignmentsForLecturer = async (req, res) => {
     }
   };
 
-// Fetch assignments for students (filter by batch + department)
+
 export const getAssignmentsForStudents = async (req, res) => {
   try {
     const { batchName, departmentName } = req.query;

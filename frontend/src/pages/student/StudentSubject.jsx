@@ -13,6 +13,9 @@ const StudentSubject = () => {
     (sub) => sub.subjectId === subjectId
   );
 
+ 
+  
+
   const [showSubmitAssignmentPopup, setShowSubmitAssignmentPopup] =
     useState(false);
     const [showSubmitQuizPopup, setShowSubmitQuizPopup] =
@@ -71,8 +74,8 @@ const StudentSubject = () => {
       {/* Assignments */}
       <h1 className="text-2xl font-semibold mb-6 border-b pb-2">Assignments</h1>
       <div className="grid md:grid-cols-2 gap-6 md:gap-10">
-        {currentSubject.assignments.length > 0 ? (
-          currentSubject.assignments.map((ass, index) => {
+        {currentSubject.Assignments.length > 0 ? (
+          currentSubject.Assignments.map((ass, index) => {
             const [remaining, setRemaining] = useState(
               getRemainingTime(ass.deadline)
             );
@@ -91,26 +94,31 @@ const StudentSubject = () => {
                 key={index}
                 className="p-4 sm:p-6 md:p-8 border border-primaryColor/30 rounded-lg hover:-translate-y-2 duration-300 transition-transform ease-linear"
               >
-                <p className="font-medium text-xl">{ass.assignmentTitle}</p>
+                <p className="font-medium text-xl">{ass.title}</p>
                 <p className="mt-4 text-primaryColor/80 text-sm">
-                  {ass.assignmentDescription}
+                  {ass.description}
                 </p>
 
                 <div className="mt-4">
                   <p className="font-medium">Attached Files:</p>
                   <div className="flex items-center gap-2">
-                    {ass.assignmentFiles.map((item, idx) => (
-                      <a
-                        key={idx}
-                        href={item.file}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 hover:underline mt-1"
-                      >
-                        {getFileIcon(item.fileName)}
-                        <span>{item.fileName}</span>
-                      </a>
-                    ))}
+                  {ass.fileUrl.map((url, idx) => {
+  
+  return (
+    <a
+      key={idx}
+      href={url.public_id}
+      download={url.public_id}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 hover:underline mt-1"
+    >
+      {getFileIcon(url.original_name)}
+      <span>{url.original_name}</span>
+    </a>
+  );
+})}
+
                   </div>
                 </div>
 
@@ -182,8 +190,8 @@ const StudentSubject = () => {
       </h1>
 
       <div className="grid md:grid-cols-2 gap-6 md:gap-10">
-        {currentSubject.quizzes.length > 0 ? (
-          currentSubject.quizzes.map((qs, index) => {
+        {currentSubject.Quizzes.length > 0 ? (
+          currentSubject.Quizzes.map((qs, index) => {
             const [remaining, setRemaining] = useState(
               getRemainingTime(qs.deadline)
             );
@@ -202,26 +210,31 @@ const StudentSubject = () => {
                 key={index}
                 className="p-4 sm:p-6 md:p-8 border border-primaryColor/30 rounded-lg hover:-translate-y-2 duration-300 transition-transform ease-linear"
               >
-                <p className="font-medium text-xl">{qs.quizTitle}</p>
+                <p className="font-medium text-xl">{qs.title}</p>
                 <p className="mt-4 text-primaryColor/80 text-sm">
-                  {qs.quizDescription}
+                  {qs.description}
                 </p>
 
                 <div className="mt-4">
                   <p className="font-medium">Attached Files:</p>
                   <div className="flex items-center gap-2">
-                    {qs.quizFiles.map((item, idx) => (
-                      <a
-                        key={idx}
-                        href={item.file}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 hover:underline mt-1"
-                      >
-                        {getFileIcon(item.fileName)}
-                        <span>{item.fileName}</span>
-                      </a>
-                    ))}
+                  {qs.fileUrl.map((url, idx) => {
+  
+  return (
+    <a
+      key={idx}
+      href={url.public_id}
+      download={url.public_id}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 hover:underline mt-1"
+    >
+      {getFileIcon(url.original_name)}
+      <span>{url.original_name}</span>
+    </a>
+  );
+})}
+
                   </div>
                 </div>
 
@@ -289,27 +302,32 @@ const StudentSubject = () => {
         Resources
       </h1>
       <div>
-        {currentSubject.resources.length > 0 ? (
+        {currentSubject.Resources.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-6 md:gap-10">
-            {currentSubject.resources.map((res, index) => (
+            {currentSubject.Resources.map((res, index) => (
               <div
                 key={index}
                 className="p-4 sm:p-6 md:p-8 border border-primaryColor/30 rounded-lg hover:-translate-y-2 duration-300 transition-transform ease-linear"
               >
-                <p className="text-xl font-medium mb-2">{res.resourceTitle}</p>
+                <p className="text-xl font-medium mb-2">{res.title}</p>
                 <div className="flex items-center gap-2 flex-wrap">
-                  {res.resourceFiles.map((item, idx) => (
-                    <a
-                      key={idx}
-                      href={item.file}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 hover:underline mt-1"
-                    >
-                      {getFileIcon(item.fileName)}
-                      <span>{item.fileName}</span>
-                    </a>
-                  ))}
+                {res.fileUrl.map((url, idx) => {
+ 
+  return (
+    <a
+      key={idx}
+      href={url.public_id}
+      download={url.public_id}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 hover:underline mt-1"
+    >
+      {getFileIcon(url.original_name)}
+      <span>{url.original_name}</span>
+    </a>
+  );
+})}
+
                 </div>
               </div>
             ))}

@@ -79,7 +79,7 @@ export const deleteQuiz = async (req, res) => {
   try {
     const { quizId } = req.params;
 
-    // Find assignment by ID
+    // Find  by ID
     const quiz = await Quiz.findByPk(quizId);
     if (!quiz) {
       return res
@@ -113,7 +113,7 @@ export const deleteQuiz = async (req, res) => {
       }
     }
 
-    // Delete the quiz record
+    // Delete the assiquizgnment record
     await quiz.destroy();
 
     res.json({

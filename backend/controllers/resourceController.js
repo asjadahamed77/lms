@@ -76,7 +76,7 @@ export const deleteResource = async (req, res) => {
   try {
     const { resourceId } = req.params;
 
-    // Find assignment by ID
+    // Find  by ID
     const resource = await Resource.findByPk(resourceId);
     if (!resource) {
       return res
@@ -118,7 +118,7 @@ export const deleteResource = async (req, res) => {
       message: "Resource and its files deleted successfully.",
     });
   } catch (error) {
-    console.error("Delete Resource Error:", error);
+    console.error("Delete Quiz Error:", error);
     res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });

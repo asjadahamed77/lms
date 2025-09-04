@@ -33,6 +33,7 @@ const AppContextProvider = ({ children }) => {
   
 
 
+  console.log(user);
   
 
 
