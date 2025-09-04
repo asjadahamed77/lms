@@ -4,6 +4,13 @@ import AssignmentSubmission from "../models/assignmentSubmissionModel.js";
 
 export const submitAssignment = async (req, res) => {
     try {
+
+        const {userId} = req.params;
+
+        if(!userId){
+            return res.status(400).json({ success: false, message: "User ID is required in params" });
+        }
+
         const { assignmentId, studentId, title, batchName, departmentName, studentName, subjectName, deadline  } = req.body;
     
         // Check if the assignment exists

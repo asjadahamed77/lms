@@ -6,8 +6,7 @@ import { FaFileAlt, FaFileImage, FaFilePdf, FaFileWord } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import toast from "react-hot-toast";
 import Loading from "../../components/common/Loading";
-import { submitAssignment } from "../../service/assignmentService";
-import { submitQuiz } from "../../service/quizService";
+
 
 const StudentSubject = () => {
   const navigate = useNavigate();

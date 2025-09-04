@@ -7,7 +7,7 @@ import upload from "../middlewares/multerConfig.js";
 
 const submissionRouter = express.Router();
 
-submissionRouter.post('/assignment', verifyToken, authorizeRoles('student'),   upload.array("files", 5),     
+submissionRouter.post('/assignment/:userId', verifyToken, authorizeRoles('student'),   upload.array("files", 5),     
 uploadFilesToCloudinary("fileUrls"), submitAssignment)
 
 
