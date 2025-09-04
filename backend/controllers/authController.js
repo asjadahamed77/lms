@@ -2,6 +2,9 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Subject from "../models/subjectModel.js";
+import Assignment from "../models/assignmentModel.js";
+import Quiz from "../models/quizModel.js";
+import Resource from "../models/resourceModel.js";
 
 
 export const login = async (req, res) => {
@@ -74,6 +77,20 @@ export const login = async (req, res) => {
           "batchName",
           "departmentName",
           "facultyName",
+        ],
+        include: [
+          {
+            model: Assignment,
+            attributes: ["assignmentId", "title", "description", "fileUrl", "deadline"],
+          },
+          {
+            model: Quiz,
+            attributes: ["quizId", "title", "description", "fileUrl", "deadline"],
+          },
+          {
+            model: Resource,
+            attributes: ["resourceId", "title", "fileUrl"],
+          },
         ],
       });
     }

@@ -1,6 +1,6 @@
 import express from "express";
 import { authorizeRoles, verifyToken } from "../middlewares/userAuthMiddleware.js";
-import { createAssignment, getAssignmentsForLecturer } from "../controllers/assignmentController.js";
+import { createAssignment, deleteAssignment, getAssignmentsForLecturer } from "../controllers/assignmentController.js";
 import upload from '../middlewares/multerConfig.js'
 import  { uploadFilesToCloudinary } from "../middlewares/cloudinaryUpload.js";
 
@@ -12,9 +12,12 @@ assignmentRouter.post(
   verifyToken,
   authorizeRoles("lecturer"),
   upload.array("files", 5),     
-  uploadFilesToCloudinary,            
+  uploadFilesToCloudinary("fileUrls"),            
   createAssignment
 );
 assignmentRouter.get('/lecturer-assignments/:lecturerId', verifyToken, authorizeRoles('lecturer'), getAssignmentsForLecturer);
+assignmentRouter.delete('/lecturer-assignments/:assignmentId', verifyToken, authorizeRoles('lecturer'), deleteAssignment);
+
+
 
 export default assignmentRouter;

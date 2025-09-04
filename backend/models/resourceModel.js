@@ -5,8 +5,8 @@ import sequelize from "../config/db.js";
 import User from "./userModel.js";
 import Subject from "./subjectModel.js";
 
-const Assignment = sequelize.define("Assignment", {
-  assignmentId: {
+const Resource = sequelize.define("Resource", {
+  resourceId: {
     type: DataTypes.UUID,
     defaultValue: () => uuidv4(),
     primaryKey: true,
@@ -15,9 +15,7 @@ const Assignment = sequelize.define("Assignment", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  description: {
-    type: DataTypes.TEXT,
-  },
+ 
   fileUrl: {
     type: DataTypes.TEXT, // Store as JSON string
     defaultValue: "[]",
@@ -29,10 +27,7 @@ const Assignment = sequelize.define("Assignment", {
       this.setDataValue('fileUrl', JSON.stringify(value));
     }
   },
-  deadline: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
+  
   batchName: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -41,16 +36,15 @@ const Assignment = sequelize.define("Assignment", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  
 }, {
   timestamps: true,
 });
 
 // Associations
-Assignment.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
-User.hasMany(Assignment, { as: "assignments", foreignKey: "lecturerId" });
+Resource.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
+User.hasMany(Resource, { as: "resources", foreignKey: "lecturerId" });
 
-Assignment.belongsTo(Subject, { foreignKey: "subjectId" });
-Subject.hasMany(Assignment, { foreignKey: "subjectId" });
+Resource.belongsTo(Subject, { foreignKey: "subjectId" });
+Subject.hasMany(Resource, { foreignKey: "subjectId" });
 
-export default Assignment;
+export default Resource;

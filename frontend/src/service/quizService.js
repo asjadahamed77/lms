@@ -1,14 +1,17 @@
 import axios from 'axios';
 
+
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const token = localStorage.getItem('token');
 
-//  Create Assignment
-export const createAssignment = async (formData) => {
+
+
+//  Create Quiz
+export const createQuiz = async (formData) => {
     try {
         const { data } = await axios.post(
-            '/assignment/add-assignment',
+            '/quiz/add-quiz',
             formData,
             {
                 headers: {
@@ -19,16 +22,16 @@ export const createAssignment = async (formData) => {
         );
         return data;
     } catch (error) {
-        console.error("Create Assignment Error:", error);
+        console.error("Create Quiz Error:", error);
         throw error;
     }
 };
 
-//  Get Lecturer Assignments
-export const getLecturerAssignments = async (lecturerId) => {
+//  Get Lecturer Quizzes
+export const getLecturerQuizzes = async (lecturerId) => {
     try {
         const { data } = await axios.get(
-          `/assignment/lecturer-assignments/${lecturerId}`,
+          `/quiz/lecturer-quizzes/${lecturerId}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,16 +42,16 @@ export const getLecturerAssignments = async (lecturerId) => {
         
         return data;
     } catch (error) {
-        console.error("Get Lecturer Assignments Error:", error);
+        console.error("Get Lecturer Quizzes Error:", error);
         throw error;
     }
 };
 
-// delete assignment
-export const deleteAssignment = async (assignmentId) => {
+// delete quiz
+export const deleteQuiz = async (quizId) => {
     try {
         const { data } = await axios.delete(
-          `/assignment/lecturer-assignments/${assignmentId}`,
+          `/quiz/lecturer-quizzes/${quizId}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,3 +66,4 @@ export const deleteAssignment = async (assignmentId) => {
         throw error;
     }
 }
+

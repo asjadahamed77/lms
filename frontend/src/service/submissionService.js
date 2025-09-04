@@ -1,0 +1,20 @@
+import axios from 'axios';
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+
+const token = localStorage.getItem('token')
+
+export const submitAssignment = async ({userId,formData}) => {
+    try {
+        const {data} = await axios.post(`/submission/assignment/${userId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+        return data;
+    } catch (error) {
+        console.error("Submit Assignment Error:", error);
+        throw error;
+    }
+}

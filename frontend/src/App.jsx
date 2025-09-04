@@ -35,12 +35,12 @@ import ResourceManagement from "./pages/lecturer/resourceManagement/ResourceMana
 import QuizManagement from "./pages/lecturer/quizManagement/QuizManagement";
 import PaymentManagement from "./pages/admin/paymentManagement/PaymentManagement";
 import AttendanceManagement from "./pages/lecturer/attendanceManagement/AttendanceManagement";
-import StudentSubject from "./pages/student/StudentSubject";
 import ForgotPassword from "./pages/common/ForgotPassword";
 import  { Toaster } from 'react-hot-toast';
 import { AppContext } from "./context/AppContext";
 import Loading from "./components/common/Loading";
 import ManageProfile from "./pages/common/ManageProfile";
+import StudentCurrentSubject from "./pages/student/StudentCurrentSubject";
 
 const App = () => {
   const {loading} = useContext(AppContext)
@@ -167,7 +167,7 @@ const App = () => {
 
           <Route path="student" element={<StudentLayout />}>
             <Route index element={<StudentDashboard />} />
-            <Route path="enrolled-subjects/:subjectId" element={<StudentSubject />} />
+            <Route path="enrolled-subjects/:subjectId" element={<StudentCurrentSubject />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

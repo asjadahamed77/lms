@@ -4,16 +4,30 @@ import { IoChevronBackSharp } from "react-icons/io5";
 import { AppContext } from "../../../context/AppContext";
 import { MdLibraryBooks } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
+import { createResource } from "../../../service/resourceService";
+import toast from "react-hot-toast";
+import Loading from "../../../components/common/Loading";
 
 const AddResources = () => {
   const navigate = useNavigate();
-  const { lecturer } = useContext(AppContext);
+  const { user, loading, setLoading } = useContext(AppContext);
   const [subjectSelected, setSubjectSelected] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    files: [],
+  });
 
   const handleClose = () => {
     setShowPopup(false);
     setSubjectSelected(null);
+    setFormData({
+      title: "",
+      description: "",
+      deadline: "",
+      files: [],
+    });
   };
 
   const handleSubjectSelect = (subject) => {
@@ -21,9 +35,70 @@ const AddResources = () => {
     setShowPopup(true);
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+   // handle text input
+   const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
+
+  // handle file input
+  const handleFileChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      files: e.target.files,
+    }));
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    if (!subjectSelected) {
+      toast.error("Please select a subject first!");
+      return;
+    }
+
+    setLoading(true)
+
+    try {
+      const form = new FormData();
+      form.append("title", formData.title);
+      form.append("description", formData.description);
+      form.append("deadline", formData.deadline);
+      form.append("subjectId", subjectSelected.subjectId);
+      form.append("lecturerId", user.userId);
+
+      if (formData.files && formData.files.length > 0) {
+        for (let i = 0; i < formData.files.length; i++) {
+          form.append("files", formData.files[i]);
+        }
+      }
+
+     const response = await createResource(form);
+     if(response.success){
+      toast.success("Resource created successfully!");
+      setFormData({
+        title: "",
+       
+        files: [],
+      })
+
+      setLoading(false)
+     }
+      
+      handleClose();
+    
+    } catch (error) {
+      toast.error("Failed to create resources.");
+      console.error(error);
+    }
+  };
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <div className="py-8 md:py-12">
@@ -38,7 +113,7 @@ const AddResources = () => {
       </button>
       {/* Display the subjects of particular lecturer */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3  gap-8 md:gap-12">
-        {lecturer.subjects?.map((subject, index) => (
+        {user.lecturerSubjects?.map((subject, index) => (
           <div
             key={index}
             onClick={() => handleSubjectSelect(subject)}
@@ -81,6 +156,9 @@ const AddResources = () => {
                 <label className="font-semibold">Title</label>
                 <input
                   type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
                   placeholder="Enter here ..."
                   className="p-2 w-full rounded border border-primaryColor/30"
                   required
@@ -94,6 +172,7 @@ const AddResources = () => {
                   type="file"
                   accept="application/pdf, image/*, .doc, .docx"
                   multiple
+                  onChange={handleFileChange}
                   className="p-2 rounded border border-primaryColor/30"
                 />
               </div>

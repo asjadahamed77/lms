@@ -2,9 +2,10 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "../../../context/AppContext";
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBackSharp } from "react-icons/io5";
+import Loading from "../../../components/common/Loading";
 
 const ViewBatch = () => {
-  const { batches } = useContext(AppContext);
+  const { batches, loading } = useContext(AppContext);
   const navigate = useNavigate()
 
   const [selectedFaculty, setSelectedFaculty] = useState("");
@@ -25,6 +26,10 @@ const ViewBatch = () => {
       );
     });
   };
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <div className="py-8 md:py-12">

@@ -5,8 +5,8 @@ import sequelize from "../config/db.js";
 import User from "./userModel.js";
 import Subject from "./subjectModel.js";
 
-const Assignment = sequelize.define("Assignment", {
-  assignmentId: {
+const Quiz = sequelize.define("Quiz", {
+  quizId: {
     type: DataTypes.UUID,
     defaultValue: () => uuidv4(),
     primaryKey: true,
@@ -41,16 +41,16 @@ const Assignment = sequelize.define("Assignment", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  
+ 
 }, {
   timestamps: true,
 });
 
 // Associations
-Assignment.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
-User.hasMany(Assignment, { as: "assignments", foreignKey: "lecturerId" });
+Quiz.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
+User.hasMany(Quiz, { as: "quizzes", foreignKey: "lecturerId" });
 
-Assignment.belongsTo(Subject, { foreignKey: "subjectId" });
-Subject.hasMany(Assignment, { foreignKey: "subjectId" });
+Quiz.belongsTo(Subject, { foreignKey: "subjectId" });
+Subject.hasMany(Quiz, { foreignKey: "subjectId" });
 
-export default Assignment;
+export default Quiz;

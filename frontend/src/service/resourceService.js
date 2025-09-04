@@ -4,11 +4,11 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const token = localStorage.getItem('token');
 
-//  Create Assignment
-export const createAssignment = async (formData) => {
+//  Create Resource
+export const createResource = async (formData) => {
     try {
         const { data } = await axios.post(
-            '/assignment/add-assignment',
+            '/resource/add-resource',
             formData,
             {
                 headers: {
@@ -19,16 +19,16 @@ export const createAssignment = async (formData) => {
         );
         return data;
     } catch (error) {
-        console.error("Create Assignment Error:", error);
+        console.error("Create Resource Error:", error);
         throw error;
     }
 };
 
-//  Get Lecturer Assignments
-export const getLecturerAssignments = async (lecturerId) => {
+//  Get Lecturer Resources
+export const getLecturerResources = async (lecturerId) => {
     try {
         const { data } = await axios.get(
-          `/assignment/lecturer-assignments/${lecturerId}`,
+          `/resource/lecturer-resources/${lecturerId}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,16 +39,16 @@ export const getLecturerAssignments = async (lecturerId) => {
         
         return data;
     } catch (error) {
-        console.error("Get Lecturer Assignments Error:", error);
+        console.error("Get Lecturer Resources Error:", error);
         throw error;
     }
 };
 
-// delete assignment
-export const deleteAssignment = async (assignmentId) => {
+// delete resource
+export const deleteResource = async (resourceId) => {
     try {
         const { data } = await axios.delete(
-          `/assignment/lecturer-assignments/${assignmentId}`,
+          `/resource/lecturer-resources/${resourceId}`,
             {
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,9 +1,11 @@
+
+
 import cloudinary from "../config/cloudinaryConfig.js";
-import Assignment from "../models/assignmentModel.js";
+import Quiz from "../models/quizModel.js";
 import Subject from "../models/subjectModel.js";
 import User from "../models/userModel.js";
 
-export const createAssignment = async (req, res) => {
+export const createQuiz = async (req, res) => {
     try {
       const { title, description, deadline, subjectId, lecturerId } = req.body;
   
@@ -12,7 +14,7 @@ export const createAssignment = async (req, res) => {
         return res.status(404).json({ success: false, message: "Subject not found" });
       }
   
-      const assignment = await Assignment.create({
+      const quiz = await Quiz.create({
         title,
         description,
         deadline,
@@ -24,21 +26,21 @@ export const createAssignment = async (req, res) => {
   
       res.status(201).json({
         success: true,
-        message: "Assignment created successfully.",
-        assignment,
+        message: "Quiz created successfully.",
+        quiz,
       });
     } catch (error) {
-      console.error("Create Assignment Error:", error);
+      console.error("Create Quiz Error:", error);
       res.status(500).json({ success: false, message: "Internal Server Error" });
     }
   };
   
 
-export const getAssignmentsForLecturer = async (req, res) => {
+export const getQuizzesForLecturer = async (req, res) => {
     try {
       const { lecturerId } = req.params;
   
-      const assignments = await Assignment.findAll({
+      const quizzes = await Quiz.findAll({
         where: { lecturerId },
         include: [
           { model: Subject, attributes: ["subjectId", "subjectName", "subjectCode", "batchName"] },
@@ -47,54 +49,51 @@ export const getAssignmentsForLecturer = async (req, res) => {
         order: [["createdAt", "DESC"]],
       });
   
-      res.json({ success: true, assignments });
+      res.json({ success: true, quizzes });
     } catch (error) {
-      console.error("Fetch Lecturer Assignments Error:", error);
+      console.error("Fetch Lecturer Quizzes Error:", error);
       res.status(500).json({ success: false, message: "Internal Server Error" });
     }
   };
 
-
-export const getAssignmentsForStudents = async (req, res) => {
+// Fetch assignments for students (filter by batch + department)
+export const getQuizzesForStudents = async (req, res) => {
   try {
     const { batchName, departmentName } = req.query;
 
- 
-   
-    
-
-    const assignments = await Assignment.findAll({
+    const quizzes = await Quiz.findAll({
       where: { batchName, departmentName },
       include: [{ model: Subject }, { association: "lecturer", attributes: ["name", "email"] }],
     });
 
-    res.json({ success: true, assignments });
+    res.json({ success: true, quizzes });
   } catch (error) {
-    console.error("Fetch Assignments Error:", error);
+    console.error("Fetch Quizzes Error:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
-// Delete Assignment
-export const deleteAssignment = async (req, res) => {
-  try {
-    const { assignmentId } = req.params;
 
-    // Find assignment by ID
-    const assignment = await Assignment.findByPk(assignmentId);
-    if (!assignment) {
+// Delete Quiz
+export const deleteQuiz = async (req, res) => {
+  try {
+    const { quizId } = req.params;
+
+    // Find  by ID
+    const quiz = await Quiz.findByPk(quizId);
+    if (!quiz) {
       return res
         .status(404)
-        .json({ success: false, message: "Assignment not found" });
+        .json({ success: false, message: "Quiz not found" });
     }
 
     // Ensure fileUrl is parsed correctly
     let fileUrls = [];
     try {
-      if (Array.isArray(assignment.fileUrl)) {
-        fileUrls = assignment.fileUrl;
-      } else if (typeof assignment.fileUrl === "string") {
-        fileUrls = JSON.parse(assignment.fileUrl);
+      if (Array.isArray(quiz.fileUrl)) {
+        fileUrls = quiz.fileUrl;
+      } else if (typeof quiz.fileUrl === "string") {
+        fileUrls = JSON.parse(quiz.fileUrl);
       }
     } catch (err) {
       console.error("Error parsing fileUrl:", err);
@@ -114,15 +113,15 @@ export const deleteAssignment = async (req, res) => {
       }
     }
 
-    // Delete the assignment record
-    await assignment.destroy();
+    // Delete the assiquizgnment record
+    await quiz.destroy();
 
     res.json({
       success: true,
-      message: "Assignment and its files deleted successfully.",
+      message: "Quiz and its files deleted successfully.",
     });
   } catch (error) {
-    console.error("Delete Assignment Error:", error);
+    console.error("Delete Quiz Error:", error);
     res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });

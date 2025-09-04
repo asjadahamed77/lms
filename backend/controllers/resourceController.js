@@ -1,21 +1,21 @@
+
 import cloudinary from "../config/cloudinaryConfig.js";
-import Assignment from "../models/assignmentModel.js";
+import Resource from "../models/resourceModel.js";
 import Subject from "../models/subjectModel.js";
 import User from "../models/userModel.js";
 
-export const createAssignment = async (req, res) => {
+export const createResource = async (req, res) => {
     try {
-      const { title, description, deadline, subjectId, lecturerId } = req.body;
+      const { title,  subjectId, lecturerId } = req.body;
   
       const subject = await Subject.findByPk(subjectId);
       if (!subject) {
         return res.status(404).json({ success: false, message: "Subject not found" });
       }
   
-      const assignment = await Assignment.create({
+      const resource = await Resource.create({
         title,
-        description,
-        deadline,
+        
         subjectId,
         lecturerId,
         batchName: subject.batchName,
@@ -24,21 +24,21 @@ export const createAssignment = async (req, res) => {
   
       res.status(201).json({
         success: true,
-        message: "Assignment created successfully.",
-        assignment,
+        message: "Resource created successfully.",
+        resource,
       });
     } catch (error) {
-      console.error("Create Assignment Error:", error);
+      console.error("Create Resource Error:", error);
       res.status(500).json({ success: false, message: "Internal Server Error" });
     }
   };
   
 
-export const getAssignmentsForLecturer = async (req, res) => {
+export const getResourcesForLecturer = async (req, res) => {
     try {
       const { lecturerId } = req.params;
   
-      const assignments = await Assignment.findAll({
+      const resources = await Resource.findAll({
         where: { lecturerId },
         include: [
           { model: Subject, attributes: ["subjectId", "subjectName", "subjectCode", "batchName"] },
@@ -47,54 +47,50 @@ export const getAssignmentsForLecturer = async (req, res) => {
         order: [["createdAt", "DESC"]],
       });
   
-      res.json({ success: true, assignments });
+      res.json({ success: true, resources });
     } catch (error) {
-      console.error("Fetch Lecturer Assignments Error:", error);
+      console.error("Fetch Lecturer Resource Error:", error);
       res.status(500).json({ success: false, message: "Internal Server Error" });
     }
   };
 
-
-export const getAssignmentsForStudents = async (req, res) => {
+// Fetch Resources for students (filter by batch + department)
+export const getResourcesForStudents = async (req, res) => {
   try {
     const { batchName, departmentName } = req.query;
 
- 
-   
-    
-
-    const assignments = await Assignment.findAll({
+    const resources = await Resource.findAll({
       where: { batchName, departmentName },
       include: [{ model: Subject }, { association: "lecturer", attributes: ["name", "email"] }],
     });
 
-    res.json({ success: true, assignments });
+    res.json({ success: true, resources });
   } catch (error) {
-    console.error("Fetch Assignments Error:", error);
+    console.error("Fetch Resource Error:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
-// Delete Assignment
-export const deleteAssignment = async (req, res) => {
+// Delete Resource
+export const deleteResource = async (req, res) => {
   try {
-    const { assignmentId } = req.params;
+    const { resourceId } = req.params;
 
-    // Find assignment by ID
-    const assignment = await Assignment.findByPk(assignmentId);
-    if (!assignment) {
+    // Find  by ID
+    const resource = await Resource.findByPk(resourceId);
+    if (!resource) {
       return res
         .status(404)
-        .json({ success: false, message: "Assignment not found" });
+        .json({ success: false, message: "Resource not found" });
     }
 
     // Ensure fileUrl is parsed correctly
     let fileUrls = [];
     try {
-      if (Array.isArray(assignment.fileUrl)) {
-        fileUrls = assignment.fileUrl;
-      } else if (typeof assignment.fileUrl === "string") {
-        fileUrls = JSON.parse(assignment.fileUrl);
+      if (Array.isArray(resource.fileUrl)) {
+        fileUrls = resource.fileUrl;
+      } else if (typeof resource.fileUrl === "string") {
+        fileUrls = JSON.parse(resource.fileUrl);
       }
     } catch (err) {
       console.error("Error parsing fileUrl:", err);
@@ -114,18 +110,17 @@ export const deleteAssignment = async (req, res) => {
       }
     }
 
-    // Delete the assignment record
-    await assignment.destroy();
+    // Delete the resource record
+    await resource.destroy();
 
     res.json({
       success: true,
-      message: "Assignment and its files deleted successfully.",
+      message: "Resource and its files deleted successfully.",
     });
   } catch (error) {
-    console.error("Delete Assignment Error:", error);
+    console.error("Delete Quiz Error:", error);
     res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });
   }
 };
-
