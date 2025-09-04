@@ -5,7 +5,7 @@ import sequelize from "../config/db.js";
 import Subject from "./subjectModel.js";
 import User from "./userModel.js";
 
-const AssignmentSubmission = sequelize.define("AssignmentSubmission",{
+const QuizSubmission = sequelize.define("QuizSubmission",{
     submissionId: {
         type: DataTypes.UUID,
         defaultValue: () => uuidv4(),
@@ -60,15 +60,15 @@ const AssignmentSubmission = sequelize.define("AssignmentSubmission",{
 } )
 
 // Associations
-AssignmentSubmission.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
-User.hasMany(AssignmentSubmission, { as: "lecturerAssignmentSubmissions", foreignKey: "lecturerId" });
+QuizSubmission.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
+User.hasMany(QuizSubmission, { as: "lecturerQuizSubmissions", foreignKey: "lecturerId" });
 
-AssignmentSubmission.belongsTo(User, { as: "student", foreignKey: "studentId" });
-User.hasMany(AssignmentSubmission, { as: "studentAssignmentSubmissions", foreignKey: "studentId" });
+QuizSubmission.belongsTo(User, { as: "student", foreignKey: "studentId" });
+User.hasMany(QuizSubmission, { as: "studentQuizSubmissions", foreignKey: "studentId" });
 
-AssignmentSubmission.belongsTo(Subject, { as: "subject", foreignKey: "subjectId" });
-Subject.hasMany(AssignmentSubmission, { as: "AssignmentSubmissions", foreignKey: "subjectId" });
+QuizSubmission.belongsTo(Subject, { as: "subject", foreignKey: "subjectId" });
+Subject.hasMany(QuizSubmission, { as: "quizSubmissions", foreignKey: "subjectId" });
 
 
 
-export default AssignmentSubmission;
+export default QuizSubmission;

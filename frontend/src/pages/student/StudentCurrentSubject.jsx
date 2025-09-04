@@ -27,7 +27,7 @@ const StudentCurrentSubject = () => {
         <p>Back</p>
       </button>
 
-      <div>
+      <div className="flex flex-col gap-12">
         <ViewStudentAssignments currentSubject={currentSubject} user={user} />
         <ViewStudentQuiz currentSubject={currentSubject} user={user} />
         <ViewStudentResources currentSubject={currentSubject} user={user} />

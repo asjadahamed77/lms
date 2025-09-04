@@ -1,5 +1,7 @@
 import Assignment from "../models/assignmentModel.js";
 import AssignmentSubmission from "../models/assignmentSubmissionModel.js";
+import Quiz from "../models/quizModel.js";
+import QuizSubmission from "../models/quizSubmissionModel.js";
 
 
 export const submitAssignment = async (req, res) => {
@@ -41,6 +43,50 @@ export const submitAssignment = async (req, res) => {
         });
     } catch (error) {
         console.error("Submit Assignment Error:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+
+export const submitQuiz = async (req, res) => {
+    try {
+
+        const {userId} = req.params;
+
+        if(!userId){
+            return res.status(400).json({ success: false, message: "User ID is required in params" });
+        }
+
+        const { quizId, studentId, title, batchName, departmentName, studentName, subjectName, deadline  } = req.body;
+    
+        // Check if the assignment exists
+        const quiz = await Quiz.findByPk(quizId);
+        if (!quiz) {
+        return res.status(404).json({ success: false, message: "Quiz not found" });
+        }
+    
+        // Create submission record
+        const submission = await QuizSubmission.create({
+        quizId,
+        studentId,
+        title,
+        batchName,
+        departmentName,
+        studentName,
+        subjectName,
+        deadline,
+        
+        fileUrl: req.fileUrls || [],
+        submittedAt: new Date(),
+        });
+    
+        res.status(201).json({
+        success: true,
+        message: "Quiz submitted successfully.",
+        submission,
+        });
+    } catch (error) {
+        console.error("Submit Quiz Error:", error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
