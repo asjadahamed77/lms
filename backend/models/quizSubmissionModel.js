@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 import sequelize from "../config/db.js";
 import Subject from "./subjectModel.js";
 import User from "./userModel.js";
-import Assignment from "./assignmentModel.js";
+import Quiz from "./quizModel.js";
 
-const AssignmentSubmission = sequelize.define("AssignmentSubmission",{
+const QuizSubmission = sequelize.define("QuizSubmission",{
     submissionId: {
         type: DataTypes.UUID,
         defaultValue: () => uuidv4(),
@@ -61,18 +61,17 @@ const AssignmentSubmission = sequelize.define("AssignmentSubmission",{
 } )
 
 // Associations
-AssignmentSubmission.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
-User.hasMany(AssignmentSubmission, { as: "lecturerAssignmentSubmissions", foreignKey: "lecturerId" });
+QuizSubmission.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
+User.hasMany(QuizSubmission, { as: "lecturerQuizSubmissions", foreignKey: "lecturerId" });
 
-AssignmentSubmission.belongsTo(User, { as: "student", foreignKey: "studentId" });
-User.hasMany(AssignmentSubmission, { as: "studentAssignmentSubmissions", foreignKey: "studentId" });
+QuizSubmission.belongsTo(User, { as: "student", foreignKey: "studentId" });
+User.hasMany(QuizSubmission, { as: "studentQuizSubmissions", foreignKey: "studentId" });
 
-AssignmentSubmission.belongsTo(Subject, { as: "subject", foreignKey: "subjectId" });
-Subject.hasMany(AssignmentSubmission, { as: "AssignmentSubmissions", foreignKey: "subjectId" });
+QuizSubmission.belongsTo(Subject, { as: "subject", foreignKey: "subjectId" });
+Subject.hasMany(QuizSubmission, { as: "quizSubmissions", foreignKey: "subjectId" });
 
-AssignmentSubmission.belongsTo(Assignment, { as: "assignment", foreignKey: "assignmentId" });
-Assignment.hasMany(AssignmentSubmission, { as: "submissions", foreignKey: "assignmentId" });
+QuizSubmission.belongsTo(Quiz, { as: "quiz", foreignKey: "quizId" });
+Quiz.hasMany(QuizSubmission, { as: "submissions", foreignKey: "quizId" });
 
 
-
-export default AssignmentSubmission;
+export default QuizSubmission;
