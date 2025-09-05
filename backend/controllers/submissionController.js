@@ -2,6 +2,7 @@ import Assignment from "../models/assignmentModel.js";
 import AssignmentSubmission from "../models/assignmentSubmissionModel.js";
 import Quiz from "../models/quizModel.js";
 import QuizSubmission from "../models/quizSubmissionModel.js";
+import User from "../models/userModel.js";
 
 
 export const submitAssignment = async (req, res) => {
@@ -108,7 +109,17 @@ export const getAssignmentSubmissions = async (req, res) => {
         }
 
         const submissions = await AssignmentSubmission.findAll({
-            
+            include: [
+                {
+                  model: User,
+                  as: "student",
+                
+                },
+                {
+                    model: Assignment,
+                    as: "assignment",
+                }
+              ],
            
             order: [["submittedAt", "DESC"]],
         });
