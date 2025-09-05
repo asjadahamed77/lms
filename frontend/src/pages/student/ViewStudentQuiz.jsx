@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaFileAlt, FaFileImage, FaFilePdf, FaFileWord } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
-import { submitAssignment, submitQuiz } from "../../service/submissionService";
+import {  submitQuiz } from "../../service/submissionService";
 import { AppContext } from "../../context/AppContext";
 import Loading from "../../components/common/Loading";
 

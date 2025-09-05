@@ -20,6 +20,10 @@ export const submitAssignment = async (req, res) => {
         if (!assignment) {
         return res.status(404).json({ success: false, message: "Assignment not found" });
         }
+
+      
+        
+       
     
         // Create submission record
         const submission = await AssignmentSubmission.create({
@@ -31,7 +35,7 @@ export const submitAssignment = async (req, res) => {
         studentName,
         subjectName,
         deadline,
-        
+        lecturerId: assignment.lecturerId,
         fileUrl: req.fileUrls || [],
         submittedAt: new Date(),
         });
@@ -61,9 +65,12 @@ export const submitQuiz = async (req, res) => {
     
         // Check if the assignment exists
         const quiz = await Quiz.findByPk(quizId);
+
         if (!quiz) {
-        return res.status(404).json({ success: false, message: "Quiz not found" });
-        }
+            return res.status(404).json({ success: false, message: "Quiz not found" });
+            }
+
+        
     
         // Create submission record
         const submission = await QuizSubmission.create({
@@ -75,7 +82,7 @@ export const submitQuiz = async (req, res) => {
         studentName,
         subjectName,
         deadline,
-        
+        lecturerId: quiz.lecturerId,
         fileUrl: req.fileUrls || [],
         submittedAt: new Date(),
         });
@@ -87,6 +94,28 @@ export const submitQuiz = async (req, res) => {
         });
     } catch (error) {
         console.error("Submit Quiz Error:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+// get assignment submissions of students
+export const getAssignmentSubmissions = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        if(!userId){
+            return res.status(400).json({ success: false, message: "User ID is required in params" });
+        }
+
+        const submissions = await AssignmentSubmission.findAll({
+            
+           
+            order: [["submittedAt", "DESC"]],
+        });
+
+        res.json({ success: true, submissions });
+    } catch (error) {
+        console.error("Fetch Assignment Submissions Error:", error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

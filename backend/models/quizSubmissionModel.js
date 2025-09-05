@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import sequelize from "../config/db.js";
 import Subject from "./subjectModel.js";
 import User from "./userModel.js";
+import Quiz from "./quizModel.js";
 
 const QuizSubmission = sequelize.define("QuizSubmission",{
     submissionId: {
@@ -69,6 +70,8 @@ User.hasMany(QuizSubmission, { as: "studentQuizSubmissions", foreignKey: "studen
 QuizSubmission.belongsTo(Subject, { as: "subject", foreignKey: "subjectId" });
 Subject.hasMany(QuizSubmission, { as: "quizSubmissions", foreignKey: "subjectId" });
 
+QuizSubmission.belongsTo(Quiz, { as: "quiz", foreignKey: "quizId" });
+Quiz.hasMany(QuizSubmission, { as: "submissions", foreignKey: "quizId" });
 
 
 export default QuizSubmission;

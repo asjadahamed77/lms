@@ -33,3 +33,21 @@ export const submitQuiz = async ({userId,formData}) => {
         throw error;
     }
 }
+
+export const getAssignmentSubmissions = async ({userId}) => {
+    try {
+        const {data} = await axios.get(`/submission/assignments/${userId}`, {
+            headers: {
+             
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+        
+        
+        return data;
+    } catch (error) {
+        console.error("Get Assignment Submissions Error:", error);
+        throw error;
+        
+    }
+} 
