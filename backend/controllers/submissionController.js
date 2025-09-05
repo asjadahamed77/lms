@@ -130,3 +130,35 @@ export const getAssignmentSubmissions = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
+
+// get quiz submissions of students
+export const getQuizSubmissions = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        if(!userId){
+            return res.status(400).json({ success: false, message: "User ID is required in params" });
+        }
+
+        const submissions = await QuizSubmission.findAll({
+            include: [
+                {
+                  model: User,
+                  as: "student",
+                
+                },
+                {
+                    model: Quiz,
+                    as: "quiz",
+                }
+              ],
+           
+            order: [["submittedAt", "DESC"]],
+        });
+
+        res.json({ success: true, submissions });
+    } catch (error) {
+        console.error("Fetch Quiz Submissions Error:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}

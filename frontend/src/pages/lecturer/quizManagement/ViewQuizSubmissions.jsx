@@ -11,14 +11,14 @@ import {
     FaDownload,
   } from "react-icons/fa";
 
-const ViewAssignmentSubmissions = () => {
-  const { assignmentId } = useParams()
-  const { assignmentSubmissions, loading } = useContext(AppContext)
+const ViewQuizSubmissions = () => {
+  const { quizId } = useParams()
+  const { quizSubmissions, loading } = useContext(AppContext)
   const navigate = useNavigate()
 
   // Filter submissions that belong to the current assignment
-  const submissionsForAssignment = assignmentSubmissions.filter(
-    (sub) => sub.assignmentId === assignmentId
+  const submissionsForQuiz = quizSubmissions.filter(
+    (sub) => sub.quizId === quizId
   )
 
   const getFileIcon = (fileName) => {
@@ -39,18 +39,19 @@ const ViewAssignmentSubmissions = () => {
     }
   };
 
+
   
 
   if (loading) {
     return <Loading />
   }
 
-  if (!submissionsForAssignment.length) {
+  if (!submissionsForQuiz.length) {
     return (
       <div className="py-8 md:py-12">
         <button
           onClick={() =>
-            navigate('/lecturer/assignment-management/view-assignments')
+            navigate('/lecturer/quiz-management/view-quizzes')
           }
           className="flex items-center gap-1 text-sm mb-6 cursor-pointer text-primaryColor/80 border border-transparent hover:border-primaryColor/80 px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:bg-primaryColor/10"
         >
@@ -68,7 +69,7 @@ const ViewAssignmentSubmissions = () => {
     <div className="py-8 md:py-12">
       <button
         onClick={() =>
-          navigate('/lecturer/assignment-management/view-assignments')
+          navigate('/lecturer/quiz-management/view-quizzes')
         }
         className="flex items-center gap-1 text-sm mb-6 cursor-pointer text-primaryColor/80 border border-transparent hover:border-primaryColor/80 px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:bg-primaryColor/10"
       >
@@ -78,7 +79,7 @@ const ViewAssignmentSubmissions = () => {
 
       {/* Display all submissions for the assignment */}
       <div className="flex flex-col gap-4 sm:gap-6 mt-6">
-        {submissionsForAssignment.map((submission, index) => (
+        {submissionsForQuiz.map((submission, index) => (
           <div
             key={index}
                className="border border-primaryColor/30 rounded-lg sm:rounded-2xl p-4 sm:p-6 lg:p-8 flex sm:flex-row flex-col gap-4  sm:justify-between"
@@ -95,10 +96,10 @@ const ViewAssignmentSubmissions = () => {
 
             {/* Assignment Details */}
             <div>
-            <h1 className='font-medium'>Assignment Details</h1>
-            <p className="text-sm mt-2">Title: {submission.assignment.title}</p>
-            <p className="text-sm mt-2">Batch: {submission.assignment.batchName}</p>
-            <p className="text-sm mt-2">Deadline: {new Date(submission.assignment.deadline).toLocaleString()}</p>
+            <h1 className='font-medium'>Quiz Details</h1>
+            <p className="text-sm mt-2">Title: {submission.quiz.title}</p>
+            <p className="text-sm mt-2">Batch: {submission.quiz.batchName}</p>
+            <p className="text-sm mt-2">Deadline: {new Date(submission.quiz.deadline).toLocaleString()}</p>
             </div>
 
             {/* Submission details */}
@@ -151,4 +152,4 @@ const ViewAssignmentSubmissions = () => {
   )
 }
 
-export default ViewAssignmentSubmissions
+export default ViewQuizSubmissions
