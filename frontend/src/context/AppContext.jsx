@@ -113,7 +113,7 @@ const AppContextProvider = ({ children }) => {
   const getLecturerResourcesDetails = async ()=> {
     if(user && user.role === "lecturer") {
       setLoading(true)
-      const response = await getLecturerResources({userId: user.userId});
+      const response = await getLecturerResources(user.userId);
       if(response.success) {
         setResources(response.resources)
         setLoading(false)

@@ -11,7 +11,10 @@ const ViewResources = () => {
   const navigate = useNavigate();
   const { resources, loading, setLoading, getLecturerResourcesDetails } = useContext(AppContext);
 
-  const [assignmentToDelete, setAssignmentToDelete] = useState(null);
+
+  
+
+  const [resourceToDelete, setResourceToDelete] = useState(null);
 
 
   const getFileNameFromUrl = (url) => {
@@ -41,17 +44,17 @@ const ViewResources = () => {
     }
   };
 
-  const deleteResourceHandler = async (assignmentId) => {
+  const deleteResourceHandler = async (resourceId) => {
     setLoading(true);
-    const response = await deleteResource(assignmentId);
+    const response = await deleteResource(resourceId);
     if (response.success) {
       toast.success(response.message);
       getLecturerResourcesDetails();
       setLoading(false);
-      setAssignmentToDelete(null);
+      setResourceToDelete(null);
 
     } else {
-      toast.error(response.message || "Failed to delete assignment");
+      toast.error(response.message || "Failed to delete resource");
       setLoading(false);
     }
   };
@@ -76,10 +79,10 @@ const ViewResources = () => {
         <h1 className="text-2xl font-semibold">All Resources</h1>
         {resources.length === 0 ? (
           <p className="text-center mt-8 text-gray-500">
-            No assignments found.
+            No resources found.
           </p>
         ) : (
-          <div className="flex flex-col gap-4 sm:gap-6 mt-6">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6 mt-6">
             {resources.map((ass, index) => (
               <div
                 key={index}
@@ -147,10 +150,10 @@ const ViewResources = () => {
                 <div className="mt-4">
                   
                   <button
-                    onClick={() => setAssignmentToDelete(ass)}
+                    onClick={() => setResourceToDelete(ass)}
                     className="bg-red-500 text-white text-sm rounded hover:bg-red-400 duration-300 transition-all ease-linear py-2.5 px-8 cursor-pointer"
                   >
-                    Delete Assignment
+                    Delete Resource
                   </button>
                 </div>
               </div>
@@ -159,24 +162,24 @@ const ViewResources = () => {
         )}
       </div>
        {/* Confirmation Modal */}
-       {assignmentToDelete && (
+       {resourceToDelete && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-[350px]">
             <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
             <p className="text-sm mb-6">
               Are you sure you want to delete{" "}
-              <span className="font-medium">{assignmentToDelete.title}</span>?
+              <span className="font-medium">{resourceToDelete.title}</span>?
             </p>
             <div className="flex justify-end gap-3">
               <button
-                onClick={() => setAssignmentToDelete(null)}
+                onClick={() => setResourceToDelete(null)}
                 className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
               >
                 Cancel
               </button>
               <button
                 onClick={() =>
-                  deleteResourceHandler(assignmentToDelete.resourceId)
+                  deleteResourceHandler(resourceToDelete.resourceId)
                 }
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
               >

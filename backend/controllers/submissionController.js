@@ -10,11 +10,25 @@ export const submitAssignment = async (req, res) => {
 
         const {userId} = req.params;
 
+
+
         if(!userId){
             return res.status(400).json({ success: false, message: "User ID is required in params" });
         }
 
         const { assignmentId, studentId, title, batchName, departmentName, studentName, subjectName, deadline  } = req.body;
+
+
+        //  check user already submitted
+        const existingSubmission = await AssignmentSubmission.findOne({
+            where: {
+                assignmentId,
+                studentId
+            }
+        });
+        if(existingSubmission){
+            return res.json({ success: false, message: "You have already submitted this assignment." });
+        }
     
         // Check if the assignment exists
         const assignment = await Assignment.findByPk(assignmentId);
@@ -70,6 +84,17 @@ export const submitQuiz = async (req, res) => {
         if (!quiz) {
             return res.status(404).json({ success: false, message: "Quiz not found" });
             }
+
+             //  check user already submitted
+        const existingSubmission = await QuizSubmission.findOne({
+            where: {
+                quizId,
+                studentId
+            }
+        });
+        if(existingSubmission){
+            return res.json({ success: false, message: "You have already submitted this quiz." });
+        }
 
         
     
