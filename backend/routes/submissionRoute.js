@@ -1,7 +1,7 @@
 import express from "express";
 import { authorizeRoles, verifyToken } from "../middlewares/userAuthMiddleware.js";
 import { uploadFilesToCloudinary } from "../middlewares/cloudinaryUpload.js";
-import { getAssignmentSubmissions, submitAssignment, submitQuiz } from "../controllers/submissionController.js";
+import { getAssignmentSubmissions, getQuizSubmissions, submitAssignment, submitQuiz } from "../controllers/submissionController.js";
 import upload from "../middlewares/multerConfig.js";
 
 
@@ -14,6 +14,9 @@ submissionRouter.post('/quiz/:userId', verifyToken, authorizeRoles('student'),  
 uploadFilesToCloudinary("fileUrls"), submitQuiz)
 
 submissionRouter.get('/assignments/:userId', verifyToken, authorizeRoles('lecturer'),   getAssignmentSubmissions)
+
+
+submissionRouter.get('/quizzes/:userId', verifyToken, authorizeRoles('lecturer'),   getQuizSubmissions)
 
 
 export default submissionRouter;

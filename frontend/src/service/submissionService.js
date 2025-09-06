@@ -51,3 +51,21 @@ export const getAssignmentSubmissions = async ({userId}) => {
         
     }
 } 
+
+export const getQuizSubmissions = async ({userId}) => {
+    try {
+        const {data} = await axios.get(`/submission/quizzes/${userId}`, {
+            headers: {
+             
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+        
+        
+        return data;
+    } catch (error) {
+        console.error("Get Assignment Submissions Error:", error);
+        throw error;
+        
+    }
+} 

@@ -8,7 +8,7 @@ import { getAllSubjects } from "../service/adminSubject";
 import { getLecturerAssignments } from "../service/assignmentService";
 import { getLecturerQuizzes } from "../service/quizService";
 import { getLecturerResources } from "../service/resourceService";
-import { getAssignmentSubmissions } from "../service/submissionService";
+import { getAssignmentSubmissions, getQuizSubmissions } from "../service/submissionService";
 // import { getStudent } from "../service/studentService";
 
 export const AppContext = createContext();
@@ -30,6 +30,7 @@ const AppContextProvider = ({ children }) => {
   const [quizzes, setQuizzes] = useState([])
   const [resources, setResources] = useState([])
   const [assignmentSubmissions, setAssignmentSubmissions] = useState([])
+  const [quizSubmissions, setQuizSubmissions] = useState([])
   // const [student, setStudent] = useState(null)
 
   
@@ -112,7 +113,7 @@ const AppContextProvider = ({ children }) => {
   const getLecturerResourcesDetails = async ()=> {
     if(user && user.role === "lecturer") {
       setLoading(true)
-      const response = await getLecturerResources({userId: user.userId});
+      const response = await getLecturerResources(user.userId);
       if(response.success) {
         setResources(response.resources)
         setLoading(false)
@@ -128,6 +129,25 @@ const AppContextProvider = ({ children }) => {
         const response = await getAssignmentSubmissions(user.userId);
         if(response.success) {
           setAssignmentSubmissions(response.submissions)
+          setLoading(false)
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+      
+    }finally{
+      setLoading(false)
+    }
+  }
+
+  const getLecturerQuizSubmissions = async ()=>{
+    setLoading(true)
+    try {
+      if(user && user.role === "lecturer") {
+     
+        const response = await getQuizSubmissions(user.userId);
+        if(response.success) {
+          setQuizSubmissions(response.submissions)
           setLoading(false)
         }
       }
@@ -161,6 +181,7 @@ const AppContextProvider = ({ children }) => {
     getLecturerQuizzesDetails()
     getLecturerResourcesDetails()
     getLecturerAssignmentSubmissions()
+    getLecturerQuizSubmissions()
   },[])
 
  
@@ -210,6 +231,9 @@ const AppContextProvider = ({ children }) => {
     assignmentSubmissions,
     setAssignmentSubmissions,
     getLecturerAssignmentSubmissions,
+    quizSubmissions,
+    setQuizSubmissions,
+    getLecturerQuizSubmissions,
     
   };
 

@@ -151,7 +151,7 @@ const ViewQuiz = () => {
 
                 {/* Buttons */}
                 <div className="grid grid-cols-2 gap-4 sm:gap-8 mt-6">
-                  <button className="bg-primaryColor text-white text-sm rounded hover:bg-primaryColor/80 duration-300 transition-all ease-linear py-2.5 cursor-pointer">
+                  <button onClick={()=> navigate(`/lecturer/quiz-management/view-quizzes/${ass.quizId}`)} className="bg-primaryColor text-white text-sm rounded hover:bg-primaryColor/80 duration-300 transition-all ease-linear py-2.5 cursor-pointer">
                     View Submissions
                   </button>
                   <button

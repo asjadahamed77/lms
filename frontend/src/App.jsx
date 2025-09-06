@@ -42,6 +42,7 @@ import Loading from "./components/common/Loading";
 import ManageProfile from "./pages/common/ManageProfile";
 import StudentCurrentSubject from "./pages/student/StudentCurrentSubject";
 import ViewAssignmentSubmissions from "./pages/lecturer/assignmentManagement/ViewAssignmentSubmissions";
+import ViewQuizSubmissions from "./pages/lecturer/quizManagement/ViewQuizSubmissions";
 
 const App = () => {
   const {loading} = useContext(AppContext)
@@ -148,6 +149,7 @@ const App = () => {
             <Route path="quiz-management" element={<QuizManagement />} />
             <Route path="quiz-management/add-quiz" element={<AddQuiz />} />
             <Route path="quiz-management/view-quizzes" element={<ViewQuiz />} />
+            <Route path="quiz-management/view-quizzes/:quizId" element={<ViewQuizSubmissions />} />
             <Route
               path="resource-management"
               element={<ResourceManagement />}
