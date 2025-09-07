@@ -13,10 +13,14 @@ export const createAnnouncement = async (req, res) => {
         const newAnnouncement = await Announcement.create({
             title,
             description,
-            fileUrl: fileUrl || [],
+            fileUrl: req.fileUrls || [],
         });
 
-        res.status(201).json(newAnnouncement);
+        res.status(201).json({
+            success: true,
+            message: "Announcement created successfully",
+            announcement: newAnnouncement
+        });
     } catch (error) {
         console.error("Error creating announcement:", error);
         res.status(500).json({ message: "Server error" });

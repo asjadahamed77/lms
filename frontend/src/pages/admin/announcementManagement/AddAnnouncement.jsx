@@ -1,24 +1,92 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { IoChevronBackSharp } from "react-icons/io5";
 import { RiImageAddFill } from "react-icons/ri";
+import { FaFilePdf, FaFileWord } from "react-icons/fa";
+import { AppContext } from "../../../context/AppContext";
+import toast from "react-hot-toast";
+import { createAnnouncement } from "../../../service/announcementService";
+import Loading from "../../../components/common/Loading";
 
 const AddAnnouncement = () => {
   const navigate = useNavigate();
-  const [imagePreview, setImagePreview] = useState(null);
+  const { loading, setLoading } = useContext(AppContext);
+  const [filePreviews, setFilePreviews] = useState([]); 
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    files: [],
+  });
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-   
+  // handle text input
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  // handle image change
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file)); 
+  // handle file input (image/pdf/doc)
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setFormData((prev) => ({
+      ...prev,
+      files: files,
+    }));
+
+    // preview logic
+    const previews = files.map((file) => {
+      if (file.type.startsWith("image/")) {
+        return { type: "image", url: URL.createObjectURL(file), name: file.name };
+      } else if (file.type === "application/pdf") {
+        return { type: "pdf", name: file.name };
+      } else if (
+        file.type ===
+          "application/msword" || // .doc
+        file.type ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" // .docx
+      ) {
+        return { type: "doc", name: file.name };
+      } else {
+        return { type: "other", name: file.name };
+      }
+    });
+
+    setFilePreviews(previews);
+  };
+
+  const submitHandler =  async (e) => {
+    e.preventDefault();
+    
+
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("description", formData.description);
+    if (formData.files && formData.files.length > 0) {
+      for (let i = 0; i < formData.files.length; i++) {
+        form.append("files", formData.files[i]);
+      }
+    }
+    setLoading(true);
+    try {
+    const response = await createAnnouncement(form);
+    
+    if(response.success){
+      setLoading(false);
+      toast.success(response.message);
+    }
+    } catch (error) {
+      toast.error("Failed to create announcement");
+      console.error(error);
+    }finally{
+      setLoading(false)
     }
   };
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <div className="py-8 md:py-12">
@@ -40,6 +108,9 @@ const AddAnnouncement = () => {
             <input
               type="text"
               placeholder="IEEE Conference 2025"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
               className="p-2 w-full rounded border border-primaryColor/30"
               required
             />
@@ -51,27 +122,43 @@ const AddAnnouncement = () => {
             <textarea
               rows={4}
               placeholder="IEEE Conference 2025 will be held ...."
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
               className="p-2 w-full rounded border border-primaryColor/30 resize-none"
               required
             />
           </div>
 
-          {/* Image Upload */}
+          {/* File Upload */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="announcementImageUrl" className="cursor-pointer">
-              <p className="font-semibold mb-1">Announcement Image</p>
+            <label htmlFor="announcementFiles" className="cursor-pointer">
+              <p className="font-semibold mb-1">Attach Files (Image / PDF / DOC)</p>
 
-              {!imagePreview ? (
+              {filePreviews.length === 0 ? (
                 <div className="p-6 w-full rounded border border-primaryColor/30 flex items-center justify-center">
                   <RiImageAddFill className="text-4xl text-primaryColor/30" />
                 </div>
               ) : (
-                <div className="relative">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-48 object-cover rounded border border-primaryColor/30"
-                  />
+                <div className="flex flex-col gap-3">
+                  {filePreviews.map((file, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      {file.type === "image" ? (
+                        <img
+                          src={file.url}
+                          alt={file.name}
+                          className="w-32 h-20 object-cover rounded border border-primaryColor/30"
+                        />
+                      ) : file.type === "pdf" ? (
+                        <FaFilePdf className="text-4xl text-red-500" />
+                      ) : file.type === "doc" ? (
+                        <FaFileWord className="text-4xl text-blue-500" />
+                      ) : (
+                        <span className="text-gray-500">📎</span>
+                      )}
+                      <p className="text-sm">{file.name}</p>
+                    </div>
+                  ))}
                 </div>
               )}
             </label>
@@ -79,10 +166,11 @@ const AddAnnouncement = () => {
             {/* Hidden file input */}
             <input
               type="file"
-              accept="image/*"
+              accept="image/*,.pdf,.doc,.docx"
+              multiple
               className="hidden"
-              id="announcementImageUrl"
-              onChange={handleImageChange}
+              id="announcementFiles"
+              onChange={handleFileChange}
             />
           </div>
 

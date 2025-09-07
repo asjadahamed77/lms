@@ -1,9 +1,13 @@
 import express from "express";
-import { createAnnouncement } from "../controllers/announcementController.js";
+import { createAnnouncement, getAllAnnouncements } from "../controllers/announcementController.js";
 import { authorizeRoles, verifyToken } from "../middlewares/userAuthMiddleware.js";
+import upload from "../middlewares/multerConfig.js";
+import { uploadFilesToCloudinary } from "../middlewares/cloudinaryUpload.js";
 
 const announcementRouter = express.Router();
 
-announcementRouter.post('/create', verifyToken, authorizeRoles('admin'), createAnnouncement);
+announcementRouter.post('/create', verifyToken, authorizeRoles('admin'), upload.array("files", 5),     
+uploadFilesToCloudinary("fileUrls"), createAnnouncement);
+announcementRouter.get('/all', verifyToken, authorizeRoles('admin', 'lecturer', 'student'), getAllAnnouncements);
 
 export default announcementRouter;

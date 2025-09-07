@@ -37,7 +37,7 @@ app.use("/api/quiz", quizRouter);
 app.use("/api/resource", resourceRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/submission", submissionRouter);
-app.use("/api/ammouncement", announcementRouter);
+app.use("/api/announcements", announcementRouter);
 
 // Default route
 app.get("/", (req, res) => {
