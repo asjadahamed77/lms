@@ -14,6 +14,7 @@ import assignmentRouter from "./routes/assignmentRoute.js";
 import quizRouter from "./routes/quizRoute.js";
 import resourceRouter from "./routes/resourceRoute.js";
 import submissionRouter from "./routes/submissionRoute.js";
+import announcementRouter from "./routes/announcementRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -36,6 +37,7 @@ app.use("/api/quiz", quizRouter);
 app.use("/api/resource", resourceRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/submission", submissionRouter);
+app.use("/api/announcements", announcementRouter);
 
 // Default route
 app.get("/", (req, res) => {

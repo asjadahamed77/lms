@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
 import { lecturer } from "../assets/lecturers";
-import { announcements } from "../assets/announcements";
 import { getAllBatches } from "../service/adminBatch";
 import { getAllStudents } from "../service/adminStudent";
 import { getAllLecturers } from "../service/adminLecturer";
@@ -9,6 +8,7 @@ import { getLecturerAssignments } from "../service/assignmentService";
 import { getLecturerQuizzes } from "../service/quizService";
 import { getLecturerResources } from "../service/resourceService";
 import { getAssignmentSubmissions, getQuizSubmissions } from "../service/submissionService";
+import { getAllAnnouncements } from "../service/announcementService";
 // import { getStudent } from "../service/studentService";
 
 export const AppContext = createContext();
@@ -31,6 +31,7 @@ const AppContextProvider = ({ children }) => {
   const [resources, setResources] = useState([])
   const [assignmentSubmissions, setAssignmentSubmissions] = useState([])
   const [quizSubmissions, setQuizSubmissions] = useState([])
+  const [announcements, setAnnouncements] = useState([])
   // const [student, setStudent] = useState(null)
 
   
@@ -159,6 +160,22 @@ const AppContextProvider = ({ children }) => {
     }
   }
 
+  const getAnnouncements = async ()=> {
+    setLoading(true)
+    try {
+      const response = await getAllAnnouncements();
+      if(response.success) {
+        setAnnouncements(response.announcements)
+        setLoading(false)
+      }
+    } catch (error) {
+      console.log(error.message);
+      
+    }finally{
+      setLoading(false)
+    }
+  }
+
   
 
   // const getStudentData = async () => {
@@ -182,6 +199,7 @@ const AppContextProvider = ({ children }) => {
     getLecturerResourcesDetails()
     getLecturerAssignmentSubmissions()
     getLecturerQuizSubmissions()
+    getAnnouncements()
   },[])
 
  
