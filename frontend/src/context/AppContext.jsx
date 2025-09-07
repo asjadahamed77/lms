@@ -252,6 +252,7 @@ const AppContextProvider = ({ children }) => {
     quizSubmissions,
     setQuizSubmissions,
     getLecturerQuizSubmissions,
+    getAnnouncements
     
   };
 
