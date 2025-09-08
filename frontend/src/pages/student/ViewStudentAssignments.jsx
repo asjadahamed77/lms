@@ -60,7 +60,7 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
 
   const [selectedAssignment, setSelectedAssignment] = useState(null);
 
-  console.log(selectedAssignment);
+
   
 
   const [formData, setFormData] = useState({

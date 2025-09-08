@@ -4,6 +4,7 @@ import Sidebar from "../../components/student/Sidebar";
 import { MdOutlineMenu } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { GoFileSubmodule } from "react-icons/go";
+import ViewAnnouncementsLS from "../../components/common/ViewAnnouncementsLS";
 
 const StudentDashboard = () => {
   const { user } = useContext(AppContext);
@@ -32,6 +33,7 @@ const StudentDashboard = () => {
 
       {/* Main Section */}
       <div className="flex-1">
+        <ViewAnnouncementsLS />
         <h1 className="text-2xl font-semibold mb-4">Enrolled Subjects</h1>
 
         {semesters.map((sem) => (

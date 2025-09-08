@@ -106,7 +106,6 @@ const ViewAssignments = () => {
                   <div className="flex flex-wrap gap-4 mt-2">
                     {ass.fileUrl.length > 0 ? (
                       ass.fileUrl.map((file, idx) => {
-                       
                         const fileName =
                           typeof file === "string"
                             ? getFileNameFromUrl(file)
@@ -157,7 +156,14 @@ const ViewAssignments = () => {
 
                 {/* Buttons */}
                 <div className="grid grid-cols-2 gap-4 sm:gap-8 mt-6">
-                  <button onClick={()=> navigate(`/lecturer/assignment-management/view-submissions/${ass.assignmentId}`)} className="bg-primaryColor text-white text-sm rounded hover:bg-primaryColor/80 duration-300 transition-all ease-linear py-2.5 cursor-pointer">
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/lecturer/assignment-management/view-submissions/${ass.assignmentId}`
+                      )
+                    }
+                    className="bg-primaryColor text-white text-sm rounded hover:bg-primaryColor/80 duration-300 transition-all ease-linear py-2.5 cursor-pointer"
+                  >
                     View Submissions
                   </button>
                   <button

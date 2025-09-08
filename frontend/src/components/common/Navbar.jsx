@@ -37,7 +37,7 @@ const Navbar = () => {
     try {
       const response = await logout();
       if (response.success) {
-        navigate("/");
+        navigate("/login");
         toast.success(response.message);
       }
     } catch (error) {

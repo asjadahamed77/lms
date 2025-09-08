@@ -3,12 +3,17 @@ import { AppContext } from "../../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackSharp, IoCloseSharp } from "react-icons/io5";
 import { FaFilePdf, FaFileWord } from "react-icons/fa";
+import { deleteAnnouncement } from "../../../service/announcementService";
+import toast from "react-hot-toast";
+import Loading from "../../../components/common/Loading";
 
 const ViewAnnouncements = () => {
-  const { announcements } = useContext(AppContext);
+  const { announcements, loading, setLoading, getAnnouncements } = useContext(AppContext);
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+
+  const [announcementToDelete, setAnnouncementToDelete] = useState(null);
 
   const announcementHandler = (announcement) => {
     if (announcement) {
@@ -19,6 +24,24 @@ const ViewAnnouncements = () => {
       setShowPopup(false);
     }
   };
+
+  const deleteAnnouncementHandler = async (announcementId) => {
+    setLoading(true);
+    const response = await deleteAnnouncement(announcementId);
+    if (response.success) {
+      toast.success(response.message);
+      getAnnouncements();
+      setLoading(false);
+      setAnnouncementToDelete(null);
+    }else{
+      toast.error(response.message || "Failed to delete announcement");
+      setLoading(false);
+    }
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="py-8 md:py-12">
@@ -100,65 +123,68 @@ const ViewAnnouncements = () => {
 
               {/* Files */}
               {selectedAnnouncement.fileUrl &&
- Array.isArray(selectedAnnouncement.fileUrl) &&
- selectedAnnouncement.fileUrl.length > 0 && (
-  <div>
-    <p className="font-medium sm:text-lg mb-2">Attachments</p>
-    <div className="flex flex-col gap-3">
-      {selectedAnnouncement.fileUrl.map((file, i) => {
-        // if file is an object, get the actual URL
-        const fileUrl = typeof file === "string" ? file : file.url;
+                Array.isArray(selectedAnnouncement.fileUrl) &&
+                selectedAnnouncement.fileUrl.length > 0 && (
+                  <div>
+                    <p className="font-medium sm:text-lg mb-2">Attachments</p>
+                    <div className="flex flex-col gap-3">
+                      {selectedAnnouncement.fileUrl.map((file, i) => {
+                        // if file is an object, get the actual URL
+                        const fileUrl =
+                          typeof file === "string" ? file : file.url;
 
-        const isImage =
-          fileUrl.endsWith(".jpg") ||
-          fileUrl.endsWith(".png") ||
-          fileUrl.endsWith(".jpeg");
-        const isPdf = fileUrl.endsWith(".pdf");
-        const isDoc = fileUrl.endsWith(".doc") || fileUrl.endsWith(".docx");
+                        const isImage =
+                          fileUrl.endsWith(".jpg") ||
+                          fileUrl.endsWith(".png") ||
+                          fileUrl.endsWith(".jpeg");
+                        const isPdf = fileUrl.endsWith(".pdf");
+                        const isDoc =
+                          fileUrl.endsWith(".doc") || fileUrl.endsWith(".docx");
 
-        return (
-          <div key={i} className="flex items-center gap-3">
-            {isImage ? (
-              <img
-                src={fileUrl}
-                alt={`file-${i}`}
-                className="w-32 h-20 object-cover rounded border border-primaryColor/30"
-              />
-            ) : isPdf ? (
-              <a
-                href={fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-red-600 underline"
-              >
-                <FaFilePdf className="text-2xl" /> {file.original_name}
-              </a>
-            ) : isDoc ? (
-              <a
-                href={fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-blue-600 underline"
-              >
-                <FaFileWord className="text-2xl" /> {file.original_name}
-              </a>
-            ) : (
-              <a
-                href={fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-gray-600"
-              >
-                📎 {file.original_name}
-              </a>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  </div>
-)}
-
+                        return (
+                          <div key={i} className="flex items-center gap-3">
+                            {isImage ? (
+                              <img
+                                src={fileUrl}
+                                alt={`file-${i}`}
+                                className="w-32 h-20 object-cover rounded border border-primaryColor/30"
+                              />
+                            ) : isPdf ? (
+                              <a
+                                href={fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 text-red-600 underline"
+                              >
+                                <FaFilePdf className="text-2xl" />{" "}
+                                {file.original_name}
+                              </a>
+                            ) : isDoc ? (
+                              <a
+                                href={fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 text-blue-600 underline"
+                              >
+                                <FaFileWord className="text-2xl" />{" "}
+                                {file.original_name}
+                              </a>
+                            ) : (
+                              <a
+                                href={fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline text-gray-600"
+                              >
+                                📎 {file.original_name}
+                              </a>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
               <div>
                 <p className="font-medium sm:text-lg">Created</p>
@@ -175,13 +201,38 @@ const ViewAnnouncements = () => {
                 >
                   Close
                 </button>
-                <button
-                
-                  className="bg-red-500 text-white text-sm rounded-lg py-2.5 cursor-pointer hover:bg-red-400 duration-300 transition-all ease-in-out"
-                >
+                <button   onClick={() => setAnnouncementToDelete(selectedAnnouncement)} className="bg-red-500 text-white text-sm rounded-lg py-2.5 cursor-pointer hover:bg-red-400 duration-300 transition-all ease-in-out">
                   Delete Announcement
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+       {/* Confirmation Modal */}
+       {announcementToDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-[350px]">
+            <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+            <p className="text-sm mb-6">
+              Are you sure you want to delete{" "}
+              <span className="font-medium">{announcementToDelete.title}</span>?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setAnnouncementToDelete(null)}
+                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() =>
+                  deleteAnnouncementHandler(announcementToDelete.announcementId)
+                }
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

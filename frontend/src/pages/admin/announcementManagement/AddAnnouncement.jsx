@@ -10,7 +10,7 @@ import Loading from "../../../components/common/Loading";
 
 const AddAnnouncement = () => {
   const navigate = useNavigate();
-  const { loading, setLoading } = useContext(AppContext);
+  const { loading, setLoading, getAnnouncements } = useContext(AppContext);
   const [filePreviews, setFilePreviews] = useState([]); 
   const [formData, setFormData] = useState({
     title: "",
@@ -75,6 +75,7 @@ const AddAnnouncement = () => {
     if(response.success){
       setLoading(false);
       toast.success(response.message);
+      getAnnouncements()
     }
     } catch (error) {
       toast.error("Failed to create announcement");

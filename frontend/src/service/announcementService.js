@@ -35,3 +35,18 @@ export const getAllAnnouncements = async () => {
         throw error;
     }
 }
+
+export const deleteAnnouncement = async (announcementId) => {
+    try {
+        const {data} = await axios.delete(`/announcements/delete/${announcementId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+        return data;
+    } catch (error) {
+        console.log("Error delete announcement:", error);
+        throw error;
+    }
+}
