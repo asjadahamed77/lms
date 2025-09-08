@@ -163,11 +163,13 @@ const AppContextProvider = ({ children }) => {
   const getAnnouncements = async ()=> {
     setLoading(true)
     try {
+     if(user && (user.role === "lecturer" || user.role === "student" || user.role === "admin")) {
       const response = await getAllAnnouncements();
       if(response.success) {
         setAnnouncements(response.announcements)
         setLoading(false)
       }
+     }
     } catch (error) {
       console.log(error.message);
       
