@@ -1,8 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { FaFileAlt, FaFileImage, FaFilePdf, FaFileWord } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
-import { submitAssignment } from "../../service/submissionService";
+import {
+  getStudentAssignmentSubmissions,
+  submitAssignment,
+} from "../../service/submissionService";
 import { AppContext } from "../../context/AppContext";
 import Loading from "../../components/common/Loading";
 
@@ -34,8 +37,7 @@ const RemainingTime = ({ deadline }) => {
 };
 
 const ViewStudentAssignments = ({ currentSubject, user }) => {
-
-    const {loading, setLoading} = useContext(AppContext)
+  const { loading, setLoading } = useContext(AppContext);
 
   const getFileIcon = (fileName) => {
     const ext = fileName.split(".").pop().toLowerCase();
@@ -57,11 +59,9 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
   };
 
   const [popup, setPopup] = useState(false);
-
+  const [submissionPopup, setSubmissionPopup] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
-
-
-  
+  const [submissions, setSubmissions] = useState({});
 
   const [formData, setFormData] = useState({
     title: "",
@@ -83,47 +83,104 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-        setLoading(true)
-        const form = new FormData();
-        form.append("title", formData.title);
-        form.append("assignmentId", selectedAssignment.assignmentId);
-        form.append("studentId", user.userId);
-        form.append("batchName", user.batchName);
-        form.append("departmentName", user.departmentName);
-        form.append("studentName", user.name);
-        form.append("subjectName", currentSubject.subjectName);
-        form.append("deadline", selectedAssignment.deadline);
-        if (formData.files && formData.files.length > 0) {
-            for (let i = 0; i < formData.files.length; i++) {
-              form.append("files", formData.files[i]);
-            }
-          }
+      setLoading(true);
+      const form = new FormData();
+      form.append("title", formData.title);
+      form.append("assignmentId", selectedAssignment.assignmentId);
+      form.append("studentId", user.userId);
+      form.append("batchName", user.batchName);
+      form.append("departmentName", user.departmentName);
+      form.append("studentName", user.name);
+      form.append("subjectName", currentSubject.subjectName);
+      form.append("deadline", selectedAssignment.deadline);
+      if (formData.files && formData.files.length > 0) {
+        for (let i = 0; i < formData.files.length; i++) {
+          form.append("files", formData.files[i]);
+        }
+      }
 
-          const response = await submitAssignment({userId: user.userId, formData: form});
+      const response = await submitAssignment({
+        userId: user.userId,
+        formData: form,
+      });
 
-          if(response.success){
-            toast.success(response.message);
-            setPopup(false);
-            setSelectedAssignment(null);
-            setFormData({
-                title: "",
-                files: [],
-            });
-            setLoading(false)
-          }else{
-            toast.error(response.message)
-          }
+      if (response.success) {
+        toast.success(response.message);
+        setPopup(false);
+        setSelectedAssignment(null);
+        setFormData({
+          title: "",
+          files: [],
+        });
 
+        // Refresh the submission for this assignment
+        if (selectedAssignment?.assignmentId) {
+          getSubmission(selectedAssignment.assignmentId);
+        }
+      } else {
+        toast.error(response.message);
+      }
     } catch (error) {
-        toast.error("Submission failed. Please try again.");
-        console.error("Submission Error:", error);
-    }finally{
-        setLoading(false)
+      toast.error("Submission failed. Please try again.");
+      console.error("Submission Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if(loading){
-    return <Loading />
+  const getSubmission = useCallback(
+    async (assignmentId) => {
+      try {
+        const response = await getStudentAssignmentSubmissions({
+          userId: user.userId,
+          assignmentId,
+        });
+
+        if (response.success) {
+          setSubmissions((prev) => ({
+            ...prev,
+            [assignmentId]: response.submission,
+          }));
+        } else {
+          setSubmissions((prev) => ({
+            ...prev,
+            [assignmentId]: null,
+          }));
+          toast.error(response.message || "No submission found");
+        }
+      } catch (error) {
+        console.error("Error fetching submission:", error);
+        setSubmissions((prev) => ({
+          ...prev,
+          [assignmentId]: null,
+        }));
+      }
+    },
+    [user.userId]
+  );
+
+  useEffect(() => {
+    if (selectedAssignment?.assignmentId && submissionPopup) {
+      getSubmission(selectedAssignment.assignmentId);
+    }
+  }, [selectedAssignment?.assignmentId, submissionPopup, getSubmission]);
+
+  const closeSubmissionPopup = () => {
+    setSubmissionPopup(false);
+    setSelectedAssignment(null);
+  };
+
+  const closePopup = () => {
+    setPopup(false);
+    setSelectedAssignment(null);
+    setFormData({
+      title: "",
+      files: [],
+    });
+  };
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (
@@ -174,12 +231,31 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
                 <RemainingTime deadline={ass.deadline} />
               </div>
 
-              <button
-                onClick={() => {setPopup(true); setSelectedAssignment(ass)}}
-                className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
-              >
-                Submit your assignment
-              </button>
+              {
+                submissions ? (
+                  <button
+                  onClick={() => {
+                    setSubmissionPopup(true);
+                    setSelectedAssignment(ass);
+                  }}
+                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
+                >
+                  View your submission
+                </button>
+                ) : (
+                  <button
+                  onClick={() => {
+                    setPopup(true);
+                    setSelectedAssignment(ass);
+                  }}
+                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
+                >
+                  Submit your assignment
+                </button>
+                )
+              }
+
+              
             </div>
           ))
         )}
@@ -190,10 +266,7 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
           <div className="bg-white rounded-xl p-4 sm:p-6 lg:p-8 w-full mx-4 sm:m-0 sm:w-[450px]">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-medium">Submit now</h1>
-              <p
-                onClick={() => {setPopup(false); setSelectedAssignment(null)}}
-                className="text-2xl cursor-pointer"
-              >
+              <p onClick={closePopup} className="text-2xl cursor-pointer">
                 <IoCloseSharp />
               </p>
             </div>
@@ -227,6 +300,66 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
                 Submit now
               </button>
             </form>
+          </div>
+        </div>
+      )}
+      {submissionPopup && selectedAssignment && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+          <div className="bg-white rounded-xl p-4 sm:p-6 lg:p-8 w-full mx-4 sm:m-0 sm:w-[450px]">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-medium">Your Submission</h1>
+              <p
+                onClick={closeSubmissionPopup}
+                className="text-2xl cursor-pointer"
+              >
+                <IoCloseSharp />
+              </p>
+            </div>
+
+            {submissions[selectedAssignment.assignmentId] ? (
+              <div className="mt-6 space-y-4">
+                <p>
+                  <span className="font-semibold">Title:</span>{" "}
+                  {submissions[selectedAssignment.assignmentId].title}
+                </p>
+                <div className="grid grid-cols-2">
+                  <p>
+                    <span className="font-semibold">Submitted on:</span>{" "}
+                    {new Date(
+                      submissions[selectedAssignment.assignmentId].submittedAt
+                    ).toLocaleString()}
+                  </p>{" "}
+                  <p>
+                    <span className="font-semibold">Dealine on:</span>{" "}
+                    {new Date(
+                      submissions[selectedAssignment.assignmentId].deadline
+                    ).toLocaleString()}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="font-semibold">Files:</p>
+                  <div className="flex flex-col gap-2 mt-2">
+                    {submissions[selectedAssignment.assignmentId].fileUrl.map(
+                      (file, idx) => (
+                        <a
+                          key={idx}
+                          href={file.public_id}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:underline"
+                        >
+                          {getFileIcon(file.original_name)}
+                          <span>{file.original_name}</span>
+                        </a>
+                      )
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="mt-6 text-gray-500">No submission yet.</p>
+            )}
           </div>
         </div>
       )}

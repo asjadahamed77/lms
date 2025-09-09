@@ -69,3 +69,46 @@ export const getQuizSubmissions = async ({userId}) => {
         
     }
 } 
+
+export const getStudentAssignmentSubmissions = async ({ userId, assignmentId }) => {
+    try {
+      const { data } = await axios.get(
+        `/submission/stass/${userId}?assignmentId=${assignmentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      
+        
+      );
+
+      return data;
+    } catch (error) {
+      console.error("Get Student Assignment Submissions Error:", error);
+      throw error;
+    }
+  };
+
+
+  export const getStudentQuizSubmissions = async ({ userId, quizId }) => {
+    try {
+      const { data } = await axios.get(
+        `/submission/stquiz/${userId}?quizId=${quizId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      
+        
+      );
+
+      return data;
+    } catch (error) {
+      console.error("Get Student Quiz Submissions Error:", error);
+      throw error;
+    }
+  };
+  
+  

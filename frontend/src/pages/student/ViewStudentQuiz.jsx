@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaFileAlt, FaFileImage, FaFilePdf, FaFileWord } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
-import {  submitQuiz } from "../../service/submissionService";
+import {  getStudentQuizSubmissions, submitQuiz } from "../../service/submissionService";
 import { AppContext } from "../../context/AppContext";
 import Loading from "../../components/common/Loading";
 
@@ -57,10 +57,10 @@ const ViewStudentQuiz = ({ currentSubject, user }) => {
   };
 
   const [popup, setPopup] = useState(false);
-
+  const [submissionPopup, setSubmissionPopup] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
 
-  
+  const [submissions, setSubmissions] = useState({});
 
   const [formData, setFormData] = useState({
     title: "",
@@ -121,6 +121,48 @@ const ViewStudentQuiz = ({ currentSubject, user }) => {
     }
   };
 
+  const getSubmission = useCallback(
+    async (quizId) => {
+      try {
+        const response = await getStudentQuizSubmissions({
+          userId: user.userId,
+          quizId,
+        });
+
+        if (response.success) {
+          setSubmissions((prev) => ({
+            ...prev,
+            [quizId]: response.submission,
+          }));
+        } else {
+          setSubmissions((prev) => ({
+            ...prev,
+            [quizId]: null,
+          }));
+          toast.error(response.message || "No submission found");
+        }
+      } catch (error) {
+        console.error("Error fetching submission:", error);
+        setSubmissions((prev) => ({
+          ...prev,
+          [quizId]: null,
+        }));
+      }
+    },
+    [user.userId]
+  );
+
+  useEffect(() => {
+    if (selectedQuiz?.quizId && submissionPopup) {
+      getSubmission(selectedQuiz.quizId);
+    }
+  }, [selectedQuiz?.quizId, submissionPopup, getSubmission]);
+
+  const closeSubmissionPopup = () => {
+    setSubmissionPopup(false);
+    setSelectedQuiz(null);
+  };
+
   if(loading){
     return <Loading />
   }
@@ -173,12 +215,28 @@ const ViewStudentQuiz = ({ currentSubject, user }) => {
                 <RemainingTime deadline={ass.deadline} />
               </div>
 
-              <button
-                onClick={() => {setPopup(true); setSelectedQuiz(ass)}}
-                className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
-              >
-                Submit your quiz
-              </button>
+              {
+                submissions ? (
+                  <button
+                  onClick={() => {
+                    setSubmissionPopup(true);
+                    setSelectedQuiz(ass);
+                  }}
+                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
+                >
+                  View your submission
+                </button>
+                ) : (
+                  <button
+                  onClick={() => {setPopup(true); setSelectedQuiz(ass)}}
+                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
+                >
+                  Submit your quiz
+                </button>
+                )
+              }
+
+            
             </div>
           ))
         )}
@@ -226,6 +284,66 @@ const ViewStudentQuiz = ({ currentSubject, user }) => {
                 Submit now
               </button>
             </form>
+          </div>
+        </div>
+      )}
+       {submissionPopup && selectedQuiz && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+          <div className="bg-white rounded-xl p-4 sm:p-6 lg:p-8 w-full mx-4 sm:m-0 sm:w-[450px]">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-medium">Your Submission</h1>
+              <p
+                onClick={closeSubmissionPopup}
+                className="text-2xl cursor-pointer"
+              >
+                <IoCloseSharp />
+              </p>
+            </div>
+
+            {submissions[selectedQuiz.quizId] ? (
+              <div className="mt-6 space-y-4">
+                <p>
+                  <span className="font-semibold">Title:</span>{" "}
+                  {submissions[selectedQuiz.quizId].title}
+                </p>
+                <div className="grid grid-cols-2">
+                  <p>
+                    <span className="font-semibold">Submitted on:</span>{" "}
+                    {new Date(
+                      submissions[selectedQuiz.quizId].submittedAt
+                    ).toLocaleString()}
+                  </p>{" "}
+                  <p>
+                    <span className="font-semibold">Dealine on:</span>{" "}
+                    {new Date(
+                      submissions[selectedQuiz.quizId].deadline
+                    ).toLocaleString()}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="font-semibold">Files:</p>
+                  <div className="flex flex-col gap-2 mt-2">
+                    {submissions[selectedQuiz.quizId].fileUrl.map(
+                      (file, idx) => (
+                        <a
+                          key={idx}
+                          href={file.public_id}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:underline"
+                        >
+                          {getFileIcon(file.original_name)}
+                          <span>{file.original_name}</span>
+                        </a>
+                      )
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="mt-6 text-gray-500">No submission yet.</p>
+            )}
           </div>
         </div>
       )}

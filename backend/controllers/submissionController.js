@@ -191,32 +191,51 @@ export const getQuizSubmissions = async (req, res) => {
 // Get current assignment submission of student
 export const getStudentAssignmentSubmissions = async (req, res) => {
     try {
-        const { userId } = req.params;
-
-        if(!userId){
-            return res.status(400).json({ success: false, message: "User ID is required in params" });
-        }
-
-        const submissions = await AssignmentSubmission.findAll({
-            where: { studentId: userId },
-            include: [
-                {
-                  model: User,
-                  as: "student",
-                
-                },
-                {
-                    model: Assignment,
-                    as: "assignment",
-                }
-              ],
-           
-            order: [["submittedAt", "DESC"]],
-        });
-
-        res.json({ success: true, submissions });
+      const { userId } = req.params;
+      const { assignmentId } = req.query;
+  
+      if (!userId) {
+        return res.status(400).json({ success: false, message: "User ID is required in params" });
+      }
+  
+      const submission = await AssignmentSubmission.findOne({
+        where: { studentId: userId, assignmentId },
+        include: [
+          { model: User, as: "student" },
+          { model: Assignment, as: "assignment" },
+        ],
+        order: [["submittedAt", "DESC"]],
+      });
+      res.json({ success: true, submission });
     } catch (error) {
-        console.error("Fetch Student Assignment Submissions Error:", error);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+      console.error("Fetch Student Assignment Submissions Error:", error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
     }
-}
+  };
+  
+
+  // Get current quiz submission of student
+export const getStudentQuizSubmissions = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { quizId } = req.query;
+  
+      if (!userId) {
+        return res.status(400).json({ success: false, message: "User ID is required in params" });
+      }
+  
+      const submission = await QuizSubmission.findOne({
+        where: { studentId: userId, quizId },
+        include: [
+          { model: User, as: "student" },
+          { model: Quiz, as: "quiz" },
+        ],
+        order: [["submittedAt", "DESC"]],
+      });
+      res.json({ success: true, submission });
+    } catch (error) {
+      console.error("Fetch Student Quiz Submissions Error:", error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+  };
+  
