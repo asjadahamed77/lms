@@ -37,6 +37,8 @@ const Navbar = () => {
     try {
       const response = await logout();
       if (response.success) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         navigate("/login");
         toast.success(response.message);
       }
@@ -61,7 +63,7 @@ const Navbar = () => {
         </h1>
       </div>
       {/* User Profile */}
-      {location.pathname !== "/" && location.pathname !== "/forgot-password" && (
+      {location.pathname !== "/" && location.pathname !== "/forgot-password" && user && (
         <div
           onClick={handleMobileProfile}
           className=" py-3  cursor-pointer relative group"

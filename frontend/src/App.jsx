@@ -43,12 +43,16 @@ import ManageProfile from "./pages/common/ManageProfile";
 import StudentCurrentSubject from "./pages/student/StudentCurrentSubject";
 import ViewAssignmentSubmissions from "./pages/lecturer/assignmentManagement/ViewAssignmentSubmissions";
 import ViewQuizSubmissions from "./pages/lecturer/quizManagement/ViewQuizSubmissions";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import Unauthorized from "./pages/common/Unauthorized";
 
 const App = () => {
   const {loading} = useContext(AppContext)
   if(loading){
     return  <Loading />
   }
+
+ 
   
   return (
     <div className="">
@@ -58,17 +62,27 @@ const App = () => {
       <div className="px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 mt-[60px]">
         <Routes>
           {/* ---------------------------------------------------------------------------------------- */}
-          {/*  -------------     LOGIN    ------------------------  */}
+          {/*  -------------     LOGIN and AUTH    ------------------------  */}
           {/* ---------------------------------------------------------------------------------------- */}
-          <Route path="/login" element={<Login />} />
+           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/manage-profile" element={<ManageProfile />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route
+            path="/manage-profile"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "lecturer", "student"]}>
+                <ManageProfile />
+              </ProtectedRoute>
+            }
+          />
 
           {/* ---------------------------------------------------------------------------------------- */}
           {/*  -------------     ADMIN LAYOUT   ------------------------  */}
           {/* ---------------------------------------------------------------------------------------- */}
 
-          <Route path="admin" element={<AdminLayout />}>
+          <Route path="admin/*" element={<ProtectedRoute allowedRoles={["admin"]}>
+                <AdminLayout />
+              </ProtectedRoute>}>
             <Route index element={<AdminDashboard />} />
             <Route path="student-management" element={<StudentManagement />} />
             <Route
@@ -128,7 +142,9 @@ const App = () => {
           {/*  -------------     LECTURER LAYOUT   ------------------------  */}
           {/* ---------------------------------------------------------------------------------------- */}
 
-          <Route path="lecturer" element={<LecturerLayout />}>
+          <Route path="lecturer/*" element={  <ProtectedRoute allowedRoles={["lecturer"]}>
+                <LecturerLayout />
+              </ProtectedRoute>}>
             <Route index element={<LecturerDashboard />} />
             <Route
               path="assignment-management"
@@ -172,7 +188,9 @@ const App = () => {
           {/*  -------------     STUDENT LAYOUT   ------------------------  */}
           {/* ---------------------------------------------------------------------------------------- */}
 
-          <Route path="student" element={<StudentLayout />}>
+          <Route path="student/*" element={ <ProtectedRoute allowedRoles={["student"]}>
+                <StudentLayout />
+              </ProtectedRoute>}>
             <Route index element={<StudentDashboard />} />
             <Route path="enrolled-subjects/:subjectId" element={<StudentCurrentSubject />} />
           </Route>
