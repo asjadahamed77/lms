@@ -69,3 +69,24 @@ export const getQuizSubmissions = async ({userId}) => {
         
     }
 } 
+
+export const getStudentAssignmentSubmissions = async ({ userId, assignmentId }) => {
+    try {
+      const { data } = await axios.get(
+        `/submission/stass/${userId}?assignmentId=${assignmentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      
+        
+      );
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Get Student Assignment Submissions Error:", error);
+      throw error;
+    }
+  };
+  
