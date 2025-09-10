@@ -45,6 +45,7 @@ import ViewAssignmentSubmissions from "./pages/lecturer/assignmentManagement/Vie
 import ViewQuizSubmissions from "./pages/lecturer/quizManagement/ViewQuizSubmissions";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import Unauthorized from "./pages/common/Unauthorized";
+import Footer from "./components/common/Footer";
 
 const App = () => {
   const {loading} = useContext(AppContext)
@@ -199,6 +200,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 };

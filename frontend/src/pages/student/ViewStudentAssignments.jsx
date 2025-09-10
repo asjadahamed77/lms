@@ -63,6 +63,9 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [submissions, setSubmissions] = useState({});
 
+  
+  
+
   const [formData, setFormData] = useState({
     title: "",
     files: [],
@@ -243,15 +246,17 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
                   Submit your assignment
                 </button>
             
-                  <button
-                  onClick={() => {
-                    setSubmissionPopup(true);
-                    setSelectedAssignment(ass);
-                  }}
-                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
-                >
-                  View your submission
-                </button>
+               
+                    <button
+                    onClick={() => {
+                      setSubmissionPopup(true);
+                      setSelectedAssignment(ass);
+                    }}
+                    className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
+                  >
+                    View your submission
+                  </button>
+                 
              </div>
               
                  
