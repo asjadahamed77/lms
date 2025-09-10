@@ -231,8 +231,18 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
                 <RemainingTime deadline={ass.deadline} />
               </div>
 
-              {
-                submissions ? (
+
+             <div className="flex items-center gap-4">
+             <button
+                  onClick={() => {
+                    setPopup(true);
+                    setSelectedAssignment(ass);
+                  }}
+                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
+                >
+                  Submit your assignment
+                </button>
+            
                   <button
                   onClick={() => {
                     setSubmissionPopup(true);
@@ -242,18 +252,10 @@ const ViewStudentAssignments = ({ currentSubject, user }) => {
                 >
                   View your submission
                 </button>
-                ) : (
-                  <button
-                  onClick={() => {
-                    setPopup(true);
-                    setSelectedAssignment(ass);
-                  }}
-                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
-                >
-                  Submit your assignment
-                </button>
-                )
-              }
+             </div>
+              
+                 
+               
 
               
             </div>

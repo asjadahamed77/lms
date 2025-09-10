@@ -4,6 +4,8 @@ import cloudinary from "../config/cloudinaryConfig.js";
 import Quiz from "../models/quizModel.js";
 import Subject from "../models/subjectModel.js";
 import User from "../models/userModel.js";
+import { Op } from "sequelize";
+
 
 export const createQuiz = async (req, res) => {
     try {
@@ -128,3 +130,33 @@ export const deleteQuiz = async (req, res) => {
   }
 };
 
+// get upcomming 4 quizzess for students
+export const getUpcomingQuizzesForStudents = async (req, res) => {
+  try {
+    
+    const { batchName, departmentName } = req.query;
+
+    const currentDate = new Date();
+
+    const quizzes = await Quiz.findAll({
+      where: {
+        batchName,
+        departmentName,
+        deadline: {
+          [Op.gte]: currentDate, 
+        },
+      },
+      include: [
+        { model: Subject, attributes: ["subjectId", "subjectName", "subjectCode", "batchName"] },
+        { model: User, as: "lecturer", attributes: ["name", "email"] },
+      ],
+      order: [["deadline", "ASC"]],
+      limit: 4,
+    });
+
+    res.json({ success: true, quizzes });
+  } catch (error) {
+    console.error("Fetch Upcoming Quizzes Error:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};

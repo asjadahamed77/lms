@@ -5,7 +5,7 @@ import { getAllStudents } from "../service/adminStudent";
 import { getAllLecturers } from "../service/adminLecturer";
 import { getAllSubjects } from "../service/adminSubject";
 import { getLecturerAssignments, getUpcomingAssignmentsForStudents } from "../service/assignmentService";
-import { getLecturerQuizzes } from "../service/quizService";
+import { getLecturerQuizzes, getUpcomingQuizzesForStudents } from "../service/quizService";
 import { getLecturerResources } from "../service/resourceService";
 import { getAssignmentSubmissions, getQuizSubmissions } from "../service/submissionService";
 import { getAllAnnouncements } from "../service/announcementService";
@@ -33,8 +33,10 @@ const AppContextProvider = ({ children }) => {
   const [quizSubmissions, setQuizSubmissions] = useState([])
   const [announcements, setAnnouncements] = useState([])
   const [upComingAss, setUpComingAss] = useState([])
+  const [upComingQuizzes, setUpComingQuizzes] = useState([])
   // const [student, setStudent] = useState(null)
 
+  console.log(upComingQuizzes);
   
 
   
@@ -182,6 +184,28 @@ const AppContextProvider = ({ children }) => {
     }
   }
 
+  const getUpcomingQuizz = async ()=>{
+    setLoading(true)
+    try {
+      if(user && user.role === "student") {
+     
+        const response = await getUpcomingQuizzesForStudents(user.batchName, user.departmentName);
+        if(response.success) {
+          setUpComingQuizzes(response.quizzes)
+          setLoading(false)
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+      
+    }finally{
+      setLoading(false)
+    }
+  }
+
+
+  
+
   
 
   const getAnnouncements = async ()=> {
@@ -227,6 +251,7 @@ const AppContextProvider = ({ children }) => {
     getLecturerQuizSubmissions()
     getAnnouncements()
     getUpcomingAss()
+    getUpcomingQuizz()
   },[])
 
  
@@ -283,6 +308,9 @@ const AppContextProvider = ({ children }) => {
     upComingAss,
     setUpComingAss,
     getUpcomingAss,
+    getUpcomingQuizz,
+    upComingQuizzes,
+    setUpComingQuizzes
     
   };
 

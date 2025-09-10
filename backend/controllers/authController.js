@@ -87,6 +87,7 @@ export const login = async (req, res) => {
           {
             model: Quiz,
             attributes: ["quizId", "title", "description", "fileUrl", "deadline"],
+            order: [["createdAt", "DESC"]],
           },
           {
             model: Resource,

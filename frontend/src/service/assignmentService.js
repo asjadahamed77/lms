@@ -77,7 +77,7 @@ export const getUpcomingAssignmentsForStudents = async (batchName, departmentNam
             }
         );
         
-        console.log(data);
+        
         
         return data;
     } catch (error) {

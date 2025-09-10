@@ -1,5 +1,6 @@
 import React from 'react'
 import UpcomingAssignments from './UpcomingAssignments'
+import UpcomingQuizzes from './UpcomingQuizzes'
 import { IoClose } from "react-icons/io5";
 
 
@@ -12,6 +13,7 @@ const Sidebar = ({sidebar, setSidebar}) => {
 </p>
       </div>
      <UpcomingAssignments />
+     <UpcomingQuizzes />
     </div>
   )
 }
