@@ -4,7 +4,7 @@ import { getAllBatches } from "../service/adminBatch";
 import { getAllStudents } from "../service/adminStudent";
 import { getAllLecturers } from "../service/adminLecturer";
 import { getAllSubjects } from "../service/adminSubject";
-import { getLecturerAssignments } from "../service/assignmentService";
+import { getLecturerAssignments, getUpcomingAssignmentsForStudents } from "../service/assignmentService";
 import { getLecturerQuizzes } from "../service/quizService";
 import { getLecturerResources } from "../service/resourceService";
 import { getAssignmentSubmissions, getQuizSubmissions } from "../service/submissionService";
@@ -32,6 +32,7 @@ const AppContextProvider = ({ children }) => {
   const [assignmentSubmissions, setAssignmentSubmissions] = useState([])
   const [quizSubmissions, setQuizSubmissions] = useState([])
   const [announcements, setAnnouncements] = useState([])
+  const [upComingAss, setUpComingAss] = useState([])
   // const [student, setStudent] = useState(null)
 
   
@@ -162,6 +163,27 @@ const AppContextProvider = ({ children }) => {
     }
   }
 
+  const getUpcomingAss = async ()=>{
+    setLoading(true)
+    try {
+      if(user && user.role === "student") {
+     
+        const response = await getUpcomingAssignmentsForStudents(user.batchName, user.departmentName);
+        if(response.success) {
+          setUpComingAss(response.assignments)
+          setLoading(false)
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+      
+    }finally{
+      setLoading(false)
+    }
+  }
+
+  
+
   const getAnnouncements = async ()=> {
     setLoading(true)
     try {
@@ -204,6 +226,7 @@ const AppContextProvider = ({ children }) => {
     getLecturerAssignmentSubmissions()
     getLecturerQuizSubmissions()
     getAnnouncements()
+    getUpcomingAss()
   },[])
 
  
@@ -256,7 +279,10 @@ const AppContextProvider = ({ children }) => {
     quizSubmissions,
     setQuizSubmissions,
     getLecturerQuizSubmissions,
-    getAnnouncements
+    getAnnouncements,
+    upComingAss,
+    setUpComingAss,
+    getUpcomingAss,
     
   };
 

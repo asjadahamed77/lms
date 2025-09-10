@@ -66,6 +66,7 @@ const App = () => {
           {/* ---------------------------------------------------------------------------------------- */}
            <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route
             path="/manage-profile"
@@ -80,7 +81,7 @@ const App = () => {
           {/*  -------------     ADMIN LAYOUT   ------------------------  */}
           {/* ---------------------------------------------------------------------------------------- */}
 
-          <Route path="admin/*" element={<ProtectedRoute allowedRoles={["admin"]}>
+          <Route path="admin/" element={<ProtectedRoute allowedRoles={["admin"]}>
                 <AdminLayout />
               </ProtectedRoute>}>
             <Route index element={<AdminDashboard />} />
@@ -142,7 +143,7 @@ const App = () => {
           {/*  -------------     LECTURER LAYOUT   ------------------------  */}
           {/* ---------------------------------------------------------------------------------------- */}
 
-          <Route path="lecturer/*" element={  <ProtectedRoute allowedRoles={["lecturer"]}>
+          <Route path="lecturer/" element={  <ProtectedRoute allowedRoles={["lecturer"]}>
                 <LecturerLayout />
               </ProtectedRoute>}>
             <Route index element={<LecturerDashboard />} />
@@ -188,7 +189,7 @@ const App = () => {
           {/*  -------------     STUDENT LAYOUT   ------------------------  */}
           {/* ---------------------------------------------------------------------------------------- */}
 
-          <Route path="student/*" element={ <ProtectedRoute allowedRoles={["student"]}>
+          <Route path="student/" element={ <ProtectedRoute allowedRoles={["student"]}>
                 <StudentLayout />
               </ProtectedRoute>}>
             <Route index element={<StudentDashboard />} />

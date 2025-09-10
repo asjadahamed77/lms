@@ -2,6 +2,8 @@ import cloudinary from "../config/cloudinaryConfig.js";
 import Assignment from "../models/assignmentModel.js";
 import Subject from "../models/subjectModel.js";
 import User from "../models/userModel.js";
+import { Op } from "sequelize";
+
 
 export const createAssignment = async (req, res) => {
     try {
@@ -126,6 +128,38 @@ export const deleteAssignment = async (req, res) => {
     res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+
+// get upcomming 4 assignments for students
+export const getUpcomingAssignmentsForStudents = async (req, res) => {
+  try {
+    
+    const { batchName, departmentName } = req.query;
+
+    const currentDate = new Date();
+
+    const assignments = await Assignment.findAll({
+      where: {
+        batchName,
+        departmentName,
+        deadline: {
+          [Op.gte]: currentDate, 
+        },
+      },
+      include: [
+        { model: Subject, attributes: ["subjectId", "subjectName", "subjectCode", "batchName"] },
+        { model: User, as: "lecturer", attributes: ["name", "email"] },
+      ],
+      order: [["deadline", "ASC"]],
+      limit: 4,
+    });
+
+    res.json({ success: true, assignments });
+  } catch (error) {
+    console.error("Fetch Upcoming Assignments Error:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
