@@ -215,9 +215,15 @@ const ViewStudentQuiz = ({ currentSubject, user }) => {
                 <RemainingTime deadline={ass.deadline} />
               </div>
 
-              {
-                submissions ? (
-                  <button
+            
+                 <div className="flex items-center gap-4">
+                 <button
+                  onClick={() => {setPopup(true); setSelectedQuiz(ass)}}
+                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
+                >
+                  Submit your quiz
+                </button>
+                 <button
                   onClick={() => {
                     setSubmissionPopup(true);
                     setSelectedQuiz(ass);
@@ -226,15 +232,10 @@ const ViewStudentQuiz = ({ currentSubject, user }) => {
                 >
                   View your submission
                 </button>
-                ) : (
-                  <button
-                  onClick={() => {setPopup(true); setSelectedQuiz(ass)}}
-                  className="mt-6 bg-primaryColor text-white py-2 text-sm px-8 rounded-md hover:bg-primaryColor/80 duration-300 transition-all ease-in-out cursor-pointer"
-                >
-                  Submit your quiz
-                </button>
-                )
-              }
+              
+                 
+                 </div>
+             
 
             
             </div>

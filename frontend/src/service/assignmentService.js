@@ -63,3 +63,25 @@ export const deleteAssignment = async (assignmentId) => {
         throw error;
     }
 }
+
+
+export const getUpcomingAssignmentsForStudents = async (batchName, departmentName) => {
+    try {
+        const { data } = await axios.get(
+          `/assignment/upcoming?batchName=${encodeURIComponent(batchName)}&departmentName=${encodeURIComponent(departmentName)}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        
+        
+        
+        return data;
+    } catch (error) {
+        console.error("Get Upcoming Assignments Error:", error);
+        throw error;
+    }
+}

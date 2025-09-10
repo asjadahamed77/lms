@@ -67,3 +67,23 @@ export const deleteQuiz = async (quizId) => {
     }
 }
 
+export const getUpcomingQuizzesForStudents = async (batchName, departmentName) => {
+    try {
+        const { data } = await axios.get(
+          `/quiz/upcoming?batchName=${encodeURIComponent(batchName)}&departmentName=${encodeURIComponent(departmentName)}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        
+        
+        
+        return data;
+    } catch (error) {
+        console.error("Get Upcoming Assignments Error:", error);
+        throw error;
+    }
+}

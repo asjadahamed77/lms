@@ -27,7 +27,7 @@ const StudentDashboard = () => {
           </div>
         )}
         <div className={`${sidebar ? "block" : "hidden md:block"}`}>
-          <Sidebar sidebar={sidebar} />
+          <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
         </div>
       </div>
 

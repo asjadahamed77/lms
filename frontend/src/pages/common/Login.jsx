@@ -6,7 +6,7 @@ import Loading from "../../components/common/Loading";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { organizationName, loading, setLoading, setUser } = useContext(AppContext);
+  const { organizationName, loading, setLoading, setUser, getAnnouncements, getUpcomingAss } = useContext(AppContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +30,10 @@ const Login = () => {
         if (data.user.role === "admin") {
           navigate("/admin");
         } else if (data.user.role === "student") {
+          getAnnouncements();
+          getUpcomingAss();
           navigate("/student");
+         
         } else if (data.user.role === "lecturer") {
           navigate("/lecturer");
         }

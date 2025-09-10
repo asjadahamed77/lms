@@ -50,6 +50,8 @@ const Assignment = sequelize.define("Assignment", {
 Assignment.belongsTo(User, { as: "lecturer", foreignKey: "lecturerId" });
 User.hasMany(Assignment, { as: "assignments", foreignKey: "lecturerId" });
 
+
+
 Assignment.belongsTo(Subject, { foreignKey: "subjectId" });
 Subject.hasMany(Assignment, { foreignKey: "subjectId" });
 
