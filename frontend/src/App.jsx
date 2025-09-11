@@ -46,6 +46,7 @@ import ViewQuizSubmissions from "./pages/lecturer/quizManagement/ViewQuizSubmiss
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import Unauthorized from "./pages/common/Unauthorized";
 import Footer from "./components/common/Footer";
+import AnnouncementsPage from "./pages/common/AnnouncementsPage";
 
 const App = () => {
   const {loading} = useContext(AppContext)
@@ -195,6 +196,7 @@ const App = () => {
               </ProtectedRoute>}>
             <Route index element={<StudentDashboard />} />
             <Route path="enrolled-subjects/:subjectId" element={<StudentCurrentSubject />} />
+            <Route path="announcements" element= {<AnnouncementsPage />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
