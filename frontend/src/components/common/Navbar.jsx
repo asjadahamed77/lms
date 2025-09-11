@@ -40,6 +40,7 @@ const Navbar = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate("/login");
+        window.location.reload();
         toast.success(response.message);
       }
     } catch (error) {

@@ -36,7 +36,6 @@ const AppContextProvider = ({ children }) => {
   const [upComingQuizzes, setUpComingQuizzes] = useState([])
   // const [student, setStudent] = useState(null)
 
-  console.log(upComingQuizzes);
   
 
   

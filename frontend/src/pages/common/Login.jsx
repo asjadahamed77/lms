@@ -27,15 +27,19 @@ const Login = () => {
       if (data.success) {
         setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
+      
         if (data.user.role === "admin") {
           navigate("/admin");
+          window.location.reload();
         } else if (data.user.role === "student") {
           getAnnouncements();
           getUpcomingAss();
           navigate("/student");
+          window.location.reload();
          
         } else if (data.user.role === "lecturer") {
           navigate("/lecturer");
+          window.location.reload();
         }
         toast.success(data.message);
       }else{
